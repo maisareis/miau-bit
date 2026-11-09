@@ -1,0 +1,9 @@
+body{padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.pwa-section{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;margin:24px 0}
+.pwa-section h3{font-size:24px;margin-bottom:12px}
+.pwa-section p{font-size:15px;line-height:1.6}
+.pwa-section .pwa-status{color:var(--green);background:var(--mint);padding:12px 15px;border-radius:14px;margin:15px 0}
+.pwa-section .pwa-help{font-size:14px;margin:14px 0 0;color:var(--muted)}
+.pwa-section #pwa-update{margin-top:12px}
+.pwa-section [hidden]{display:none!important}
+@media(max-width:600px){.pwa-section h3{font-size:22px}.pwa-section .button{max-width:100%;white-space:normal}}

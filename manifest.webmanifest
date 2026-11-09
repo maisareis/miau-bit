@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Miau & Bit — O Quintal das Ideias",
+  "short_name": "Miau & Bit",
+  "description": "Nove aventuras para brincar com lógica, programação e cuidado no mundo digital, a partir dos 6 anos.",
+  "lang": "pt-BR",
+  "start_url": "./#inicio",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf8ee",
+  "theme_color": "#146755",
+  "categories": ["education", "games"],
+  "prefer_related_applications": false,
+  "icons": [
+    {"src": "assets/icons/miau-bit-192-v2.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "assets/icons/miau-bit-512-v2.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "assets/icons/miau-bit-maskable-512-v2.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
