@@ -1,10 +1,12 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pwa-ec64c8b6f893';
+const CACHE_NAME = 'miau-bit-pwa-04e3f97c4f73';
 const APP_FILES = [
   "./",
   "app.js",
   "episodes.css",
+  "luma.css",
+  "assets/episodio-luma.jpg",
   "assets/episodio-sanduiche.jpg",
   "assets/episodio-foto.jpg",
   "assets/dm-sans-400.woff",
