@@ -10,6 +10,7 @@
   const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
     (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
   let installPrompt = null;
+  let installedHere = false;
   let registration = null;
   let registering = false;
   let offlineReady = false;
@@ -37,8 +38,10 @@
   }
 
   function updateInstalledState() {
-    installButton.hidden = isStandalone();
-    if (isStandalone()) help.hidden = true;
+    const installed = isStandalone() || installedHere;
+    installButton.hidden = installed;
+    document.querySelectorAll('[data-install-app],[data-install-section]').forEach(element => element.hidden = installed);
+    if (installed) help.hidden = true;
   }
   function updateStatus() {
     if (offlineReady) {
@@ -51,12 +54,16 @@
         : 'Conecte este aparelho à internet uma vez para guardar as aventuras.';
     }
   }
-  function showInstallHelp() {
-    help.textContent = isAppleMobile
+  function installHelpFor(button) {
+    return button.closest('[data-install-section]') ? document.getElementById('home-install-help') : help;
+  }
+  function showInstallHelp(button) {
+    const output = installHelpFor(button) || help;
+    output.textContent = isAppleMobile
       ? 'No iPhone ou iPad, abra o menu Compartilhar do navegador e escolha Adicionar à Tela de Início. Se aparecer a opção Abrir como App da Web, mantenha-a ativada.'
       : 'Abra o menu do navegador e procure Instalar aplicativo ou Adicionar à tela inicial. No computador, procure também o ícone de instalação na barra de endereço. A opção depende do navegador.';
-    help.hidden = false;
-    help.focus({preventScroll: true});
+    output.hidden = false;
+    output.focus({preventScroll: true});
   }
   window.addEventListener('beforeinstallprompt', event => {
     event.preventDefault();
@@ -65,26 +72,29 @@
   });
   window.addEventListener('appinstalled', () => {
     installPrompt = null;
-    installButton.hidden = true;
+    installedHere = true;
+    updateInstalledState();
     help.hidden = false;
     help.textContent = 'Prontinho! Procure Miau & Bit na tela inicial do aparelho.';
   });
   if (standaloneQuery.addEventListener) standaloneQuery.addEventListener('change', updateInstalledState);
-  installButton.addEventListener('click', async () => {
-    if (!installPrompt) { showInstallHelp(); return; }
+  document.addEventListener('click', async event => {
+    const button = event.target.closest('[data-install-app]');
+    if (!button || button.disabled) return;
+    if (!installPrompt) { showInstallHelp(button); return; }
     const prompt = installPrompt;
     installPrompt = null;
-    installButton.disabled = true;
+    document.querySelectorAll('[data-install-app]').forEach(element => element.disabled = true);
     try {
       await prompt.prompt();
       const choice = await prompt.userChoice;
       if (choice.outcome === 'accepted') {
-        installButton.hidden = true;
-        help.hidden = false;
-        help.textContent = 'A instalação foi solicitada. Procure Miau & Bit na tela inicial.';
+        const output = installHelpFor(button) || help;
+        output.hidden = false;
+        output.textContent = 'A instalação foi solicitada. Procure Miau & Bit na tela inicial.';
       }
-    } catch (_) { showInstallHelp(); }
-    finally { installButton.disabled = false; }
+    } catch (_) { showInstallHelp(button); }
+    finally { document.querySelectorAll('[data-install-app]').forEach(element => element.disabled = false); }
   });
 
   function showUpdateIfWaiting() {
@@ -149,6 +159,7 @@
     });
   }
   window.addEventListener('offline', updateStatus);
+  window.addEventListener('miau:pagechange', updateInstalledState);
   window.addEventListener('online', () => {
     updateStatus();
     if (registration) registration.update().catch(() => {});

@@ -1,20 +1,24 @@
 'use strict';
 
 const CORE_IDS = ['scratch', 'python', 'sql', 'safety', 'mochila', 'correio', 'boatos', 'amizade', 'amigo'];
-const PHASE_COUNTS = {scratch: 3, python: 3, sql: 3, correio: 3};
+const PHASE_COUNTS = {scratch: 6, python: 3, sql: 3, correio: 3, permissoes: 3, redes: 3, padroes: 3};
 const PHASE_KEY = 'miau-bit-phases-v1';
-const PARTY_KEY = 'miau-bit-journey-party-v1';
+const PARTY_KEY = 'miau-bit-journey-party-v2';
 const bonusAdventures = [
   {id:'senhas', tag:'SEGURANÇA DIGITAL · SENHAS', title:'A senha do quintal', description:'Palavras inesperadas ajudam Luma a cuidar dos segredos da turma.', time:'5 min', medal:'Inventor de segredos', symbol:'♧', filter:'proteger', category:'SEGURANÇA DIGITAL', bonus:true},
   {id:'fotos', tag:'SEGURANÇA DIGITAL · FOTOS', title:'Antes do clique', description:'Uma foto pode contar mais do que parece. Vamos olhar com carinho?', time:'5 min', medal:'Guardião das imagens', symbol:'▧', filter:'proteger', category:'SEGURANÇA DIGITAL', bonus:true},
-  {id:'receita', tag:'LÓGICA · ORDEM DOS PASSOS', title:'O sanduíche do Bit', description:'O recheio ficou de fora! Organize os passos dessa receita de faz de conta.', time:'3 min', medal:'Mestre das sequências', symbol:'☷', filter:'logica', category:'LÓGICA', bonus:true}
+  {id:'receita', tag:'LÓGICA · ORDEM DOS PASSOS', title:'O sanduíche do Bit', description:'O recheio ficou de fora! Organize os passos dessa receita de faz de conta.', time:'3 min', medal:'Mestre das sequências', symbol:'☷', filter:'logica', category:'LÓGICA', bonus:true},
+  ...expansionAdventures
 ];
 let phaseProgress = {};
 let partySeen = 0;
+let legacyGuardian = false;
 try {
   const saved = JSON.parse(localStorage.getItem(PHASE_KEY) || '{}');
   if (saved && typeof saved === 'object' && !Array.isArray(saved)) phaseProgress = saved;
-  partySeen = Number(localStorage.getItem(PARTY_KEY)) || 0;
+  const legacy = Number(localStorage.getItem('miau-bit-journey-party-v1')) || 0;
+  legacyGuardian = legacy >= 2;
+  partySeen = Number(localStorage.getItem(PARTY_KEY)) || (legacy ? 1 : 0);
 } catch (_) {}
 
 function phaseCount(id) { return PHASE_COUNTS[id] || 1; }
@@ -31,6 +35,12 @@ function requestedPhase(id) {
 function phaseURL(id, phase) { return '#aventura/' + id + (phase > 1 ? '/' + phase : ''); }
 function coreStars() { return CORE_IDS.filter(id => discovered.has(id)).length; }
 function bonusUnlocked() { return coreStars() === CORE_IDS.length; }
+function collectedStars() { return adventures.filter(a => discovered.has(a.id)).length; }
+function expansionUnlocked() { return bonusUnlocked() && ['senhas','fotos','receita'].every(id => discovered.has(id)); }
+function adventureUnlocked(a) { return !a.bonus || (a.unlockStars === 12 ? expansionUnlocked() : bonusUnlocked()); }
+function nextStarMilestone() { return !bonusUnlocked() ? 9 : !expansionUnlocked() ? 12 : 15; }
+function nextStarAdventure() { return adventures.find(a => adventureUnlocked(a) && !discovered.has(a.id)); }
+function celebrationStage() { return journeyFullyComplete() ? 4 : collectedStars() === 15 ? 3 : expansionUnlocked() ? 2 : bonusUnlocked() ? 1 : 0; }
 function journeyFullyComplete() { return adventures.every(a => completedPhases(a.id) === phaseCount(a.id)); }
 function rememberPhase(id) {
   const before = completedPhases(id);
@@ -65,18 +75,19 @@ function phaseNextLinks() {
     '<a class="button secondary small" href="#conquistas">Minhas descobertas ✦</a></div>';
 }
 function journeyCard(a) {
-  const locked = a.bonus && !bonusUnlocked();
+  const locked = !adventureUnlocked(a);
+  const threshold = a.unlockStars || 9;
   const done = completedPhases(a.id);
   const next = Math.min(phaseCount(a.id), done + 1);
   const href = locked ? '#novidades' : phaseURL(a.id, done === phaseCount(a.id) ? 1 : next);
   const art = a.bonus ? bonusCardArt(a.id) : cardArt(a.id);
   const category = a.category || (a.id === 'safety' ? 'SEGURANÇA DIGITAL' : a.id.toUpperCase());
   return '<a class="adventure-card ' + (locked ? 'locked-card' : '') + '" href="' + href + '" aria-label="' +
-    (locked ? a.title + ': abre com as nove estrelas da primeira jornada' : 'Jogar ' + a.title) + '">' +
+    (locked ? a.title + ': abre com ' + threshold + ' estrelas' : 'Jogar ' + a.title) + '">' +
     (locked ? '<span class="complete-mark bonus-label">♧ Novo cantinho</span>' : discovered.has(a.id) ? '<span class="complete-mark">✦ Estrela conquistada</span>' : '') +
     '<div class="adventure-illustration ' + a.id + '">' + art + '</div><div class="card-content"><div class="card-label"><span>' + category + '</span><span>◷ ' + a.time + '</span></div><h3>' + a.title + '</h3><p>' + a.description + '</p>' +
-    (phaseCount(a.id) > 1 ? '<div class="card-phases">' + phaseDots(a) + '<small>' + done + ' de 3 fases</small></div>' : '') +
-    '<div class="card-cta">' + (locked ? 'Abre com 9 estrelas' : done > 0 && done < phaseCount(a.id) ? 'Continuar na fase ' + next : discovered.has(a.id) ? 'Brincar de novo' : 'Vamos brincar') + ' <span aria-hidden="true">↗</span></div></div></a>';
+    (phaseCount(a.id) > 1 ? '<div class="card-phases">' + phaseDots(a) + '<small>' + done + ' de ' + phaseCount(a.id) + ' fases</small></div>' : '') +
+    '<div class="card-cta">' + (locked ? 'Abre com ' + threshold + ' estrelas' : done > 0 && done < phaseCount(a.id) ? 'Continuar na fase ' + next : discovered.has(a.id) ? 'Brincar de novo' : 'Vamos brincar') + ' <span aria-hidden="true">↗</span></div></div></a>';
 }
 function bonusCardArt(id) {
   const drawings = {
@@ -84,18 +95,26 @@ function bonusCardArt(id) {
     fotos:'<rect x="40" y="31" width="171" height="112" rx="16" fill="#fff6db" stroke="#8e79ac" stroke-width="5"/><circle cx="88" cy="65" r="15" fill="#f1c75c"/><path d="M51 129l48-45 33 28 24-25 43 42" fill="#9ab6a0"/><circle cx="171" cy="96" r="31" fill="#e4eff080" stroke="#397d70" stroke-width="7"/><path d="M192 120l22 23" stroke="#397d70" stroke-width="10" stroke-linecap="round"/>',
     receita:'<path d="M55 65q6-48 70-48t70 48z" fill="#e6b86e" stroke="#ad7c45" stroke-width="3"/><path d="M52 84q25-18 48 0t49 0 49 0" fill="none" stroke="#8cad70" stroke-width="15" stroke-linecap="round"/><path d="M56 104h138" stroke="#e99c63" stroke-width="15" stroke-linecap="round"/><path d="M54 124h142v10q-67 28-142 0z" fill="#e6b86e" stroke="#ad7c45" stroke-width="3"/><path d="M90 42l3-5M122 36l3-5M153 43l3-5" stroke="#fff1c7" stroke-width="4" stroke-linecap="round"/>'
   };
+  if (!drawings[id]) return expansionCardArt(id);
   return '<svg class="art-svg" viewBox="0 0 250 160" aria-hidden="true">' + drawings[id] + '</svg>';
 }
 function journeyBanner() {
-  const n = coreStars();
-  if (journeyFullyComplete()) return '<section class="journey-banner"><div class="journey-banner-icon" aria-hidden="true">✦</div><div><span class="eyebrow">TODAS AS FASES DESCOBERTAS</span><h2>O quintal inteiro brilhou!</h2><p>Sua coleção está completa. A turma adora brincar de novo com você.</p></div><a class="button primary" href="#conquistas">Ver minhas conquistas ✦</a></section>';
-  return '<section class="journey-banner"><div class="journey-banner-icon" aria-hidden="true">' + (n === 9 ? '✦' : '✧') + '</div><div><span class="eyebrow">' + (n === 9 ? 'A PRIMEIRA JORNADA ESTÁ COMPLETA' : 'SEU PRIMEIRO MAPA DE DESCOBERTAS') + '</span><h2>' + (n === 9 ? 'Nove estrelas. Um novo cantinho!' : 'Cada estrela abre uma possibilidade.') + '</h2><p>' +
-    (n === 9 ? 'A turma preparou uma medalha e três novas brincadeiras para você.' : n + ' de 9 estrelas encontradas. Complete a jornada para abrir as surpresas da Luma.') + '</p></div><a class="button ' + (n === 9 ? 'primary' : 'secondary') + '" href="' + (n === 9 ? '#novidades' : '#conquistas') + '">' + (n === 9 ? 'Explorar o novo cantinho ↗' : 'Ver meu mapa ✦') + '</a></section>';
+  const n = collectedStars(), target = nextStarMilestone(), next = nextStarAdventure();
+  const full = journeyFullyComplete(), allStars = n === 15;
+  const heading = full ? 'O quintal inteiro brilhou!' : allStars ? 'Quinze estrelas. Uma turma inteira!' : n >= 12 ? 'Uma nova rota está aberta!' : n >= 9 ? 'As surpresas da Luma estão abertas!' : 'Cada estrela abre uma possibilidade.';
+  const detail = full ? 'Você descobriu todas as fases! A turma adora brincar de novo com você.' : allStars ? 'Sua coleção de estrelas está completa. Ainda dá para explorar novas fases!' : n + ' de 15 estrelas. Faltam ' + (target-n) + ' para ' + (target === 15 ? 'a medalha das quinze estrelas.' : 'abrir três novas brincadeiras!');
+  return '<section class="journey-banner"><div class="journey-banner-icon" aria-hidden="true">✦</div><div><span class="eyebrow">SEU MAPA CONTINUA CRESCENDO</span><h2>' + heading + '</h2><p>' + detail + '</p></div><a class="button primary" href="' + (next ? phaseURL(next.id,1) : '#conquistas') + '">' + (next ? 'Minha próxima estrela ↗' : 'Ver minhas conquistas ✦') + '</a></section>';
 }
 function bonusPreview() {
-  return '<section class="adventure-section bonus-preview"><div class="section-heading"><div><span class="eyebrow">AS SURPRESAS DA LUMA</span><h2>O quintal continua crescendo.</h2><p>' + (bonusUnlocked() ? 'Seu novo cantinho está aberto. Escolha a próxima descoberta!' : 'Três novas brincadeiras esperam pelas nove estrelas da primeira jornada.') + '</p></div><a class="text-link" href="#novidades">Conhecer o novo cantinho ↗</a></div><div class="adventure-grid bonus-grid">' + bonusAdventures.map(journeyCard).join('') + '</div></section>';
+  return [9,12].map(threshold => {
+    const available = threshold === 9 ? bonusUnlocked() : expansionUnlocked();
+    const title = threshold === 9 ? 'As surpresas da Luma' : 'Uma nova rota no quintal';
+    return '<section class="adventure-section bonus-preview"><div class="section-heading"><div><span class="eyebrow">' + threshold + ' ESTRELAS ABREM ESTE CANTINHO</span><h2>' + title + '</h2><p>' + (available ? 'Cantinho aberto! Escolha sua próxima descoberta.' : 'Mais três jogos esperam por você. Continue encontrando estrelas!') + '</p></div><a class="text-link" href="#novidades">Ver meu caminho ↗</a></div><div class="adventure-grid bonus-grid">' + bonusAdventures.filter(a => (a.unlockStars || 9) === threshold).map(journeyCard).join('') + '</div></section>';
+  }).join('');
 }
 function decorateJourneyHome() {
+  const heroCopy = main.querySelector('.hero-copy');
+  if (heroCopy) heroCopy.insertAdjacentHTML('beforeend','<aside class="install-promo" data-install-section><div class="install-promo-heading"><img src="assets/icons/miau-bit-192-v2.png" width="48" height="48" alt=""><div><b>Leve o quintal com você!</b><p>Instale para brincar pela tela inicial.</p></div></div><button class="button yellow" type="button" data-install-app>Instalar Miau &amp; Bit <span aria-hidden="true">↗</span></button><p class="install-promo-help" id="home-install-help" tabindex="-1" hidden></p></aside>');
   const strip = main.querySelector('.welcome-strip');
   if (strip) strip.insertAdjacentHTML('afterend', journeyBanner());
   const teaser = main.querySelector('.story-teaser');
@@ -103,7 +122,7 @@ function decorateJourneyHome() {
 }
 function renderAdventureCatalogue() {
   const filters = [['todas','Todas as aventuras'],['logica','Criar caminhos'],['criar','Acender ideias'],['descobrir','Procurar pistas'],['proteger','Cuidar da turma'],['novas','O novo cantinho']];
-  main.innerHTML = '<section class="page-heading"><span class="eyebrow">PORTAS ABERTAS PARA A IMAGINAÇÃO</span><h1>Uma história para cada “e se…”</h1><p>Escolha uma aventura. Algumas têm três fases para continuar descobrindo!</p><div class="filter-bar" aria-label="Tipos de aventura">' +
+  main.innerHTML = '<section class="page-heading"><span class="eyebrow">PORTAS ABERTAS PARA A IMAGINAÇÃO</span><h1>Uma história para cada “e se…”</h1><p>Quinze jogos, novos caminhos e muitas fases. Escolha sua próxima descoberta!</p><div class="filter-bar" aria-label="Tipos de aventura">' +
     filters.map(f => '<button class="filter ' + (f[0] === 'todas' ? 'active' : '') + '" data-filter="' + f[0] + '" aria-pressed="' + (f[0] === 'todas') + '">' + f[1] + '</button>').join('') +
     '</div></section><section class="full-adventures"><div class="adventure-grid" id="filtered-adventures">' + adventures.map(journeyCard).join('') + '</div></section>';
   $$('[data-filter]').forEach(button => button.onclick = () => {
@@ -112,27 +131,27 @@ function renderAdventureCatalogue() {
   });
 }
 function bonusHub() {
-  const left = adventures.filter(a => !a.bonus && !discovered.has(a.id));
-  main.innerHTML = '<section class="page-heading bonus-heading"><span class="eyebrow">AS SURPRESAS DA LUMA</span><h1>' + (bonusUnlocked() ? 'Um novo cantinho só para explorar.' : 'Tem mais quintal depois das estrelas.') + '</h1><p>' +
-    (bonusUnlocked() ? 'Você abriu este cantinho com suas nove descobertas. Vamos continuar juntos?' : 'Encontre as ' + left.length + ' estrelas que faltam na primeira jornada para abrir estas brincadeiras.') + '</p>' +
-    (left.length ? '<a class="button primary" href="' + phaseURL(left[0].id,1) + '">Encontrar a próxima estrela ✦</a>' : '<button class="button secondary" id="see-party">Rever minha conquista ✦</button>') +
-    '</section><section class="full-adventures"><div class="adventure-grid bonus-grid">' + bonusAdventures.map(journeyCard).join('') + '</div></section>';
+  const n = collectedStars(), target = nextStarMilestone(), next = nextStarAdventure();
+  main.innerHTML = '<section class="page-heading bonus-heading"><span class="eyebrow">UM QUINTAL DE SURPRESAS</span><h1>' + (bonusUnlocked() ? 'Cada descoberta abre um caminho.' : 'Tem mais quintal depois das estrelas.') + '</h1><p>' + n + ' de 15 estrelas. ' + (n === 15 ? 'Você encontrou todas! Suas fases favoritas continuam aqui.' : 'Faltam ' + (target-n) + ' para ' + (target === 15 ? 'uma nova medalha.' : 'abrir três jogos!')) + '</p>' +
+    (next ? '<a class="button primary" href="' + phaseURL(next.id,1) + '">Encontrar a próxima estrela ✦</a>' : '<a class="button primary" href="#conquistas">Ver minhas descobertas ✦</a>') +
+    (bonusUnlocked() ? '<button class="text-button" id="see-party">Rever minha conquista ✦</button>' : '') + '</section>' + milestoneTrail() + bonusPreview();
   const party = $('#see-party'); if (party) party.onclick = showJourneyParty;
+}
+function milestoneTrail() {
+  const n = collectedStars();
+  return '<section class="milestone-trail" aria-label="As surpresas da coleção">' + [{n:9,title:'As surpresas da Luma',text:'Três jogos se abrem',done:bonusUnlocked()},{n:12,title:'Uma nova rota',text:'Mais três jogos se abrem',done:expansionUnlocked()},{n:15,title:'Quinze estrelas',text:'Uma medalha especial',done:n===15}].map(m => '<div class="milestone-stop ' + (m.done ? 'done' : '') + '"><span aria-hidden="true">' + (m.done ? '✦' : '✧') + '</span><b>' + m.n + ' estrelas</b><strong>' + m.title + '</strong><small>' + (m.done ? 'Conquista desbloqueada' : m.text) + '</small></div>').join('') + '</section>';
 }
 function phaseGate(a) {
   const available = Math.min(phaseCount(a.id),completedPhases(a.id)+1);
   main.innerHTML = '<section class="page-heading"><span class="eyebrow">UM PASSO DE CADA VEZ</span><h1>Uma descoberta abre a próxima.</h1><p>Complete a fase anterior de “' + a.title + '” para continuar por aqui.</p>' + phaseNavigation(a) + '<a class="button primary" href="' + phaseURL(a.id,available) + '">Vamos para a fase ' + available + ' →</a></section>';
 }
 function renderDiscoveries() {
-  const n = coreStars(), phases = adventures.reduce((sum,a) => sum + completedPhases(a.id),0);
-  const total = adventures.reduce((sum,a) => sum + phaseCount(a.id),0);
-  const complete = journeyFullyComplete();
-  const core = adventures.filter(a => !a.bonus);
-  main.innerHTML = '<section class="page-heading"><span class="eyebrow">SEU BOLSO DE PEQUENAS GRANDES IDEIAS</span><h1>Olha o que você descobriu!</h1><p>As nove estrelas da primeira jornada abrem as surpresas da Luma. As novas fases continuam do ponto em que você parou.</p><div class="progress-bar" role="progressbar" aria-label="Estrelas da primeira jornada" aria-valuemin="0" aria-valuemax="9" aria-valuenow="' + n + '"><span style="width:' + n/9*100 + '%"></span></div><p><b>' + n + ' de 9 estrelas</b> na primeira jornada ✦ <span class="phase-total">' + phases + ' de ' + total + ' fases descobertas</span></p></section>' +
-    (bonusUnlocked() ? '<section class="journey-complete"><div class="journey-medal" aria-hidden="true">✦</div><div><span class="eyebrow">' + (complete ? 'SUA COLEÇÃO ESTÁ COMPLETA' : 'SUA CONQUISTA ESPECIAL') + '</span><h2>' + (complete ? 'Guardião das Ideias!' : 'Explorador do Quintal!') + '</h2><p>' + (complete ? 'Você descobriu as ' + total + ' fases do quintal! Miau, Bit e Luma celebram cada caminho, cada ideia e cada cuidado. Agora você pode revisitar suas brincadeiras favoritas.' : 'Você criou caminhos, investigou pistas e cuidou da turma. Miau, Bit e Luma comemoram com você!') + '</p><div class="success-next"><a class="button primary" href="' + (complete ? '#aventuras' : '#novidades') + '">' + (complete ? 'Escolher minha favorita ↗' : 'Abrir o novo cantinho ↗') + '</a><button class="button secondary" id="replay-party">Rever a festa ✦</button></div></div></section>' : '') +
-    '<section class="achievements"><div class="medal-grid">' + core.map(a => '<article class="medal ' + (discovered.has(a.id) ? 'earned' : '') + '"><div class="medal-icon" aria-hidden="true">' + (discovered.has(a.id) ? '✦' : a.symbol) + '</div><h3>' + a.medal + '</h3><p>' + (discovered.has(a.id) ? 'A estrela desta aventura já é sua!' : 'Encontre a estrela em “' + a.title + '”.') + '</p>' + phaseDots(a) +
-      '<a class="text-link" href="' + phaseURL(a.id,completedPhases(a.id) === phaseCount(a.id) ? 1 : Math.min(phaseCount(a.id),completedPhases(a.id)+1)) + '">' + (completedPhases(a.id) === phaseCount(a.id) ? 'Brincar de novo' : completedPhases(a.id) ? 'Continuar na próxima fase' : 'Encontrar a estrela') + ' ↗</a></article>').join('') +
-    '</div></section>' + bonusPreview() + '<section class="reset-section"><p>Suas descobertas ficam só neste navegador ou aplicativo.</p><button class="text-button" id="reset-stars">Recomeçar toda a coleção</button></section>';
+  const n = collectedStars(), phases = adventures.reduce((sum,a) => sum + completedPhases(a.id),0);
+  const total = adventures.reduce((sum,a) => sum + phaseCount(a.id),0), complete = journeyFullyComplete();
+  const core = adventures.filter(a => !a.bonus), target = nextStarMilestone();
+  main.innerHTML = '<section class="page-heading"><span class="eyebrow">SEU BOLSO DE PEQUENAS GRANDES IDEIAS</span><h1>Olha o que você descobriu!</h1><p>Cada jogo tem uma estrela. As fases continuam sua aventura sem repetir a mesma estrela. Suas descobertas ficam guardadas.</p><div class="progress-bar" role="progressbar" aria-label="Estrelas da coleção" aria-valuemin="0" aria-valuemax="15" aria-valuenow="' + n + '"><span style="width:' + n/15*100 + '%"></span></div><p><b>' + n + ' de 15 estrelas</b> na coleção ✦ <span class="phase-total">' + phases + ' de ' + total + ' fases descobertas</span></p><p class="next-surprise">' + (n === 15 ? 'Todas as estrelas encontradas! Continue explorando as fases.' : 'Faltam ' + (target-n) + ' estrelas para ' + (target === 15 ? 'uma nova medalha.' : 'abrir mais três jogos!')) + '</p></section>' + milestoneTrail() +
+    (bonusUnlocked() ? '<section class="journey-complete"><div class="journey-medal" aria-hidden="true">✦</div><div><span class="eyebrow">' + (complete ? 'TODAS AS FASES DESCOBERTAS' : n===15 ? 'QUINZE ESTRELAS NO SEU BOLSO' : 'SUA CONQUISTA ESPECIAL') + '</span><h2>' + (complete ? 'Guardião das Ideias!' : n===15 ? 'Turma das Quinze Estrelas!' : 'Explorador do Quintal!') + '</h2><p>' + (complete ? 'Você descobriu as ' + total + ' fases do quintal. Miau, Bit e Luma comemoram cada ideia e cada cuidado!' : n===15 ? 'A coleção de estrelas está completa. Você pode continuar descobrindo as fases e revisitar suas brincadeiras favoritas.' : 'As nove estrelas da primeira jornada continuam suas! Agora o quintal tem novos cantinhos para explorar.') + '</p>' + (legacyGuardian && !complete ? '<p class="legacy-medal">✦ Guardião das Ideias: sua medalha da coleção anterior também continua com você.</p>' : '') + '<div class="success-next"><a class="button primary" href="' + (complete ? '#aventuras' : '#novidades') + '">' + (complete ? 'Escolher minha favorita ↗' : 'Explorar os cantinhos ↗') + '</a><button class="button secondary" id="replay-party">Rever a festa ✦</button></div></div></section>' : '') +
+    '<section class="achievements"><div class="medal-grid">' + core.map(a => '<article class="medal ' + (discovered.has(a.id) ? 'earned' : '') + '"><div class="medal-icon" aria-hidden="true">' + (discovered.has(a.id) ? '✦' : a.symbol) + '</div><h3>' + a.medal + '</h3><p>' + (discovered.has(a.id) ? 'A estrela desta aventura já é sua!' : 'Encontre a estrela em “' + a.title + '”.') + '</p>' + phaseDots(a) + '<a class="text-link" href="' + phaseURL(a.id,completedPhases(a.id) === phaseCount(a.id) ? 1 : Math.min(phaseCount(a.id),completedPhases(a.id)+1)) + '">' + (completedPhases(a.id) === phaseCount(a.id) ? 'Brincar de novo' : completedPhases(a.id) ? 'Continuar na próxima fase' : 'Encontrar a estrela') + ' ↗</a></article>').join('') + '</div></section>' + bonusPreview() + '<section class="reset-section"><p>Suas descobertas ficam só neste navegador ou aplicativo.</p><button class="text-button" id="reset-stars">Recomeçar toda a coleção</button></section>';
   $('#reset-stars').onclick = resetJourney;
   const party = $('#replay-party'); if (party) party.onclick = showJourneyParty;
 }
@@ -145,32 +164,37 @@ function resetJourney() {
   const close = () => { dialog.close(); dialog.remove(); $('#reset-stars')?.focus(); };
   $('#keep-stars',dialog).onclick = close;
   $('#clear-stars',dialog).onclick = () => {
-    discovered.clear(); phaseProgress = {}; partySeen = 0;
-    try { [PHASE_KEY,PARTY_KEY,'miau-bit-stars-v1'].forEach(key => localStorage.removeItem(key)); } catch (_) {}
+    discovered.clear(); phaseProgress = {}; partySeen = 0; legacyGuardian = false;
+    try { [PHASE_KEY,PARTY_KEY,'miau-bit-journey-party-v1','miau-bit-stars-v1'].forEach(key => localStorage.removeItem(key)); } catch (_) {}
     dialog.close(); dialog.remove(); updateProgress(); renderDiscoveries(); toast('Uma nova jornada começa quando você quiser!');
   };
   dialog.addEventListener('cancel',event => { event.preventDefault(); close(); });
   dialog.showModal(); $('#keep-stars',dialog).focus();
 }
 function showJourneyParty() {
-  if (!bonusUnlocked() || document.querySelector('#journey-party')) return;
-  const complete = journeyFullyComplete();
-  partySeen = complete ? 2 : 1; try { localStorage.setItem(PARTY_KEY,String(partySeen)); } catch (_) {}
-  const before = document.activeElement, dialog = document.createElement('dialog');
+  const stage = celebrationStage();
+  if (!stage || document.querySelector('#journey-party')) return;
+  partySeen = Math.max(partySeen,stage); try { localStorage.setItem(PARTY_KEY,String(partySeen)); } catch (_) {}
+  const messages = {
+    1:{eyebrow:'NOVE ESTRELAS, MUITAS DESCOBERTAS',title:'Você é da turma do quintal!',body:'Miau, Bit e Luma têm uma medalha para você: <strong>Explorador do Quintal.</strong> E abriram três brincadeiras para a aventura continuar!',href:'#novidades',cta:'Abrir meu novo cantinho ↗'},
+    2:{eyebrow:'DOZE ESTRELAS, UMA NOVA ROTA',title:'Mais quintal para descobrir!',body:'Você encontrou doze estrelas! Agora a turma abriu três missões: os aplicativos, as conexões e a ponte dos padrões. Vamos explorar?',href:'#novidades',cta:'Conhecer os três jogos ↗'},
+    3:{eyebrow:'QUINZE ESTRELAS NO SEU BOLSO',title:'Todas as estrelas brilham com você!',body:'Você ganhou a medalha <strong>Turma das Quinze Estrelas!</strong> Miau, Bit e Luma comemoram com você. As fases continuam esperando suas ideias!',href:'#conquistas',cta:'Ver minha coleção ✦'},
+    4:{eyebrow:'TODAS AS FASES, TODAS AS DESCOBERTAS',title:'O quintal inteiro brilhou!',body:'Você descobriu as 32 fases e ganhou a conquista <strong>Guardião das Ideias.</strong> A turma agradece cada ideia e cada cuidado. Suas brincadeiras favoritas continuam aqui!',href:'#aventuras',cta:'Escolher minha favorita ↗'}
+  };
+  const m = messages[stage], before = document.activeElement, dialog = document.createElement('dialog');
   dialog.id = 'journey-party'; dialog.className = 'journey-dialog party-dialog';
   dialog.setAttribute('aria-labelledby','party-title'); dialog.setAttribute('aria-describedby','party-description');
-  dialog.innerHTML = '<button class="party-close" aria-label="Fechar a comemoração">×</button><div class="party-stars" aria-hidden="true">' + Array.from({length:9},(_,i) => '<span style="--i:' + i + '">✦</span>').join('') + '</div><div class="journey-medal" aria-hidden="true">✦</div><span class="eyebrow">' + (complete ? 'TODAS AS FASES, TODAS AS DESCOBERTAS' : 'NOVE ESTRELAS, MUITAS DESCOBERTAS') + '</span><h2 id="party-title">' + (complete ? 'O quintal inteiro brilhou!' : 'Você é da turma do quintal!') + '</h2><p id="party-description">' + (complete ? 'Você descobriu todos os caminhos desta coleção e ganhou a conquista <strong>Guardião das Ideias.</strong> A turma agradece cada ideia e cada cuidado. Suas brincadeiras favoritas continuam aqui!' : 'Miau, Bit e Luma têm uma medalha para você: <strong>Explorador do Quintal.</strong> E prepararam três novas brincadeiras para a aventura continuar!') + '</p><div class="party-signatures"><span>Miau ♡</span><span>Bit ✦</span><span>Luma ♡</span></div><div class="success-next"><a class="button primary" href="' + (complete ? '#aventuras' : '#novidades') + '" id="open-bonus">' + (complete ? 'Escolher minha favorita ↗' : 'Abrir meu novo cantinho ↗') + '</a><button class="button secondary" id="stay-party">Ver minhas descobertas</button></div>';
+  dialog.innerHTML = '<button class="party-close" aria-label="Fechar a comemoração">×</button><div class="party-stars" aria-hidden="true">' + Array.from({length:9},(_,i) => '<span style="--i:' + i + '">✦</span>').join('') + '</div><div class="journey-medal" aria-hidden="true">✦</div><span class="eyebrow">' + m.eyebrow + '</span><h2 id="party-title">' + m.title + '</h2><p id="party-description">' + m.body + '</p><div class="party-signatures"><span>Miau ♡</span><span>Bit ✦</span><span>Luma ♡</span></div><div class="success-next"><a class="button primary" href="' + m.href + '" id="open-bonus">' + m.cta + '</a><button class="button secondary" id="stay-party">Ver minhas descobertas</button></div>';
   document.body.append(dialog);
   const close = () => { dialog.close(); dialog.remove(); if (before?.isConnected && !before.disabled) before.focus(); else main.focus({preventScroll:true}); };
-  $('.party-close',dialog).onclick = close;
-  $('#open-bonus',dialog).onclick = close;
+  $('.party-close',dialog).onclick = close; $('#open-bonus',dialog).onclick = close;
   $('#stay-party',dialog).onclick = () => { close(); location.hash = '#conquistas'; };
   dialog.addEventListener('cancel',event => { event.preventDefault(); close(); });
   dialog.showModal(); $('#open-bonus',dialog).focus();
 }
 function maybeCelebrateJourney() {
-  const stage = journeyFullyComplete() ? 2 : 1;
-  if (!bonusUnlocked() || partySeen >= stage) return;
+  const stage = celebrationStage();
+  if (!stage || partySeen >= stage) return;
   const currentVisit = visit;
   setTimeout(() => { if (currentVisit === visit && partySeen < stage && !document.querySelector('dialog[open]')) showJourneyParty(); },350);
 }
@@ -178,43 +202,55 @@ function maybeCelebrateJourney() {
 const PATH_PHASES = [
   {size:4,start:[3,0],goal:[0,3],blocks:[[1,1],[2,1]],key:null,limit:12,title:'A estrela que caiu',story:'Uma estrela caiu no quintal! Escolha os passos para Bit buscar a estrela, dando a volta nos arbustos.',hint:'Um caminho: direita, direita, cima, cima, direita, cima.'},
   {size:5,start:[4,0],goal:[0,4],blocks:[[3,1],[2,1],[1,1],[1,3],[2,3],[3,3]],key:null,limit:18,title:'A trilha entre os canteiros',story:'A estrela caiu do outro lado dos canteiros. O quintal cresceu! Bit pode passear pelos espaços livres sem pisar nas plantas.',hint:'Experimente subir pela primeira coluna e depois atravessar pela linha de cima.'},
-  {size:5,start:[4,0],goal:[0,4],blocks:[[3,1],[2,1],[1,3],[2,3]],key:[4,3],limit:20,title:'Uma chave no caminho',story:'Antes da estrela, Bit precisa pegar a chave dourada. Monte um caminho que passe pela chave e depois chegue à estrela.',hint:'A chave está na linha de baixo. Vá até ela e procure um caminho pela última coluna.'}
+  {size:5,start:[4,0],goal:[0,4],blocks:[[3,1],[2,1],[1,3],[2,3]],key:[4,3],limit:20,title:'Uma chave no caminho',story:'Antes da estrela, Bit precisa pegar a chave dourada. Monte um caminho que passe pela chave e depois chegue à estrela.',hint:'A chave está na linha de baixo. Vá até ela e procure um caminho pela última coluna.'},
+  {size:6,start:[5,0],goal:[0,5],blocks:[[5,1],[4,1],[3,1],[2,3],[1,3],[0,3]],key:null,limit:24,title:'O quintal cresceu',story:'Novos canteiros apareceram! Bit precisa encontrar uma passagem entre as plantas para chegar à estrela do outro lado do quintal.',hint:'Suba pela primeira coluna até encontrar uma passagem. Depois procure um espaço para atravessar o meio do mapa.'},
+  {size:6,start:[5,0],goal:[0,5],blocks:[[5,1],[4,1],[3,1],[2,3],[1,3],[0,3]],key:[0,1],limit:28,title:'A chave lá no alto',story:'A chave dourada ficou lá em cima! Busque a chave e planeje as voltas entre os canteiros antes de chegar à estrela.',hint:'Busque a chave pela primeira coluna. Para passar ao outro lado, desça até a quarta linha.'},
+  {size:6,start:[5,0],goal:[0,5],blocks:[[4,1],[3,1],[2,1],[1,3],[2,3],[3,3],[4,3]],items:[{at:[1,0],icon:'⚿',label:'Chave'},{at:[4,4],icon:'✿',label:'Flor'}],limit:30,title:'Duas descobertas pelo caminho',story:'A turma preparou uma missão especial: buscar a chave e a flor antes da estrela. Os dois itens precisam ir com Bit. Qual caminho visita todos?',hint:'A chave está na primeira coluna. A flor está do outro lado. A linha de cima e a linha de baixo ajudam a atravessar o quintal.'}
 ];
+
+function pathPickups(cfg) { return cfg.items || (cfg.key ? [{at:cfg.key,icon:'⚿',label:'Chave'}] : []); }
 function phasePathGame(a) {
-  const phase = requestedPhase(a.id), cfg = PATH_PHASES[phase-1], currentVisit = visit;
+  const cfg = PATH_PHASES[requestedPhase(a.id)-1], currentVisit = visit, items = pathPickups(cfg);
   const dirs = {up:{r:-1,c:0,arrow:'↑',label:'Cima'},right:{r:0,c:1,arrow:'→',label:'Direita'},down:{r:1,c:0,arrow:'↓',label:'Baixo'},left:{r:0,c:-1,arrow:'←',label:'Esquerda'}};
-  let commands = [], pos = {r:cfg.start[0],c:cfg.start[1]}, trail = [], busy = false, key = false;
+  let commands = [], pos = {r:cfg.start[0],c:cfg.start[1]}, trail = [], busy = false, collected = new Set();
   const blocked = (r,c) => cfg.blocks.some(p => p[0] === r && p[1] === c);
-  gameShell(a,cfg.story,'<div class="stage-label"><span>' + cfg.title.toUpperCase() + '</span><span>' + cfg.size + ' × ' + cfg.size + '</span></div><div class="board phase-board" id="board" role="img" style="--board-size:' + cfg.size + '" aria-label="Mapa do quintal"></div><div class="board-caption"><span>🌿 Dê a volta nas plantas</span>' + (cfg.key ? '<span>⚿ Pegue a chave primeiro</span>' : '') + '<span>✦ Seu destino</span></div>',
-    '<h2>Qual é o caminho, capitão?</h2><p>Monte os passos e veja Bit passear.</p><div class="direction-pad">' + Object.entries(dirs).map(([id,d]) => '<button class="direction-button" data-dir="' + id + '" aria-label="Adicionar passo para ' + d.label.toLowerCase() + '">' + d.arrow + '<small>' + d.label + '</small></button>').join('') + '</div><div class="program" id="program" aria-label="Seu caminho de comandos"></div><div class="program-tools"><span id="step-count"></span><div><button id="undo">↶ Voltar um passo</button><button id="clear">Limpar</button></div></div><button class="button primary run" id="run-path">Vamos, Bit! ▶</button><div class="feedback" id="path-feedback" role="status" aria-live="polite">Pode testar quantas vezes quiser.</div><details class="hint"><summary>Uma pista do Miau?</summary><p>' + cfg.hint + '</p></details>',
+  gameShell(a,cfg.story,'<div class="stage-label"><span>' + cfg.title.toUpperCase() + '</span><span>' + cfg.size + ' × ' + cfg.size + '</span></div><div class="board phase-board" id="board" role="img" style="--board-size:' + cfg.size + '" aria-label="Mapa do quintal"></div><div class="board-caption"><span>🌿 Dê a volta nas plantas</span><span>✦ Seu destino</span></div><div class="path-pickups" id="path-pickups"></div>',
+    '<h2>Qual é o caminho, capitão?</h2><p>Monte os passos e veja Bit passear.</p><div class="direction-pad">' + Object.entries(dirs).map(([id,d]) => '<button class="direction-button" data-dir="' + id + '" aria-label="Adicionar passo para ' + d.label.toLowerCase() + '">' + d.arrow + '<small>' + d.label + '</small></button>').join('') + '</div><div class="program" id="program" aria-label="Seu caminho de comandos"></div><p class="path-step-count" id="step-count"></p><div class="path-edit-controls"><button id="undo" aria-describedby="path-edit-help"><span aria-hidden="true">↶</span>Voltar um passo</button><button id="clear" aria-describedby="path-edit-help"><span aria-hidden="true">×</span>Limpar caminho</button></div><p class="path-edit-help" id="path-edit-help">Voltar remove a última seta. Limpar apaga o caminho inteiro.</p><button class="button primary run" id="run-path">Vamos, Bit! ▶</button><div class="feedback" id="path-feedback" role="status" aria-live="polite">Pode testar quantas vezes quiser.</div><details class="hint"><summary>Uma pista do Miau?</summary><p>' + cfg.hint + '</p></details>',
     'Você criou uma sequência de comandos, testou a ideia e pôde mudar o caminho. Programar também é experimentar!');
   function draw() {
     $('#board').innerHTML = Array.from({length:cfg.size*cfg.size},(_,i) => {
-      const r = Math.floor(i/cfg.size), c = i%cfg.size, here = pos.r === r && pos.c === c, target = r === cfg.goal[0] && c === cfg.goal[1], isKey = cfg.key && !key && r === cfg.key[0] && c === cfg.key[1];
-      return '<div class="cell ' + (blocked(r,c) ? 'blocked' : '') + ' ' + (target ? 'target' : '') + ' ' + (trail.includes(i) && !here ? 'trail' : '') + '">' + (here ? robotSVG('tiny-robot') : blocked(r,c) ? '🌿' : isKey ? '⚿' : target ? '✦' : '') + '</div>';
+      const r = Math.floor(i/cfg.size), c = i%cfg.size, here = pos.r === r && pos.c === c, target = r === cfg.goal[0] && c === cfg.goal[1];
+      const item = items.find((p,n) => !collected.has(n) && p.at[0] === r && p.at[1] === c);
+      return '<div class="cell ' + (blocked(r,c) ? 'blocked' : '') + ' ' + (target ? 'target' : '') + ' ' + (trail.includes(i) && !here ? 'trail' : '') + '">' + (here ? robotSVG('tiny-robot') : blocked(r,c) ? '🌿' : item ? item.icon : target ? '✦' : '') + '</div>';
     }).join('');
-    $('#board').setAttribute('aria-label','Quintal com ' + cfg.size + ' linhas e colunas. Bit está na linha ' + (pos.r+1) + ', coluna ' + (pos.c+1) + '. A estrela está na linha ' + (cfg.goal[0]+1) + ', coluna ' + (cfg.goal[1]+1) + '.' + (cfg.key ? ' Chave na linha ' + (cfg.key[0]+1) + ', coluna ' + (cfg.key[1]+1) + (key ? ', já coletada.' : '.') : ''));
+    $('#board').setAttribute('aria-label','Quintal com ' + cfg.size + ' linhas e colunas. Bit está na linha ' + (pos.r+1) + ', coluna ' + (pos.c+1) + '. A estrela está na linha ' + (cfg.goal[0]+1) + ', coluna ' + (cfg.goal[1]+1) + '. ' + items.map((p,n) => p.label + ' na linha ' + (p.at[0]+1) + ', coluna ' + (p.at[1]+1) + (collected.has(n) ? ', já coletada.' : ', ainda no caminho.')).join(' '));
+    $('#path-pickups').innerHTML = items.map((p,n) => '<span class="' + (collected.has(n) ? 'collected' : '') + '">' + (collected.has(n) ? '✓' : p.icon) + ' ' + p.label + (collected.has(n) ? ' encontrada' : ' para buscar') + '</span>').join('');
   }
-  function program() { $('#program').innerHTML = commands.length ? commands.map((id,i) => '<span class="step" data-step="' + i + '">' + dirs[id].arrow + '</span>').join('') : '<span class="program-empty">Seu caminho aparece aqui ✦</span>'; $('#step-count').textContent = commands.length + ' de ' + cfg.limit + ' passos'; }
+  function program() {
+    $('#program').innerHTML = commands.length ? commands.map((id,i) => '<span class="step" data-step="' + i + '">' + dirs[id].arrow + '</span>').join('') : '<span class="program-empty">Seu caminho aparece aqui ✦</span>';
+    $('#step-count').textContent = commands.length + ' de ' + cfg.limit + ' passos';
+    $('#undo').disabled = busy || !commands.length; $('#clear').disabled = busy || (!commands.length && !trail.length);
+  }
   function feedback(text,type) { const el = $('#path-feedback'); el.className = 'feedback ' + (type || ''); el.innerHTML = text; }
-  function unlock() { busy = false; $$('.direction-button,#undo,#clear,#run-path').forEach(b => b.disabled = false); $$('.step').forEach(s => s.classList.remove('running')); }
+  function unlock() { busy = false; $$('.direction-button,#run-path').forEach(b => b.disabled = false); $$('.step').forEach(s => s.classList.remove('running')); program(); }
   $$('[data-dir]').forEach(b => b.onclick = () => { if (busy) return; if (commands.length >= cfg.limit) { feedback('Seu caminho está cheio. Que tal voltar um passo?','error'); return; } commands.push(b.dataset.dir); program(); });
-  $('#undo').onclick = () => { if (!busy) { commands.pop(); program(); } };
-  $('#clear').onclick = () => { if (busy) return; commands = []; pos = {r:cfg.start[0],c:cfg.start[1]}; trail = []; key = false; draw(); program(); feedback('Uma ideia novinha para testar!'); };
+  $('#undo').onclick = () => { if (!busy) { commands.pop(); program(); feedback('A última seta saiu. Você pode escolher outro passo.'); } };
+  $('#clear').onclick = () => { if (busy) return; commands = []; pos = {r:cfg.start[0],c:cfg.start[1]}; trail = []; collected.clear(); draw(); program(); feedback('Uma ideia novinha para testar!'); };
   $('#run-path').onclick = async () => {
     if (busy) return; if (!commands.length) { feedback('Escolha uma seta para mostrar o caminho.','error'); return; }
     busy = true; $$('.direction-button,#undo,#clear,#run-path').forEach(b => b.disabled = true);
-    pos = {r:cfg.start[0],c:cfg.start[1]}; trail = []; key = false; draw(); feedback('Bip-bip… seguindo sua ideia!');
+    pos = {r:cfg.start[0],c:cfg.start[1]}; trail = []; collected.clear(); draw(); feedback('Bip-bip… seguindo sua ideia!');
     for (let i=0;i<commands.length;i++) {
       if (currentVisit !== visit) return; $$('.step').forEach(s => s.classList.toggle('running',Number(s.dataset.step) === i));
       await wait(motionReduced ? 70 : 360); if (currentVisit !== visit) return;
       const d = dirs[commands[i]], r = pos.r+d.r, c = pos.c+d.c;
       if (r < 0 || r >= cfg.size || c < 0 || c >= cfg.size) { feedback('Bit chegou à beirinha. Vamos mudar os passos e tentar outra vez?','error'); unlock(); return; }
       if (blocked(r,c)) { feedback('Uma plantinha! Bit parou para cuidar dela. Vamos dar a volta?','error'); unlock(); return; }
-      trail.push(pos.r*cfg.size+pos.c); pos = {r,c}; if (cfg.key && r === cfg.key[0] && c === cfg.key[1]) key = true; draw();
+      trail.push(pos.r*cfg.size+pos.c); pos = {r,c}; items.forEach((p,n) => { if (p.at[0] === r && p.at[1] === c) collected.add(n); }); draw();
     }
-    if (pos.r === cfg.goal[0] && pos.c === cfg.goal[1] && (!cfg.key || key)) { award(a.id); feedback('Sua ideia brilhou! Bit encontrou a estrela' + (cfg.key ? ' e levou a chave' : '') + '. ✦' + nextLinks(),'success'); }
-    else feedback(pos.r === cfg.goal[0] && cfg.key && !key ? 'Chegamos à estrela, mas a chave ficou para trás. Podemos mudar o caminho!' : 'Bit passeou. Que passos ainda faltam para chegar à estrela?','error');
+    const reached = pos.r === cfg.goal[0] && pos.c === cfg.goal[1];
+    if (reached && collected.size === items.length) { award(a.id); feedback('Sua ideia brilhou! Bit encontrou a estrela' + (items.length ? ' e trouxe todas as descobertas do caminho' : '') + '. ✦' + nextLinks(),'success'); }
+    else feedback(reached && collected.size < items.length ? 'Chegamos à estrela, mas ainda falta buscar: ' + items.filter((_,n) => !collected.has(n)).map(p => p.label.toLowerCase()).join(' e ') + '. Vamos mudar o caminho?' : 'Bit passeou. Que passos ainda faltam para chegar à estrela?','error');
     unlock();
   };
   program(); draw();
@@ -373,4 +409,4 @@ function sandwichGame(a) {
   }
   render();
 }
-const bonusGames = {senhas:passwordGame,fotos:photoGame,receita:sandwichGame};
+const bonusGames = {senhas:passwordGame,fotos:photoGame,receita:sandwichGame,...expansionGames};
