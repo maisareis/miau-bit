@@ -15,6 +15,26 @@
   let offlineReady = false;
   let refreshRequested = false;
   let reloading = false;
+  let pendingReload = false;
+  let opening = true;
+  let currentController = navigator.serviceWorker && navigator.serviceWorker.controller;
+
+  // Refresh only before the first interaction. A running game keeps its document.
+  function keepCurrentSession() { opening = false; }
+  ['pointerdown', 'keydown', 'input'].forEach(type => {
+    document.addEventListener(type, keepCurrentSession, {capture: true, once: true});
+  });
+  window.addEventListener('hashchange', keepCurrentSession, {once: true});
+  window.addEventListener('pagehide', keepCurrentSession, {once: true});
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') keepCurrentSession();
+  });
+
+  function reloadApp() {
+    if (reloading) return;
+    reloading = true;
+    window.location.reload();
+  }
 
   function updateInstalledState() {
     installButton.hidden = isStandalone();
@@ -69,10 +89,14 @@
 
   function showUpdateIfWaiting() {
     const waiting = Boolean(registration && registration.waiting && navigator.serviceWorker.controller);
-    updateButton.hidden = !waiting;
-    updateMessage.hidden = !waiting;
+    updateButton.hidden = !(waiting || pendingReload);
+    updateMessage.hidden = updateButton.hidden;
+    if (waiting && opening && document.visibilityState === 'visible') {
+      registration.waiting.postMessage({type: 'SKIP_WAITING'});
+    }
   }
   updateButton.addEventListener('click', () => {
+    if (pendingReload) { reloadApp(); return; }
     if (!registration || !registration.waiting) { showUpdateIfWaiting(); return; }
     refreshRequested = true;
     updateButton.disabled = true;
@@ -89,16 +113,20 @@
     try {
       registration = await navigator.serviceWorker.register('./sw.js', {scope: './', updateViaCache: 'none'});
       showUpdateIfWaiting();
-      registration.addEventListener('updatefound', () => {
+      function watchInstallingWorker() {
         const worker = registration.installing;
         if (!worker) return;
-        worker.addEventListener('statechange', () => {
+        const checkState = () => {
           if (worker.state === 'installed') showUpdateIfWaiting();
           if (worker.state === 'redundant' && !offlineReady) {
             status.textContent = 'A preparação ficou para depois. Abra novamente com internet para guardar os jogos.';
           }
-        });
-      });
+        };
+        worker.addEventListener('statechange', checkState);
+        checkState();
+      }
+      registration.addEventListener('updatefound', watchInstallingWorker);
+      watchInstallingWorker();
       navigator.serviceWorker.ready.then(() => {
         offlineReady = true;
         updateStatus();
@@ -109,9 +137,14 @@
   }
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshRequested && !reloading) {
-        reloading = true;
-        window.location.reload();
+      const previousController = currentController;
+      currentController = navigator.serviceWorker.controller;
+      if (!previousController || !currentController || currentController === previousController) return;
+      pendingReload = true;
+      if (refreshRequested || (opening && document.visibilityState === 'visible')) {
+        reloadApp();
+      } else {
+        showUpdateIfWaiting();
       }
     });
   }

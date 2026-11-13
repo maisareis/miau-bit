@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pwa-0709994178ad';
+const CACHE_NAME = 'miau-bit-pwa-a7ce1443f2b6';
 const APP_FILES = [
   "./",
   "app.js",
@@ -49,6 +49,8 @@ self.addEventListener('install', event => {
       await caches.delete(CACHE_NAME);
       throw error;
     }
+    // Activate only after the whole offline bundle is ready. Open games do not reload.
+    await self.skipWaiting();
   })());
 });
 
