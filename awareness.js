@@ -26,10 +26,12 @@ function awarenessStatus(message, type='') {
 }
 
 function awarenessFinish(a, message, replay) {
+  const hadStar = discovered.has(a.id);
   award(a.id);
+  const feedback = !hadStar ? 'Você encontrou mais uma estrela para o seu bolso! ✦' : phaseCount(a.id) > 1 ? 'Você concluiu a fase ' + requestedPhase(a.id) + '! Sua ideia brilhou. ✦' : 'Sua ideia brilhou de novo! ✦';
   $('#game-stage').classList.add('aw-game-complete');
   $$('#game-stage button').forEach(b=>{b.disabled=true;b.draggable=false;});
-  $('#game-panel').innerHTML=`<span class="eyebrow">UMA NOVA DESCOBERTA</span><h2 class="aw-win-title">${a.medal}!</h2><p>${message}</p><div class="feedback success" role="status">Você encontrou mais uma estrela para o seu bolso! ✦</div>${nextLinks()}<button class="text-button" id="aw-replay">↶ Brincar de novo</button>`;
+  $('#game-panel').innerHTML=`<span class="eyebrow">UMA NOVA DESCOBERTA</span><h2 class="aw-win-title">${a.medal}!</h2><p>${message}</p><div class="feedback success" role="status">${feedback}</div>${nextLinks()}<button class="text-button" id="aw-replay">↶ Brincar de novo</button>`;
   $('#aw-replay').onclick=replay;
 }
 
@@ -61,24 +63,7 @@ function backpackGame(a) {
   render();
 }
 
-function mailboxGame(a) {
-  const letters=[
-    {from:'Um remetente que Bit não conhece',text:'Você ganhou mil moedas! Escreva sua senha para receber agora.',adult:true,why:'Um prêmio pedindo senha é motivo para parar. Bit não responde e mostra a mensagem a um adulto.'},
-    {from:'Um bilhete da brincadeira combinada com a família',text:'Hoje vamos desenhar foguetes na oficina. Escolha uma cor bem bonita!',adult:false,why:'É o recado da atividade que a família já combinou. Não há link, pedido de segredo ou dados pessoais.'},
-    {from:'Uma mensagem durante um jogo',text:'Mande o código que chegou no seu celular para eu liberar uma fase.',adult:true,why:'Códigos também protegem contas. Bit não envia o código e pede ajuda a um adulto de confiança.'},
-    {from:'O mural de desenhos da oficina',text:'Qual será o nome do nosso planeta imaginário? Que tal Planeta Pipoca?',adult:false,why:'Essa é uma pergunta sobre a história inventada da turma. Ela não pede nenhuma informação pessoal.'},
-    {from:'Uma mensagem que deixou Bit desconfortável',text:'Não conte esta conversa para ninguém, nem para a sua família.',adult:true,why:'Bit pode contar o que o deixou desconfortável. Pedir ajuda é um cuidado, e ele não precisa guardar esse segredo.'}
-  ];
-  let index=0,answered=false;const sorted=[];
-  gameShell(a,'Toc-toc! O correio chegou à oficina. Bit precisa organizar cinco mensagens de faz de conta. Algumas são recados da brincadeira; outras merecem a ajuda de um adulto de confiança.', '', '', 'Observe o que uma mensagem pede, mesmo que o nome do remetente pareça conhecido. Pedidos de senha, código ou segredo merecem uma pausa e a ajuda de um adulto. Na dúvida, também pode pedir ajuda!');
-  function render() {
-    answered=false;const l=letters[index];
-    $('#game-stage').innerHTML=`<div class="stage-label"><span>CORREIO DE FAZ DE CONTA</span><span>CARTA ${index+1} DE ${letters.length}</span></div><div class="aw-letter"><span class="aw-envelope" aria-hidden="true">✉</span><p class="aw-from">${l.from}</p><p class="aw-letter-text">“${l.text}”</p></div><div class="aw-stamps" aria-label="${sorted.length} de ${letters.length} cartas organizadas">${letters.map((_,n)=>`<span class="${n<sorted.length?'aw-stamped':''}" aria-hidden="true">${n<sorted.length?'✓':'✉'}</span>`).join('')}</div><p class="aw-caption">Mensagens inventadas. Nenhum link abre de verdade.</p>`;
-    $('#game-panel').innerHTML='<h2>Para onde vai essa carta?</h2><p>Leia a mensagem com calma. O que ela está pedindo?</p><div class="choices"><button class="choice" data-mail-place="recado"><span aria-hidden="true">✉</span>Guardar com os recados da brincadeira</button><button class="choice" data-mail-place="adulto"><span aria-hidden="true">♡</span>Mostrar a um adulto de confiança</button></div><div class="feedback" id="aw-feedback" role="status" aria-live="polite">Pode tentar de novo. Bit está aprendendo com você!</div><div id="aw-mail-next"></div>';
-    $$('[data-mail-place]').forEach(b=>b.onclick=()=>{if(answered)return;const choseAdult=b.dataset.mailPlace==='adulto';if(choseAdult!==l.adult){awarenessStatus(l.adult?'Essa carta pede um segredo, uma senha ou um código. Bit pode parar e procurar ajuda. Tente o outro lugar.':'Pedir ajuda é sempre permitido! Este recado faz parte da brincadeira e não pede dados. Para organizar o correio, coloque-o com os recados.','error');return;}answered=true;sorted.push(choseAdult);$$('[data-mail-place]').forEach(x=>x.disabled=true);b.classList.add('selected');awarenessStatus(l.why,'success');$('.aw-stamps').innerHTML=letters.map((_,n)=>`<span class="${n<sorted.length?'aw-stamped':''}" aria-hidden="true">${n<sorted.length?'✓':'✉'}</span>`).join('');$('.aw-stamps').setAttribute('aria-label',`${sorted.length} de ${letters.length} cartas organizadas`);$('#aw-mail-next').innerHTML=`<button class="button primary run" id="aw-open-letter">${index===letters.length-1?'Entregar o correio':'Abrir a próxima carta'} <span aria-hidden="true">→</span></button>`;$('#aw-open-letter').onclick=()=>{index++;if(index<letters.length)render();else awarenessFinish(a,'As cinco cartas chegaram ao lugar certo. Você ajudou Bit a perceber quando uma mensagem precisa de cuidado!',()=>mailboxGame(a));};});
-  }
-  render();
-}
+function mailboxGame(a) { phaseMailboxGame(a); }
 
 function rumorsGame(a) {
   const clues=[

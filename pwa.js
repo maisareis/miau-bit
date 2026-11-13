@@ -23,8 +23,8 @@
   function updateStatus() {
     if (offlineReady) {
       status.textContent = navigator.onLine
-        ? 'Os nove jogos estão guardados neste aparelho para brincar sem internet.'
-        : 'Estamos sem internet. Os nove jogos guardados continuam disponíveis!';
+        ? 'Os jogos e suas fases estão guardados neste aparelho para brincar sem internet.'
+        : 'Estamos sem internet. Os jogos e suas fases continuam disponíveis!';
     } else {
       status.textContent = navigator.onLine
         ? 'Preparando os jogos para brincar sem internet…'
