@@ -1,0 +1,14 @@
+MIAU & BIT — GRANDE AVENTURA EDUCATIVA (25 FASES)
+- Todos os níveis têm mecanismos associados a desafios de aprendizagem.
+- Mundo 1: sequências, padrões, depuração e algoritmos.
+- Mundo 2: senhas, verificação em duas etapas e proteção de informações.
+- Mundo 3: montar sequências de comandos para programar o Bit.
+- Mundo 4: organizar padrões e sequências de dados/cristais.
+- Mundo 5: decisões de segurança digital sobre golpes, phishing, privacidade e Wi-Fi.
+- A dificuldade aumenta com o número de mecanismos/desafios nas fases avançadas.
+- HUD indica missões resolvidas; o progresso antigo permanece.
+- Preservados mundos, personagens, música, fases e ajustes visuais existentes.
+
+LIMITAÇÕES: Os desafios dos Mundos 1, 2 e 5 ainda usam decisões por alternativas;
+os Mundos 3 e 4 já têm minijogos de montar sequências.
+A jogabilidade integral no celular ainda precisa de teste manual.

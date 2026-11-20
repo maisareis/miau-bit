@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-webgl-local-20261120-v2-v2';
+const CACHE_NAME = 'miau-bit-terceira-pessoa-3d-v1';
 const APP_FILES = [
   "grande-aventura/conexao-secreta.html",
   "grande-aventura/conexao-secreta.css",
