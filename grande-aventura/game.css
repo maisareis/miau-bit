@@ -89,3 +89,72 @@ button:focus-visible,a:focus-visible{outline:4px solid #f3b53e;outline-offset:3p
 #missionAnswers button:hover,#missionAnswers button:focus-visible{background:#dbf9ee;border-color:#319e7b}
 #missionFeedback{min-height:25px;color:#7852a4;font-weight:700}
 .mission-inner small{display:block;color:#586982}
+
+.glitch-entry[hidden]{display:none!important}.glitch-entry{display:block;margin:18px auto;max-width:520px;text-align:center;text-decoration:none;color:white;background:linear-gradient(110deg,#4e217f,#7939aa,#164b82);border:2px solid #d7a2ff;border-radius:22px;padding:18px;font-weight:900;box-shadow:0 10px 30px #3a155d55}.glitch-entry span{display:block;margin-top:7px;font-size:.9em;color:#dff8ff}
+
+/* CORREÇÃO GLOBAL: o seletor de fases não pode ser cortado pelo canvas.
+   O painel ocupa a tela do dispositivo, independentemente da altura do jogo. */
+#overlay[hidden],#overlay #map[hidden],#overlay button[hidden]{display:none!important}
+#overlay{
+ position:fixed!important;
+ inset:0!important;
+ z-index:900;
+ width:100vw;
+ height:100vh;
+ height:100dvh;
+ max-height:100dvh;
+ overflow-y:auto!important;
+ overflow-x:hidden;
+ overscroll-behavior:contain;
+ -webkit-overflow-scrolling:touch;
+ display:flex;
+ flex-direction:column;
+ justify-content:flex-start!important;
+ align-items:center;
+ gap:12px;
+ padding:max(20px,env(safe-area-inset-top)) 18px max(28px,env(safe-area-inset-bottom));
+ background:linear-gradient(160deg,#173451f5,#263e65f5);
+ box-sizing:border-box;
+}
+#overlay h2{flex:none;max-width:720px;line-height:1.25;text-align:center;margin:4px 0}
+#overlay p{flex:none;max-width:720px;text-align:center;line-height:1.4}
+#overlay #map{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ width:min(660px,100%);
+ max-height:none!important;
+ height:auto!important;
+ min-height:0;
+ flex:none;
+ overflow:visible!important;
+ margin:8px 0;
+ gap:10px;
+}
+#overlay #map button{min-height:58px;white-space:normal;line-height:1.25;padding:10px 12px}
+#overlay #nextLevel,#overlay #start,#overlay #backToKingdom{flex:none;max-width:min(100%,420px)}
+#overlay #backToKingdom{background:#e6e2ff;color:#2b3053;font-size:16px;padding:12px 20px}
+#overlay .hint{padding-bottom:12px}
+@media(max-width:600px){
+ #overlay{padding:18px 14px max(24px,env(safe-area-inset-bottom));gap:10px}
+ #overlay h2{font-size:clamp(22px,6vw,30px)}
+ #overlay p{font-size:clamp(14px,3.8vw,17px)}
+ #overlay #map{grid-template-columns:1fr!important;max-height:none!important;margin:6px 0}
+ #overlay #map button{min-height:54px;font-size:clamp(15px,4vw,18px);padding:12px}
+ #overlay #nextLevel{min-height:58px}
+}
+
+.secret-entry{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:148px;padding:18px;border-radius:22px;border:3px solid #bca6ff;background:linear-gradient(145deg,#36245e,#5b358e,#233d86);color:white;text-align:center;text-decoration:none;font-weight:800;box-shadow:0 12px 26px #33215b55}.secret-entry strong{font-size:17px}.secret-entry span{font-size:13px}.secret-entry small{font-size:12px;color:#e3d7ff}.secret-entry:focus-visible{outline:4px solid #f3bf62}
+
+/* Jornada 2: as mesmas cartas de mundo e o mesmo Canvas 2.5D da jornada original. */
+.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));align-items:stretch;gap:11px}
+.world-grid .world{min-height:142px;border:3px solid #78bf95;outline:2px solid #c9e9d0;outline-offset:-7px;border-radius:20px;background:linear-gradient(145deg,#dcf7e3,#f7f8d9);color:#194839;font-family:inherit;box-shadow:0 6px 16px #27425a22}
+.world-grid .world.available{background:linear-gradient(145deg,#dcf7e3,#f7f8d9)}
+.world-grid .world.locked{background:linear-gradient(145deg,#e8e9f5,#f2f1fb);color:#64718a;border-color:#c0c6dc;outline-color:#e4e5f3}
+.world-grid .world strong{font-size:15px}
+.world-grid .world span{font-size:14px}
+.world-grid .glitch-entry{grid-column:1/-1;width:min(100%,470px);justify-self:center}
+.secret-portal-art{position:absolute;right:5%;top:35%;z-index:3;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 12px;border:2px solid #d3a9ff;border-radius:18px;background:#30206bcf;color:#fff;text-decoration:none;font-size:clamp(24px,4vw,42px);font-weight:900;text-shadow:0 2px 3px #120b37;box-shadow:0 0 20px #b984fa88;animation:secret-pulse 3s ease-in-out infinite}
+.secret-portal-art span{font-size:clamp(10px,1.3vw,14px)}
+@keyframes secret-pulse{50%{box-shadow:0 0 34px #b984fadd;transform:scale(1.035)}}
+@media(max-width:600px){.world-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.world-grid .world{min-height:132px;padding:9px}.secret-portal-art{right:3%;top:42%;padding:5px 8px}}
+@media(prefers-reduced-motion:reduce){.secret-portal-art{animation:none}}

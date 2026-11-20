@@ -1,7 +1,0 @@
-MIAU & BIT — EXPERIMENTO VISUAL 2.5D
-
-Esta versão mantém a física e as dez fases de plataforma lateral, mas desenha cenários em várias camadas, plataformas extrudadas, personagens com volume e sombras, e detalhes de primeiro plano. É 2.5D estilizado via Canvas 2D, não usa modelos 3D ou WebGL.
-
-O portal original está incluído, com a área A Grande Aventura integrada. Para testar, extraia o ZIP e abra index.html. Em celular, teste também em hospedagem HTTPS para verificar PWA/offline.
-
-Ainda não foi realizado teste completo de todas as fases e navegadores; considere esta uma versão experimental para avaliar o visual.

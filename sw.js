@@ -1,7 +1,13 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-educativo-25-fases-20261120';
+const CACHE_NAME = 'miau-bit-webgl-local-20261120-v2-v2';
 const APP_FILES = [
+  "grande-aventura/conexao-secreta.html",
+  "grande-aventura/conexao-secreta.css",
+  "grande-aventura/conexao-secreta.js",
+  "grande-aventura/glitch.html",
+  "grande-aventura/glitch.css",
+  "grande-aventura/glitch.js",
   "autoria.css",
   "autoria.html",
   "LICENSE.txt",

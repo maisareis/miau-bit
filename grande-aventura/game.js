@@ -29,6 +29,43 @@ const worldInfo={
 4:{icon:'💎',name:'Caverna dos Dados',names:['','Cristais Perdidos','Pedras que Somem','O Labirinto das Sequências','O Rio de Dados','O Coração da Caverna'],descriptions:['','Explore a caverna e evite os cristais pontiagudos.','Algumas plataformas aparecem e desaparecem. Observe o ritmo!','Encontre os cristais na ordem 1, 2 e 3.','Salte entre plataformas móveis sobre os abismos.','Ative os três cristais para estabilizar a caverna!'],configs:{}},
 5:{icon:'🛡️',name:'Cyberlândia',names:['','A Mensagem Suspeita','A Ponte da Privacidade','Wi-Fi em Perigo','O Labirinto do Glitch','O Confronto Final'],descriptions:['','Cuidado com mensagens suspeitas! Desvie das ameaças digitais.','Proteja seus dados e atravesse as plataformas temporárias.','Redes desconhecidas podem ser arriscadas: acione os escudos na ordem!','O Glitch muda os caminhos. Observe as plataformas e os drones!','Ative os três escudos para derrotar o Glitch e proteger Cyberlândia!'],configs:{}}
 };
+const nextWorlds={
+6:{icon:'🏭',name:'Fábrica dos Comandos',names:['','A Esteira Acorda','Engrenagens em Movimento','A Ponte Programada','Robôs em Equipe','O Núcleo da Fábrica'],descriptions:['','Explore a fábrica e ligue o primeiro circuito.','Pule as esteiras e sincronize seus movimentos.','Ative os mecanismos na ordem para reconstruir a ponte.','Encontre os três comandos e evite os robôs.','Desligue a máquina antes que as engrenagens parem.']},
+7:{icon:'🌿',name:'Jardim das Decisões',names:['','Flores do Amanhecer','O Caminho das Cores','As Pontes Condicionais','O Labirinto das Escolhas','O Coração do Jardim'],descriptions:['','Ative os botões que fazem as flores crescer.','Observe os sinais e escolha a rota.','Ligue as pontes seguindo a sequência dos interruptores.','Combine plataformas móveis e decisões.','Restaure os três núcleos do jardim.']},
+8:{icon:'🌊',name:'Oceano das Conexões',names:['','O Mergulho Digital','Correntes Submarinas','Os Cabos de Coral','A Rede das Profundezas','O Farol Submerso'],descriptions:['','Mergulhe no oceano e encontre os transmissores submersos.','Desvie das correntes e explore os recifes.','Conecte os cabos entre as estações submarinas.','Ative os transmissores das profundezas na ordem correta.','Acenda o farol submerso para proteger a mensagem.']},
+9:{icon:'📚',name:'Arquivo dos Mistérios',names:['','Livros Perdidos','Estantes Móveis','O Padrão Secreto','Arquivos em Ordem','A Biblioteca Viva'],descriptions:['','Encontre os arquivos espalhados.','Salte pelas estantes móveis.','Ative os mecanismos na ordem 1, 2 e 3.','Combine plataformas e circuitos de classificação.','Restaure o arquivo central.']},
+10:{icon:'🏯',name:'Fortaleza do Glitch',names:['','Portões da Fortaleza','A Torre dos Erros','O Labirinto Digital','A Máquina do Glitch','A Última Conexão'],descriptions:['','Atravesse os portões e encontre os escudos.','Desvie das armadilhas que mudam de lugar.','Ative os terminais na ordem certa.','Desligue os mecanismos da máquina do Glitch.','Restaure os três núcleos e conclua a aventura!']}
+};
+for(const [id,info] of Object.entries(nextWorlds)){
+ const w=Number(id);worldInfo[w]={...info,configs:{}};
+ for(let l=1;l<=5;l++){
+  const hard=w-5,spikes=[675,935,1470,1870,2300];
+  if(l>=3)spikes.push(2020);
+  const cfg={width:2800,coins:[340,530,820,1095,1420,1650,1950,2450],spikes:spikes.slice(0,Math.min(6,2+Math.ceil(l/2)+Math.floor(hard/2))),extras:[],drones:[],moving:[],vanish:[],conveyors:[],lasers:[],switches:[{x:350,y:315},{x:1260,y:420},{x:1950,y:310}].slice(0,l<=2?1:l<=4?2:3)};
+  if(l>=2){cfg.extras=[{x:690,y:365,w:120,h:20},{x:1430,y:330,w:125,h:20}];cfg.moving=[{x:1150,y:345,w:110,h:20,axis:'x',amp:35+hard*8,speed:.7+hard*.1}]}
+  if(l>=3){cfg.ordered=true;cfg.moving.push({x:1790,y:310,w:125,h:20,axis:'y',amp:28+hard*3,speed:1.0+hard*.08})}
+  if(l>=4){cfg.drones=[{x:1510,y:398,range:45+hard*8,speed:1+hard*.12}];cfg.vanish=[{x:2270,y:300,w:115,h:20,period:250-hard*12}]}
+  if(l===5){cfg.boss=true;cfg.drones.push({x:2110,y:400,range:45+hard*6,speed:1.3})}
+  if(w===6)cfg.conveyors=[{x:620,y:465,w:400,push:.45+hard*.1},{x:1640,y:465,w:370,push:-.35}];
+  if(w===8&&l>=3)cfg.bridge=true;
+  if(w===10&&l>=3)cfg.lasers=[{x:1320,y:390,period:220},{x:2200,y:385,period:190}];
+  // Cada fase usa uma distribuição própria: alternância de rotas, altura, ritmo e riscos.
+  const pattern=(w*7+l*11)%5;
+  cfg.coins=cfg.coins.map((x,i)=>x+((i*37+w*29+l*53)%125)-62);
+  cfg.spikes=cfg.spikes.map((x,i)=>x+((i*89+l*117+w*43)%210)-105);
+  if(pattern===0){cfg.extras.push({x:920,y:280,w:150,h:22},{x:2020,y:280,w:140,h:22});cfg.moving.push({x:1510,y:305,w:120,h:22,axis:'y',amp:62,speed:.75+l*.11});}
+  if(pattern===1){cfg.extras.push({x:1050,y:350,w:180,h:22},{x:1740,y:280,w:150,h:22});cfg.vanish.push({x:2120,y:350,w:130,h:20,period:270-l*12});}
+  if(pattern===2){cfg.moving.push({x:780,y:310,w:140,h:20,axis:'x',amp:85,speed:.7+l*.13});cfg.extras.push({x:1880,y:270,w:135,h:22});}
+  if(pattern===3){cfg.extras.push({x:880,y:270,w:125,h:20},{x:1560,y:295,w:150,h:20},{x:2170,y:330,w:110,h:20});}
+  if(pattern===4){cfg.moving.push({x:990,y:325,w:135,h:20,axis:'y',amp:65,speed:1+l*.1});cfg.extras.push({x:1840,y:290,w:130,h:22});}
+  if(w===6){cfg.conveyors=[{x:420+l*65,w:260+25*l,push:l%2?1.5:-1.25},{x:1680-l*30,w:340,push:l%2?-1.3:1.4}];}
+  if(w===7){cfg.vanish.push({x:800+l*60,y:310,w:120,h:22,period:290-l*20});cfg.moving.push({x:1730,y:325,w:140,h:20,axis:'y',amp:35+l*12,speed:.65+l*.16});}
+  if(w===8){cfg.moving.push({x:1080,y:290,w:130,h:22,axis:'y',amp:55+l*10,speed:.45+l*.11});cfg.vanish.push({x:2040,y:340,w:145,h:20,period:320-l*18});}
+  if(w===9){cfg.extras.push({x:530+l*35,y:300,w:130,h:22},{x:2300-l*32,y:275,w:150,h:22});cfg.moving.push({x:1460,y:310,w:130,h:22,axis:'x',amp:65+l*9,speed:.7+l*.12});}
+  if(w===10){cfg.lasers.push({x:980+l*30,y:395,period:280-l*15});cfg.drones.push({x:1700,y:392,range:70+l*9,speed:.9+l*.13});}
+  worldInfo[w].configs[l]=cfg;
+ }
+}
 const commonCoins=[340,530,820,1095,1420,1650,1950,2450];
 function makeCfg(w,l){
  const shift=w===3?0:w===4?20:35;
@@ -57,23 +94,25 @@ function makeCfg(w,l){
 }
 for(let w=3;w<=5;w++)for(let l=1;l<=5;l++)worldInfo[w].configs[l]=makeCfg(w,l);
 let world=1,worldUnlocked=1;
-const progress={1:1,2:1,3:1,4:1,5:1};
+const progress=Object.fromEntries(Array.from({length:10},(_,i)=>[i+1,1]));
 try{
  progress[1]=Math.min(5,Math.max(1,Number(localStorage.getItem('miau-bit-aventura-mundo1'))||1));
  progress[2]=Math.min(5,Math.max(1,Number(localStorage.getItem('miau-bit-aventura-mundo2'))||1));
- for(let w=3;w<=5;w++)progress[w]=Math.min(5,Math.max(1,Number(localStorage.getItem('miau-bit-aventura-mundo'+w))||1));
+ for(let w=3;w<=10;w++)progress[w]=Math.min(5,Math.max(1,Number(localStorage.getItem('miau-bit-aventura-mundo'+w))||1));
  if(localStorage.getItem('miau-bit-aventura-mundo1-completo')==='sim')worldUnlocked=2;
- for(let w=2;w<=4;w++)if(localStorage.getItem('miau-bit-aventura-mundo'+w+'-completo')==='sim')worldUnlocked=Math.max(worldUnlocked,w+1);
+ for(let w=2;w<=9;w++)if(localStorage.getItem('miau-bit-aventura-mundo'+w+'-completo')==='sim')worldUnlocked=Math.max(worldUnlocked,w+1);
 }catch(e){}
 function currentNames(){return worldInfo[world].names}
 function currentDescriptions(){return worldInfo[world].descriptions}
 function currentConfigs(){return worldInfo[world].configs}
 function worldTitle(){return worldInfo[world].icon+' Mundo '+world+' — '+worldInfo[world].name}
-function updateWorldAccess(){
- for(let w=2;w<=5;w++){
+function updateGlitchAccess(){const el=document.querySelector('#glitchWorld');if(el)el.hidden=localStorage.getItem('miau-bit-aventura-mundo5-completo')!=='sim';}
+function updateWorldAccess(){updateGlitchAccess();
+ for(let w=2;w<=10;w++){
   const b=document.querySelector(w===2?'#castleWorld':'#world'+w+'Btn');
-  const available=w<=worldUnlocked;b.disabled=!available;b.classList.toggle('available',available);b.classList.toggle('locked',!available);
-  document.querySelector(w===2?'#castleStatus':'#world'+w+'Status').textContent=available?'Entrar no mundo ▶':'🔒 Conclua o Mundo '+(w-1);
+  const glitchDone=localStorage.getItem('miau-bit-intermundo-glitch-completo')==='sim';
+  const available=w<=worldUnlocked&&(w<6||glitchDone);b.disabled=!available;b.classList.toggle('available',available);b.classList.toggle('locked',!available);
+  document.querySelector(w===2?'#castleStatus':'#world'+w+'Status').textContent=available?'Entrar no mundo ▶':w===6&& !glitchDone?'🔒 Enfrente o Glitch':w>6&&!glitchDone?'🔒 Conclua o Intermundo':'🔒 Conclua o Mundo '+(w-1);
  }
 }
 const base=[{x:0,y:465,w:520,h:75},{x:610,y:465,w:440,h:75},{x:1140,y:465,w:410,h:75},{x:1630,y:465,w:460,h:75},{x:2180,y:465,w:620,h:75},{x:260,y:360,w:135,h:24},{x:475,y:310,w:120,h:24},{x:760,y:345,w:150,h:24},{x:1030,y:285,w:145,h:24},{x:1350,y:355,w:150,h:24},{x:1580,y:290,w:140,h:24},{x:1890,y:350,w:150,h:24},{x:2130,y:300,w:145,h:24},{x:2400,y:355,w:150,h:24}];
@@ -84,6 +123,7 @@ const missionBox=document.querySelector('#missionBox');
 function missionCount(){return level<=2?1:level<=4?2:3;}
 function missionTitle(){return `${worldInfo[world].icon} Missão ${world}-${level}`;}
 function missionHint(){
+ if(world>=6)return currentDescriptions()[level];
  const n=missionBank[world][level-1];
  return n[0];
 }
@@ -176,27 +216,37 @@ function openMission(s){
 let level=1,player,coins,spikes,switches,platforms,drones=[],laserTraps=[],score=0,lives=3,camera=0,playing=false,invuln=0,last=0,muted=false,audio=null,tick=0,notice='',noticeFrames=0,previousJump=false,elapsed=0;
 
 function tone(f=440,d=.13,type='sine',vol=.035){if(muted)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f,audio.currentTime);g.gain.setValueAtTime(vol,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
-// Five original procedural themes, lightweight and offline: one melody per world.
+// Ten original procedural themes, lightweight and offline: one per world, shared Miau & Bit motif.
 const themes={
  1:{notes:[392,523,587,659,587,523,440,392,330,392,440,523,440,392,330,294],bass:[196,196,220,196],tempo:335,wave:'triangle'},
  2:{notes:[330,392,440,392,311,349,392,311,294,349,392,349,261,311,349,261],bass:[165,155,147,131],tempo:385,wave:'sine'},
  3:{notes:[440,554,659,554,440,330,392,494,523,659,784,659,523,392,330,392],bass:[110,131,147,131],tempo:245,wave:'square'},
  4:{notes:[294,349,440,523,440,349,294,261,330,392,494,587,494,392,330,294],bass:[147,165,131,147],tempo:450,wave:'sine'},
- 5:{notes:[392,466,587,698,659,587,466,392,349,440,554,659,587,554,440,349],bass:[196,175,233,165],tempo:275,wave:'sawtooth'}
+ 5:{notes:[392,466,587,698,659,587,466,392,349,440,554,659,587,554,440,349],bass:[196,175,233,165],tempo:275,wave:'sawtooth'},
+ 6:{notes:[440,523,659,784,659,523,440,392,440,523,659,880,784,659,523,440],bass:[110,147,165,147],tempo:190,wave:'square'},
+ 7:{notes:[392,494,587,659,587,494,440,392,330,392,494,587,659,587,494,392],bass:[196,220,247,196],tempo:430,wave:'sine'},
+ 8:{notes:[294,392,440,523,587,523,440,392,349,440,523,587,523,440,392,294],bass:[147,196,174,147],tempo:510,wave:'sine'},
+ 9:{notes:[349,440,523,587,523,440,392,349,294,349,440,523,494,440,392,349],bass:[175,196,220,175],tempo:305,wave:'triangle'},
+ 10:{notes:[392,466,554,698,659,554,466,392,349,466,587,784,698,587,466,392],bass:[196,233,175,147],tempo:205,wave:'sawtooth'}
 };
 let musicTimer=null,musicStep=0;
 function stopMusic(){if(musicTimer!==null){clearInterval(musicTimer);musicTimer=null;}}
 function startMusic(){stopMusic();musicStep=0;if(muted||!playing)return;
  const theme=themes[world];musicTimer=setInterval(()=>{
   if(!playing||muted){stopMusic();return;}
-  const step=musicStep++,f=theme.notes[step%theme.notes.length];
-  tone(f,theme.tempo/1000*.72,theme.wave,world===5?.008:.013);
-  if(step%4===0)tone(theme.bass[Math.floor(step/4)%theme.bass.length],theme.tempo/1000*1.8,'triangle',.009);
+  const step=musicStep++,f=theme.notes[step%theme.notes.length],beat=theme.tempo/1000;
+  if(world<=5){tone(f,beat*.72,theme.wave,.013);if(step%4===0)tone(theme.bass[Math.floor(step/4)%theme.bass.length],beat*1.8,'triangle',.009);return;}
+  // Ritmos e arranjos distintos por ambiente; cada mundo tem seu próprio padrão.
+  if(world===6){if(step%2===0)tone(f,beat*.38,'square',.012);tone(step%4===0?88:step%2===0?180:320,.055,'sawtooth',.009);if(step%4===0)tone(theme.bass[(step/4)%4],beat*1.2,'triangle',.014);}
+  if(world===7){tone(f,beat*1.3,'sine',.013);if(step%4===2)tone(f*2,beat*.5,'triangle',.004);if(step%8===0)tone(theme.bass[(step/4)%4],beat*3,'sine',.008);}
+  if(world===8){if(step%2===0)tone(f,beat*1.8,'sine',.012);if(step%4===0)tone(f*.5,beat*3,'triangle',.009);if(step%8===6)tone(f*1.5,beat*2,'sine',.005);}
+  if(world===9){tone(f,beat*.35,'triangle',.015);if(step%3===0)tone(f*2,beat*1.5,'sine',.006);if(step%8===0)tone(theme.bass[(step/4)%4],beat*2.5,'sine',.009);}
+  if(world===10){tone(f,beat*.56,'sawtooth',.011);if(step%2===0)tone(f*.5,beat*.6,'square',.009);if(step%4===0)tone(95,beat*.18,'triangle',.024);if(step%8===7)tone(f*2,beat*.25,'square',.006);}
  },theme.tempo);
 }
 function message(s){notice=s;noticeFrames=170;}
 function renderMap(){document.querySelectorAll('[data-level]').forEach(b=>{let n=Number(b.dataset.level),limit=progress[world];b.disabled=n>limit;b.textContent=(n>limit?'🔒 ':'🌟 ')+`${world}-${n} · ${currentNames()[n]}`+(n===5?' 👾':'');});}
-function showMap(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();choose.hidden=true;kingdom.hidden=true;gameSection.hidden=false;playing=false;overlay.hidden=false;overlay.querySelector('h2').textContent=worldTitle();overlay.querySelector('p').textContent='Colete os itens, resolva os desafios de lógica e chegue ao final!';document.querySelector('#map').hidden=false;startBtn.hidden=true;renderMap();}
+function showMap(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();choose.hidden=true;kingdom.hidden=true;gameSection.hidden=false;playing=false;overlay.hidden=false;overlay.querySelector('h2').textContent=worldTitle();overlay.querySelector('p').textContent=world>=6?'Explore o cenário, colete os itens e ative os mecanismos para abrir a saída.':'Colete os itens, resolva os desafios de lógica e chegue ao final!';document.querySelector('#map').hidden=false;startBtn.hidden=true;renderMap();}
 function reset(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();choose.hidden=true;kingdom.hidden=true;gameSection.hidden=false;const cfg=currentConfigs()[level];const special=[...(cfg.moving||[]),...(cfg.vanish||[])];
 const staticPlatforms=base.concat(cfg.extras).filter(p=>{
  if(p.y>=460)return true; // ground remains untouched
@@ -208,18 +258,18 @@ const staticPlatforms=base.concat(cfg.extras).filter(p=>{
   return p.x<xMax&&p.x+p.w>xMin&&p.y<yMax+18&&p.y+p.h>yMin-18;
  });
 });
-platforms=staticPlatforms.map(p=>({...p}));if(cfg.moving)platforms.push(...cfg.moving.map(p=>({...p,moving:true,originX:p.x,originY:p.y})));if(cfg.vanish)platforms.push(...cfg.vanish.map(p=>({...p,vanish:true})));drones=(cfg.drones||[]).map(d=>({...d}));laserTraps=(cfg.lasers||[]).map(d=>({...d}));elapsed=0;if(cfg.bridge)platforms.push({x:2090,y:465,w:90,h:75,conditional:true});player={x:55,y:370,w:38,h:47,vx:0,vy:0,ground:false,spawnX:55,spawnY:370};coins=cfg.coins.map((x,i)=>({x,y:[322,272,307,247,317,252,312,317][i],got:false}));spikes=cfg.spikes.map(x=>({x,y:440,w:42}));switches=(cfg.switches&&cfg.switches.length?cfg.switches:[{x:350,y:315},{x:1260,y:300},{x:1950,y:310}].slice(0,missionCount())).map((s,i)=>({...s,on:false,index:i}));score=0;lives=3;camera=0;invuln=0;notice='';previousJump=false;missionOpen=false;missionPending=null;missionSolved=0;missionRequired=switches.length;missionBox.hidden=true;updateMissionHUD();playing=true;overlay.hidden=true;document.querySelector('#score').textContent=0;document.querySelector('#goal').textContent=coins.length;document.querySelector('#lives').textContent=lives;document.querySelector('#stageLabel').textContent=`Fase ${world}-${level} · ${currentNames()[level]}`;message('🧠 '+missionHint());tone(523,.15);startMusic();}
+platforms=staticPlatforms.map(p=>({...p}));if(cfg.moving)platforms.push(...cfg.moving.map(p=>({...p,moving:true,originX:p.x,originY:p.y})));if(cfg.vanish)platforms.push(...cfg.vanish.map(p=>({...p,vanish:true})));drones=(cfg.drones||[]).map(d=>({...d}));laserTraps=(cfg.lasers||[]).map(d=>({...d}));elapsed=0;if(cfg.bridge)platforms.push({x:2090,y:465,w:90,h:75,conditional:true});player={x:55,y:370,w:38,h:47,vx:0,vy:0,ground:false,spawnX:55,spawnY:370};coins=cfg.coins.map((x,i)=>({x,y:[322,272,307,247,317,252,312,317][i],got:false}));spikes=cfg.spikes.map(x=>({x,y:440,w:42}));switches=(cfg.switches&&cfg.switches.length?cfg.switches:[{x:350,y:315},{x:1260,y:420},{x:1950,y:310}].slice(0,missionCount())).map((s,i)=>({...s,on:false,index:i}));score=0;lives=3;camera=0;invuln=0;notice='';previousJump=false;missionOpen=false;missionPending=null;missionSolved=0;missionRequired=switches.length;missionBox.hidden=true;updateMissionHUD();playing=true;overlay.hidden=true;document.querySelector('#score').textContent=0;document.querySelector('#goal').textContent=coins.length;document.querySelector('#lives').textContent=lives;document.querySelector('#stageLabel').textContent=`Fase ${world}-${level} · ${currentNames()[level]}`;message('🧠 '+missionHint());tone(523,.15);startMusic();}
 function finish(win){
  playing=false;stopMusic();overlay.hidden=false;
  overlay.querySelector('h2').textContent=win?(level===5?'🏆 '+worldInfo[world].name+' concluído!':'🎉 Fase concluída!'):'💛 Vamos tentar de novo?';
- overlay.querySelector('p').textContent=win?(level===5?(world===5?'Glitch foi derrotado! Você protegeu Cyberlândia!':'Mundo concluído! '+(world<5?'O próximo mundo foi desbloqueado!':'Parabéns!')):'A próxima fase foi liberada!'):'Tente novamente. Você consegue!';
+ overlay.querySelector('p').textContent=win?(level===5?(world===5?'Cyberlândia protegida! Mas uma presença misteriosa abriu um novo portal...':'Mundo concluído! '+(world<10?'O próximo mundo foi desbloqueado!':'Parabéns!')):'A próxima fase foi liberada!'):'Tente novamente. Você consegue!';
  startBtn.hidden=false;startBtn.textContent='Jogar novamente ↻';document.querySelector('#map').hidden=false;
  const next=document.querySelector('#nextLevel');
- next.hidden=!win||(world===5&&level===5);
- next.textContent=level===5?'🌍 Ir para o próximo mundo':'➡️ Próxima fase';
+ next.hidden=!win;
+ next.textContent=world===5&&level===5?'👾 Enfrentar o Glitch':level===5?'🌍 Ir para o próximo mundo':'➡️ Próxima fase';
  
  if(win){progress[world]=Math.max(progress[world],Math.min(5,level+1));
-  if(level===5)worldUnlocked=Math.max(worldUnlocked,Math.min(5,world+1));
+  if(level===5)worldUnlocked=Math.max(worldUnlocked,Math.min(10,world+1));
   try{localStorage.setItem('miau-bit-aventura-mundo'+world,String(progress[world]));
    if(level===5)localStorage.setItem('miau-bit-aventura-mundo'+world+'-completo','sim');
   }catch(e){}
@@ -229,24 +279,74 @@ function finish(win){
 function hurt(){if(invuln>0||!playing)return;lives--;document.querySelector('#lives').textContent=lives;tone(175,.28,'sawtooth');if(lives<=0){finish(false);return;}invuln=95;player.x=player.spawnX;player.y=player.spawnY;player.vx=player.vy=0;}
 function update(dt){if(!playing||missionOpen)return;const sc=Math.min(dt/16.67,2);elapsed+=dt;const cfg=currentConfigs()[level];for(const p of platforms){if(p.moving){const t=elapsed/1000*p.speed;p.x=p.originX+(p.axis==='x'?Math.sin(t)*p.amp:0);p.y=p.originY+(p.axis==='y'?Math.sin(t)*p.amp:0)}}invuln=Math.max(0,invuln-sc);noticeFrames=Math.max(0,noticeFrames-sc);player.vx=(Number(keys.right)-Number(keys.left))*5.1;for(const belt of (cfg.conveyors||[]))if(player.ground&&player.x>belt.x&&player.x<belt.x+belt.w)player.vx+=belt.push;player.x=Math.max(0,Math.min(2762,player.x+player.vx*sc));if(keys.jump&&!previousJump&&player.ground){player.vy=-13.5;player.ground=false;tone(470,.11,'square',.017)}previousJump=keys.jump;const bottom=player.y+player.h;player.vy+=.64*sc;player.y+=player.vy*sc;player.ground=false;for(const p of platforms){if(p.conditional&&!switches.every(s=>s.on))continue;if(p.vanish&&Math.sin(elapsed/(p.period||220)*Math.PI)<-.1)continue;if(player.vy>=0&&bottom<=p.y+9&&player.y+player.h>=p.y&&player.x+player.w>p.x&&player.x<p.x+p.w){player.y=p.y-player.h;player.vy=0;player.ground=true;}}
 if(player.y>H+90)hurt();for(const d of drones){const dx=d.x+Math.sin(elapsed/1000*d.speed)*d.range;if(Math.abs(player.x+19-dx)<28&&Math.abs(player.y+23-d.y)<32)hurt();}for(const laser of laserTraps){if(Math.sin(elapsed/laser.period)>0.3&&Math.abs(player.x+19-laser.x)<14&&player.y+player.h>laser.y)hurt();}for(const s of spikes)if(player.x+player.w>s.x+7&&player.x<s.x+s.w-7&&player.y+player.h>s.y+8&&player.y<s.y+25)hurt();for(const c of coins){if(!c.got&&Math.abs(player.x+19-c.x)<31&&Math.abs(player.y+23-c.y)<37){c.got=true;score++;document.querySelector('#score').textContent=score;tone(650+score*50,.15);}}
-for(const s of switches){if(missionOpen)break;if(s.on)continue;if(Math.abs(player.x+19-s.x)<35&&Math.abs(player.y+23-s.y)<50){if(currentConfigs()[level].ordered&&switches.slice(0,s.index).some(q=>!q.on)){message('🔢 Siga a sequência: 1 → 2 → 3!');continue;}openMission(s)}}
+for(const s of switches){if(missionOpen)break;if(s.on)continue;if(Math.abs(player.x+19-s.x)<35&&Math.abs(player.y+23-s.y)<50){if(currentConfigs()[level].ordered&&switches.slice(0,s.index).some(q=>!q.on)){message('🔢 Siga a sequência: 1 → 2 → 3!');continue;}if(world>=6){s.on=true;missionSolved++;updateMissionHUD();tone(850,.2);message(currentConfigs()[level].ordered?"✨ Circuito ativado na ordem correta!":"✨ Mecanismo ativado! Continue explorando.");}else openMission(s)}}
 if(player.x>1600&&player.spawnX<1600){player.spawnX=1640;player.spawnY=390;message('🚩 Checkpoint ativado!');}
-if(player.x>2650){if(score===coins.length&&switches.every(s=>s.on))finish(true);else if(noticeFrames<40)message(`Faltam ${coins.length-score} ${world===2?'chaves':world===3?'circuitos':world===4?'cristais':world===5?'escudos':'engrenagens'} e ${switches.filter(s=>!s.on).length} mecanismos!`);}
+if(player.x>2650){if(score===coins.length&&switches.every(s=>s.on))finish(true);else if(noticeFrames<40)message(`Faltam ${coins.length-score} ${world===2?'chaves':world===3?'circuitos':world===4?'cristais':world===5||world===10?'escudos':world===8?'conexões':world===9?'arquivos':world===7?'sementes':'engrenagens'} e ${switches.filter(s=>!s.on).length} mecanismos!`);}
 camera=Math.max(0,Math.min(1840,player.x-W*.32));}
 function roundRect(x,y,w,h,r,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
 function polygon(points,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(...points[0]);for(let i=1;i<points.length;i++)ctx.lineTo(...points[i]);ctx.closePath();ctx.fill()}
 function ellipse(x,y,rx,ry,color){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill()}
+function oceanScenery(time){
+ // Mundo 8 é SUBAQUÁTICO: a superfície fica muito acima do cenário.
+ const water=ctx.createLinearGradient(0,0,0,H);
+ water.addColorStop(0,'#174c89');water.addColorStop(.36,'#117baf');water.addColorStop(.73,'#08677e');water.addColorStop(1,'#073d57');
+ ctx.fillStyle=water;ctx.fillRect(0,0,W,H);
+ // Raios solares que atravessam a água, em parallax.
+ ctx.save();ctx.globalAlpha=.16;
+ for(let i=0;i<9;i++){
+  const x=((i*170-camera*.045)%1300+1300)%1300-150;
+  polygon([[x,-20],[x+40,-20],[x+170,540],[x+100,540]],'#b8f9ff');
+ }
+ ctx.restore();
+ // Rochas e recifes ao fundo.
+ for(let i=0;i<11;i++){
+  const x=((i*230-camera*.12)%1480+1480)%1480-150;
+  const y=390+i%3*18;
+  ellipse(x+15,y+70,125,76,i%2?'#0b506d':'#0b5e70');
+  ellipse(x+10,y+37,55,33,'#0c7b88');
+  for(let j=0;j<4;j++){
+   const bx=x-42+j*30,by=y+10+(j%2)*13;
+   ctx.strokeStyle=['#ff8fa8','#f4b66c','#bc8dff','#5ae3d1'][j];ctx.lineWidth=9;ctx.lineCap='round';
+   ctx.beginPath();ctx.moveTo(bx,by+55);ctx.lineTo(bx,by+18);ctx.lineTo(bx-12,by+4);ctx.moveTo(bx,by+28);ctx.lineTo(bx+14,by+7);ctx.stroke();
+  }
+ }
+ // Estações submarinas e cabos luminosos.
+ for(let i=0;i<5;i++){
+  const x=i*345-camera*.30;
+  roundRect(x+18,330,85,95,16,'#184a79');roundRect(x+30,343,60,48,14,'#62e3ef');
+  ellipse(x+60,365,18,18,'#0d4b7b');ellipse(x+60,365,9,9,'#c6ffff');
+  ctx.strokeStyle='#44d9ed';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x+100,410);ctx.bezierCurveTo(x+145,380,x+200,455,x+250,408);ctx.stroke();
+ }
+ // Cardumes e peixes, animados sem interação com a jogabilidade.
+ for(let i=0;i<18;i++){
+  const x=((i*131+time*(.006+i%3*.003)-camera*.16)%1250+1250)%1250-110;
+  const y=110+(i*59)%260+Math.sin(time/900+i)*9;
+  ctx.save();ctx.translate(x,y);ctx.scale(i%3===0?-1:1,1);
+  ellipse(0,0,11,6,i%2?'#ffd28c':'#a6f3ff');polygon([[-7,0],[-19,-8],[-19,8]],i%2?'#ffa66d':'#63d6f2');
+  ellipse(5,-1,1.6,1.6,'#16365b');ctx.restore();
+ }
+ // Bolhas sobem continuamente desde o fundo.
+ for(let i=0;i<40;i++){
+  const x=((i*97-camera*.11)%1090+1090)%1090-60;
+  const y=((i*71-time*(.018+(i%4)*.008))%640+640)%640-50;
+  const r=2+i%5*1.6;
+  ctx.strokeStyle='#b2f9ff85';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();
+ }
+}
 function scenery(time){
- const castle=world===2,robot=world===3,cave=world===4,cyber=world===5;
+ if(world===8){oceanScenery(time);return;}
+ const castle=world===2||world===9,robot=world===3||world===6,cave=world===4||world===8,cyber=world===5||world===10;
+ const palette={6:['#5390c0','#c7edee','#e5f9db'],7:['#62b89e','#b8e8a8','#f6f4bb'],8:['#236baf','#69d4e9','#d7f8ff'],9:['#9471b9','#e3c6f3','#fff1c6'],10:['#201744','#594191','#a483c8']}[world];
  let sky=ctx.createLinearGradient(0,0,0,H);
  sky.addColorStop(0,cyber?'#15133f':cave?'#192b56':robot?'#62a8d4':castle?'#6c70b8':'#69c8f2');sky.addColorStop(.58,cyber?'#44367e':cave?'#354e80':robot?'#9ce1ee':castle?'#c3b4e5':'#c5f4e7');sky.addColorStop(1,cyber?'#7661ac':cave?'#5d7a9c':robot?'#d0e9fa':castle?'#e9d9fa':'#e8f7b8');
- ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);if(palette){const tint=ctx.createLinearGradient(0,0,0,H);palette.forEach((c,i)=>tint.addColorStop(i/2,c));ctx.fillStyle=tint;ctx.fillRect(0,0,W,H);}
  ellipse(790-camera*.018,88,53,53,cyber?'#ee6fdd':cave?'#9defff':robot?'#f7fbff':castle?'#ffe3b6':'#fff2ae');
  ellipse(775-camera*.018,76,62,62,'#ffffff24');
  for(let i=0;i<11;i++){
   let x=((i*215-camera*.09)%1450+1450)%1450-120,y=65+i%4*35;
   ellipse(x,y,56,17,'#ffffffa0');ellipse(x+29,y-10,35,24,'#ffffffb0');ellipse(x-27,y-7,31,19,'#ffffffa0');
  }
+ if(world>=6){ctx.save();ctx.globalAlpha=.16;ctx.font='150px system-ui';ctx.textAlign='center';for(let i=0;i<5;i++)ctx.fillText(worldInfo[world].icon,150+i*290-camera*.08,245+i%2*55);ctx.restore();}
  // Three scenic depth planes move at different speeds
  for(let layer=0;layer<3;layer++){
   const speed=[.12,.26,.45][layer],baseline=[367,411,470][layer];
@@ -287,6 +387,17 @@ function scenery(time){
  }
 }
 function platform25(p){
+ if(world===8){
+  const d=p.y===465?30:18;
+  if(p.conditional&&!switches.every(q=>q.on))ctx.globalAlpha=.32;
+  if(p.vanish){const phase=Math.sin(elapsed/(p.period||220)*Math.PI);if(phase<-.1){ctx.globalAlpha=1;return;}if(phase<.18)ctx.globalAlpha=.4;}
+  polygon([[p.x,p.y],[p.x+d*.5,p.y-d*.4],[p.x+p.w+d*.5,p.y-d*.4],[p.x+p.w,p.y]],'#a7dfcf');
+  polygon([[p.x+p.w,p.y],[p.x+p.w+d*.5,p.y-d*.4],[p.x+p.w+d*.5,p.y+p.h-d*.4],[p.x+p.w,p.y+p.h]],'#174b68');
+  roundRect(p.x,p.y,p.w,p.h,3,'#28788a');roundRect(p.x,p.y,p.w,13,3,'#65c5b2');
+  for(let i=p.x+20;i<p.x+p.w-10;i+=65){ellipse(i,p.y+6,11,5,'#e6c79b');ellipse(i+8,p.y+8,4,3,'#e9a0ba');}
+  ctx.globalAlpha=1;return;
+ }
+
  const depth=p.y===465?35:22,castle=world===2,robot=world===3,cave=world===4,cyber=world===5;
  const side=cyber?'#292b63':cave?'#285d78':robot?'#4b728d':castle?'#615477':'#795b46',front=cyber?'#5d4a9e':cave?'#3d8298':robot?'#6da6c3':castle?'#8b79a5':'#a77b55',top=cyber?'#b56de2':cave?'#6dd6d7':robot?'#a6e7ef':castle?'#c7b6e5':'#82c991';
  if(p.conditional&&!switches.every(q=>q.on))ctx.globalAlpha=.35;
@@ -408,18 +519,20 @@ function frame(t){const dt=t-last||16.67;last=t;update(dt);draw();requestAnimati
 function stopPortal(){if(portalTimer!==null){clearTimeout(portalTimer);portalTimer=null;}portalScene.hidden=true;portalScene.classList.remove('entering');}
 function enterPortal(){stopMusic();stopPortal();playing=false;choose.hidden=true;kingdom.hidden=true;gameSection.hidden=true;portalScene.hidden=false;const hero=document.querySelector('#portalHero');hero.src=character+'.svg';hero.alt=character==='luma'?'Luma entrando no reino':'Miau entrando no reino';void portalScene.offsetWidth;portalScene.classList.add('entering');tone(560,.23,'triangle');portalTimer=setTimeout(()=>{portalTimer=null;showKingdom();},3100);}
 document.querySelector('#skipPortal').addEventListener('click',()=>showKingdom());
-function showKingdom(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();playing=false;updateWorldAccess();choose.hidden=true;kingdom.hidden=false;gameSection.hidden=true;window.scrollTo({top:0,behavior:'smooth'});}
+function showKingdom(){updateGlitchAccess();document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();playing=false;updateWorldAccess();choose.hidden=true;kingdom.hidden=false;gameSection.hidden=true;window.scrollTo({top:0,behavior:'smooth'});}
 function showChoose(){stopMusic();stopPortal();playing=false;gameSection.hidden=true;kingdom.hidden=true;choose.hidden=false;document.querySelectorAll('[data-character]').forEach(b=>b.classList.toggle('selected',b.dataset.character===character));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-character]').forEach(b=>b.addEventListener('click',()=>{character=b.dataset.character;document.querySelectorAll('[data-character]').forEach(x=>x.classList.toggle('selected',x===b));tone(740,.15);try{localStorage.setItem('miau-bit-aventura-personagem',character)}catch(e){}}));
 document.querySelector('#enterKingdom').addEventListener('click',()=>{tone(880,.3);enterPortal()});
 document.querySelector('#characterBtn').addEventListener('click',showChoose);
-document.querySelector('#forestWorld').addEventListener('click',()=>{world=1;showMap()});document.querySelector('#castleWorld').addEventListener('click',()=>{if(worldUnlocked>=2){world=2;showMap()}});for(let w=3;w<=5;w++)document.querySelector('#world'+w+'Btn').addEventListener('click',()=>{if(worldUnlocked>=w){world=w;showMap()}});
-document.querySelector('#kingdomBtn').addEventListener('click',showKingdom);
+document.querySelector('#forestWorld').addEventListener('click',()=>{world=1;showMap()});document.querySelector('#castleWorld').addEventListener('click',()=>{if(worldUnlocked>=2){world=2;showMap()}});for(let w=3;w<=10;w++)document.querySelector('#world'+w+'Btn').addEventListener('click',()=>{if(worldUnlocked>=w&&(w<6||localStorage.getItem('miau-bit-intermundo-glitch-completo')==='sim')){world=w;showMap()}});
+document.querySelector('#kingdomBtn').addEventListener('click',showKingdom);document.querySelector('#backToKingdom').addEventListener('click',showKingdom);
 document.querySelector('#nextLevel').addEventListener('click',()=>{
  if(playing)return;
  if(level<5){level++;reset();return;}
- if(world<5){world++;level=1;showMap();return;}
+ if(world===5){window.location.href='glitch.html';return;}if(world<10){world++;level=1;showMap();return;}
  showKingdom();
 });
 startBtn.addEventListener('click',reset);document.querySelector('#mapBtn').addEventListener('click',showMap);document.querySelector('#soundBtn').addEventListener('click',()=>{muted=!muted;document.querySelector('#soundBtn').textContent=muted?'🔇 Som desligado':'🔊 Som ligado';if(!muted){tone(600,.12);if(playing)startMusic()}else stopMusic()});document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled){level=Number(b.dataset.level);reset();}}));
-function bind(id,key){const el=document.getElementById(id);el.addEventListener('pointerdown',e=>{e.preventDefault();keys[key]=true;el.setPointerCapture(e.pointerId)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(ev,()=>keys[key]=false)}bind('left','left');bind('right','right');bind('jump','jump');const mapping={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'jump',Space:'jump',KeyW:'jump'};window.addEventListener('keydown',e=>{const k=mapping[e.code];if(k){e.preventDefault();keys[k]=true}});window.addEventListener('keyup',e=>{const k=mapping[e.code];if(k){e.preventDefault();keys[k]=false}});window.addEventListener('blur',()=>{keys.left=keys.right=keys.jump=false});reset();showChoose();updateWorldAccess();requestAnimationFrame(frame);
+function bind(id,key){const el=document.getElementById(id);el.addEventListener('pointerdown',e=>{e.preventDefault();keys[key]=true;el.setPointerCapture(e.pointerId)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(ev,()=>keys[key]=false)}bind('left','left');bind('right','right');bind('jump','jump');const mapping={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'jump',Space:'jump',KeyW:'jump'};window.addEventListener('keydown',e=>{const k=mapping[e.code];if(k){e.preventDefault();keys[k]=true}});window.addEventListener('keyup',e=>{const k=mapping[e.code];if(k){e.preventDefault();keys[k]=false}});window.addEventListener('blur',()=>{keys.left=keys.right=keys.jump=false});reset();showChoose();updateWorldAccess();
+try{if(new URLSearchParams(location.search).get('world')==='6'&&localStorage.getItem('miau-bit-intermundo-glitch-completo')==='sim'){world=6;showMap();}}catch(e){}
+requestAnimationFrame(frame);
