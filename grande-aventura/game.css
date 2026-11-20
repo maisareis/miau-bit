@@ -1,0 +1,64 @@
+*{box-sizing:border-box}body{margin:0;background:#fff8ec;color:#29364d;font-family:system-ui,sans-serif}main{max-width:1060px;margin:auto;padding:15px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}a{color:#345d7c;font-weight:700}h1{margin:5px 0;font-size:clamp(20px,3vw,30px)}h1 small{display:block;font-size:14px;color:#7b608f}#hud{font-weight:800;background:white;padding:12px;border-radius:15px}.game{position:relative;border:7px solid white;border-radius:24px;overflow:hidden;box-shadow:0 12px 40px #7a8a7b30}canvas{display:block;width:100%;height:auto;background:#9ce7ff}#overlay{position:absolute;inset:0;background:#172e4aaf;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:white;padding:15px}#overlay[hidden]{display:none}#overlay h2{font-size:clamp(22px,4vw,40px);margin:0}button{border:0;border-radius:16px;background:#ffc44f;color:#29364d;font-size:19px;font-weight:800;padding:14px 24px;cursor:pointer;touch-action:none}button:active{transform:scale(.96)}.hint{font-size:13px}.controls{display:flex;gap:14px;justify-content:center;padding:15px}.controls button{min-width:80px;background:#d8d1ff}#jump{background:#ffcc77}.note{text-align:center;font-size:13px;color:#667}@media(min-width:850px){.controls{opacity:.85}}
+
+.toolbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:12px 0 0}.toolbar button{font-size:14px;padding:10px 16px;background:#e6e2ff}.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:min(660px,95%);max-height:60%;overflow-y:auto;margin:14px 0}.map button{font-size:clamp(12px,1.6vw,16px);padding:10px;background:#fff5d5}.map button:disabled{opacity:.6;cursor:not-allowed}#overlay{overflow-y:auto}#overlay h2{font-size:clamp(20px,3vw,34px)}#overlay p{margin:8px 0}#hud{font-size:14px}@media(max-width:560px){.map{grid-template-columns:1fr}.map button{padding:6px}.controls button{padding:12px}.toolbar button{font-size:12px}}
+/* Panorama do reino */
+[hidden]{display:none!important}body{background:linear-gradient(155deg,#e5faff,#fff4df 60%,#f0e8ff)}.kingdom{margin:16px 0 24px}.kingdom-art{position:relative;border:7px solid white;border-radius:26px;overflow:hidden;box-shadow:0 15px 36px #315e7a35}.kingdom-art img{width:100%;display:block}.kingdom-caption{position:absolute;left:3%;top:4%;padding:12px 20px;border-radius:20px;background:#143c64dd;color:white;text-shadow:0 1px 2px #18304a;font-size:clamp(15px,2.4vw,25px);font-weight:900}.kingdom-caption p{font-size:clamp(11px,1.4vw,15px);font-weight:500;margin:3px 0}.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:14px}.world{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:125px;padding:12px;border-radius:18px;border:3px solid white;text-align:center;box-shadow:0 6px 14px #27425a1c;font-size:25px}.world strong{font-size:15px}.world span{font-size:14px;font-weight:800}.world small{font-size:12px}.world.available{background:#c9f7b9;color:#204a38;cursor:pointer}.world.available:hover{transform:translateY(-3px)}.world.locked{background:#e5e8f4;color:#5d6783;filter:saturate(.65)}.toolbar{align-items:center}#gameSection{margin-top:14px}
+
+/* Escolha de personagem e acabamento */
+.choose{margin:20px auto;padding:clamp(18px,4vw,35px);max-width:800px;text-align:center;border-radius:28px;background:linear-gradient(135deg,#fff9df,#e5f8ff 55%,#f1e8ff);box-shadow:0 12px 35px #32527a24;border:5px solid white}.choose h2{font-size:clamp(24px,4vw,38px);margin:0;color:#29456a}.choose p{color:#57677e}.character-options{display:flex;justify-content:center;gap:clamp(12px,3vw,28px);margin:20px 0;flex-wrap:wrap}.character{width:min(220px,45%);min-width:140px;display:flex;flex-direction:column;align-items:center;gap:8px;background:white;border:4px solid #d9e6ef;box-shadow:0 6px 15px #28496c1a}.character.selected{border-color:#8b6cf0;box-shadow:0 0 0 4px #cbbcff,0 10px 24px #6156b32b}.character img{width:100%;height:175px;object-fit:contain;filter:drop-shadow(0 7px 5px #0002)}.character strong{font-size:20px}.character small{font-size:12px}.primary{background:#6e55d7;color:white;box-shadow:0 6px 0 #4a38a3}.primary:hover{background:#5e47c5}.world.available{outline:2px solid #69b77e;outline-offset:2px}.world.locked{cursor:default}button:focus-visible,a:focus-visible{outline:4px solid #3e70e8;outline-offset:3px}.kingdom-art img{aspect-ratio:3/2;object-fit:cover}.game{border-color:#fff;box-shadow:0 14px 45px #2d667d40}#overlay{backdrop-filter:blur(5px)}.map button:not(:disabled):hover{background:#c9f7b9}.note{line-height:1.6}@media(max-width:560px){.character img{height:125px}.character{padding:10px 5px}.character strong{font-size:16px}}
+
+/* Entrada animada no reino, sem alterar o portal principal */
+.portal-scene{position:relative;margin:18px auto;max-width:960px;min-height:500px;border:7px solid white;border-radius:28px;overflow:hidden;background:linear-gradient(#8ad9fa 0%,#c4f3ef 67%,#82ce91 68%,#56b56c 100%);box-shadow:0 16px 42px #355a8040}
+.portal-land{height:450px;position:relative;overflow:hidden;background:radial-gradient(circle at 82% 15%,#fff7b6 0 7%,transparent 8%),repeating-linear-gradient(125deg,transparent 0 105px,#ffffff16 106px 130px)}
+.portal-land:before,.portal-land:after{content:"";position:absolute;bottom:100px;border-radius:50% 50% 0 0;background:#5fae94;width:430px;height:220px;left:-80px}.portal-land:after{left:auto;right:-90px;background:#8bceb0;height:160px}
+.portal-ground{position:absolute;bottom:0;height:104px;width:100%;background:linear-gradient(#75d17c 0 15px,#a16b47 16px 100%);border-top:6px solid #a8f29b}
+.portal-ring{position:absolute;z-index:2;left:62%;top:52px;width:195px;height:275px;border-radius:50%;border:18px solid #ffd981;box-shadow:0 0 0 8px #8065ca,0 0 35px 18px #9aebff,inset 0 0 32px #e9faff;display:grid;place-items:center;background:radial-gradient(#e5fbff,#64b7f7 55%,#7964dc)}
+.portal-core{font-size:58px;animation:portalPulse 1s ease-in-out infinite alternate}
+.portal-traveler{position:absolute;z-index:4;left:12%;bottom:98px;width:95px;height:95px;display:grid;place-items:center;filter:drop-shadow(0 7px 2px #315e6644)}
+.round-face{font-size:57px;display:grid;place-items:center;width:90px;height:90px;border-radius:50%;border:5px solid #fff3d4}
+.portal-scene.entering .portal-traveler{animation:runToPortal 2.8s cubic-bezier(.5,.1,.55,1) forwards}
+.portal-scene.entering .portal-ring{animation:ringGlow 2.8s ease-in-out forwards}
+.portal-message{position:absolute;top:20px;left:20px;z-index:5;font-size:clamp(16px,3vw,26px);font-weight:900;color:#264c73;text-shadow:0 2px 0 #fff9}
+.skip-portal{position:absolute;bottom:8px;right:10px;z-index:5;background:#fff7d7;font-size:14px;padding:9px 15px}
+@keyframes portalPulse{to{transform:scale(1.2) rotate(12deg);filter:brightness(1.4)}}
+@keyframes ringGlow{60%{filter:brightness(1.1)}100%{filter:brightness(1.8)}}
+@keyframes runToPortal{0%{left:12%;transform:translateY(0) scale(1);opacity:1}22%{transform:translateY(-28px) scale(1)}40%{transform:translateY(0) scale(1)}60%{transform:translateY(-30px) scale(1)}78%{opacity:1}100%{left:68%;transform:translateY(-90px) scale(.12) rotate(15deg);opacity:0}}
+@media(max-width:600px){.portal-scene{min-height:360px}.portal-land{height:315px}.portal-ring{left:58%;width:135px;height:195px;border-width:12px}.portal-traveler{bottom:96px;width:68px;height:68px}.round-face{width:68px;height:68px;font-size:43px}.portal-message{max-width:70%}}
+@media(prefers-reduced-motion:reduce){.portal-scene.entering .portal-traveler{animation-duration:.5s}.portal-core{animation:none}}
+
+/* Acabamento visual e acessibilidade */
+[hidden]{display:none!important}
+:root{color-scheme:light}
+body{background:radial-gradient(circle at 15% 0%,#e2fbff 0%,transparent 36%),radial-gradient(circle at 85% 35%,#fff1d4 0%,transparent 35%),linear-gradient(135deg,#d9f2ff,#f0e9ff 60%,#e6ffe5);background-attachment:fixed}
+main{max-width:1160px}
+button{transition:transform .16s ease,box-shadow .16s ease,filter .16s ease}
+button:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.05)}
+button:focus-visible,a:focus-visible{outline:4px solid #f3b53e;outline-offset:3px}
+.character{border-radius:25px!important;background:linear-gradient(150deg,#fff,#eaf8ff)!important;box-shadow:0 9px 25px #324b7025!important}
+.character.selected{box-shadow:0 0 0 4px #ffd66e,0 13px 35px #324b7040!important}
+.character img{filter:drop-shadow(0 10px 5px #344f6c33);transition:transform .3s}
+.character:hover img{transform:scale(1.06)}
+.kingdom-art{border:7px solid #fff;border-radius:25px;overflow:hidden;box-shadow:0 18px 50px #33496c38}
+.kingdom-art img{display:block;width:100%}
+.world.available{background:linear-gradient(145deg,#ddffe2,#fff9d7)!important;border:3px solid #7bd89b!important;box-shadow:0 7px 20px #3b815e25}
+.world.locked{opacity:.75}
+#stage{border-radius:19px;box-shadow:0 12px 35px #2d53674d}
+.portal-scene{background:linear-gradient(180deg,#70c7f3 0%,#d6f7f2 67%,#82ce91 68%,#56b56c 100%)}
+.portal-ring{background:radial-gradient(ellipse,#e9fbff 0%,#6bc8ff 33%,#7765e8 75%,#342c84 100%);border:16px solid #ffd57d;box-shadow:0 0 0 9px #8065ca,0 0 30px 15px #a1efff,inset 0 0 45px #fff;animation:portalBreathe 1.4s ease-in-out infinite alternate}
+.portal-ring:after{content:"";position:absolute;inset:10px;border:3px dashed #ffffff88;border-radius:50%;animation:portalSpin 8s linear infinite}
+.portal-traveler{width:110px;height:135px;bottom:96px;filter:drop-shadow(0 13px 8px #173a6750)}
+.portal-hero{width:100%;height:100%;object-fit:contain;filter:drop-shadow(4px 5px 2px #493a6b40) drop-shadow(-3px -3px 3px #ffffff88)}
+.portal-shadow{position:absolute;bottom:0;width:80px;height:12px;background:#1b5c553d;border-radius:50%;z-index:-1}
+.portal-sparkles{position:absolute;top:120px;left:63%;z-index:3;font-size:26px;color:#fff9bb;letter-spacing:20px;text-shadow:0 0 12px #fff;animation:sparkleDrift 2s ease-in-out infinite alternate;pointer-events:none}
+.portal-message{background:#ffffffd9;padding:10px 17px;border-radius:15px;box-shadow:0 5px 18px #3b62812b}
+@keyframes portalBreathe{to{filter:brightness(1.2);box-shadow:0 0 0 9px #9a74ef,0 0 55px 24px #c0f7ff,inset 0 0 65px #fff}}
+@keyframes portalSpin{to{transform:rotate(360deg)}}
+@keyframes sparkleDrift{to{transform:translateY(-25px);opacity:.4}}
+@media(max-width:600px){.portal-traveler{width:80px;height:100px;bottom:95px}.portal-sparkles{left:58%;letter-spacing:5px;font-size:18px}.portal-message{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.portal-ring,.portal-ring:after,.portal-sparkles{animation:none!important}}
+
+/* Controles táteis confortáveis, layout responsivo e baixo custo de renderização */
+.controls{position:relative;gap:clamp(8px,2vw,22px);align-items:center;user-select:none;-webkit-user-select:none}
+.controls button{min-height:64px;min-width:76px;border:3px solid #ffffffbb;box-shadow:0 5px 0 #66638b55;touch-action:none}
+#jump{margin-left:auto;min-width:112px}
+@media(max-width:600px){main{padding:8px}.game{border-width:3px;border-radius:12px}.controls{padding:12px 4px}.controls button{min-height:72px;min-width:72px;font-size:20px;padding:10px}.toolbar{gap:6px}.toolbar button{padding:9px 10px;font-size:12px}#hud{padding:8px;font-size:12px}.kingdom-caption{padding:8px!important}.note{padding:0 10px}}

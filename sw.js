@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pwa-2b3ee3a12f41';
+const CACHE_NAME = 'miau-bit-pwa-grande-aventura-20261120';
 const APP_FILES = [
   "autoria.css",
   "autoria.html",
@@ -43,6 +43,14 @@ const APP_FILES = [
   "manifest.webmanifest",
   "pwa.css",
   "pwa.js",
+  "grande-aventura/game.js",
+  "grande-aventura/portal-card.css",
+  "grande-aventura/luma.svg",
+  "grande-aventura/miau.svg",
+  "grande-aventura/LEIA-ME.txt",
+  "grande-aventura/game.css",
+  "grande-aventura/reino-miau-bit.png",
+  "grande-aventura/index.html",
   "styles.css"
 ];
 const BASE_URL = new URL('./', self.location.href);
