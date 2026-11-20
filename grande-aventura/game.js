@@ -77,6 +77,102 @@ function updateWorldAccess(){
  }
 }
 const base=[{x:0,y:465,w:520,h:75},{x:610,y:465,w:440,h:75},{x:1140,y:465,w:410,h:75},{x:1630,y:465,w:460,h:75},{x:2180,y:465,w:620,h:75},{x:260,y:360,w:135,h:24},{x:475,y:310,w:120,h:24},{x:760,y:345,w:150,h:24},{x:1030,y:285,w:145,h:24},{x:1350,y:355,w:150,h:24},{x:1580,y:290,w:140,h:24},{x:1890,y:350,w:150,h:24},{x:2130,y:300,w:145,h:24},{x:2400,y:355,w:150,h:24}];
+const missionBank={"1": [["A ponte está quebrada! Qual ordem ajuda o Bit?", ["Pegar tábuas → montar → atravessar", "Atravessar → pegar tábuas → montar", "Montar → atravessar → pegar tábuas"], 0, "Um algoritmo segue passos na ordem certa."], ["O robô precisa chegar à árvore. Qual sequência funciona?", ["Pular → andar → parar", "Andar → pular obstáculo → chegar", "Chegar → pular → andar"], 1, "A ordem dos comandos muda o resultado."], ["Para abrir a ponte, o que fazemos primeiro?", ["Testar a ponte", "Reunir as peças", "Atravessar o rio"], 1, "Dividir um problema em etapas ajuda a resolvê-lo."], ["Qual padrão continua? ⭐ 🌙 ⭐ 🌙 ...", ["🌙", "⭐", "☀️"], 1, "Reconhecer padrões ajuda a prever sequências."], ["A máquina falhou. Qual é a melhor estratégia?", ["Repetir o erro", "Desistir", "Verificar cada passo e corrigir"], 2, "Encontrar e corrigir erros se chama depuração."]], "2": [["Qual senha protege melhor o portão?", ["123456", "GatoAzul!PulaNaLua27", "miau"], 1, "Senhas longas e únicas são mais difíceis de adivinhar."], ["Dois cofres precisam de senhas. O que fazer?", ["Usar a mesma senha", "Criar uma senha diferente para cada um", "Deixar sem senha"], 1, "Senhas diferentes reduzem os danos se uma for descoberta."], ["Um desconhecido pede sua senha. Você...", ["Conta para ajudar", "Publica no chat", "Não compartilha e procura um adulto de confiança"], 2, "Senhas são segredos que devemos proteger."], ["Além da senha, o cofre pede um código. Isso é...", ["Verificação em duas etapas", "Um erro do cofre", "Um convite para compartilhar dados"], 0, "Uma segunda verificação aumenta a segurança."], ["O guardião oferece um prêmio se você revelar sua senha.", ["Revela para ganhar", "Recusa e avisa um adulto de confiança", "Envia a senha de um amigo"], 1, "Prêmios não justificam revelar senhas."]], "3": [["Programe o Bit: há um obstáculo à frente.", ["Avançar → pular → avançar", "Avançar → avançar → cair", "Parar → parar → parar"], 0, "Comandos executados na ordem correta levam ao objetivo."], ["O Bit precisa dar três passos iguais. Qual comando é melhor?", ["Repetir 3 vezes: avançar", "Pular 3 vezes", "Voltar 3 vezes"], 0, "Laços de repetição evitam repetir instruções manualmente."], ["Se o elevador estiver embaixo, o Bit deve...", ["Pular no vazio", "Esperar; quando chegar, entrar", "Ignorar o elevador"], 1, "Uma condição permite agir somente quando algo acontece."], ["Qual comando evita o robô patrulheiro?", ["Se robô perto → esperar; senão → avançar", "Sempre avançar", "Desligar todos os comandos"], 0, "Condições tornam programas capazes de tomar decisões."], ["O robô repete movimentos errados. Como corrigir?", ["Executar mais rápido", "Encontrar o comando errado e ajustar", "Apagar o jogo"], 1, "Testar e corrigir instruções é parte de programar."]], "4": [["Organize os dados: 🔵 🔴 🔵 🔴 ...", ["🔵", "🔴", "🟢"], 0, "Sequências possuem regras que podemos identificar."], ["Qual grupo reúne apenas cristais azuis?", ["🔵 🔵 🔵", "🔵 🔴 🔵", "🔴 🟢 🔵"], 0, "Organizar dados por características facilita a busca."], ["Qual número completa 2, 4, 6, 8, ...?", ["9", "12", "10"], 2, "A sequência aumenta de dois em dois."], ["Qual regra separa os cristais corretamente?", ["Misturar tudo", "Agrupar por cor e tamanho", "Escolher ao acaso"], 1, "Classificar dados ajuda a encontrar informações."], ["Os dados 3, 1, 2 estão fora de ordem. Organize:", ["3 → 2 → 1", "1 → 2 → 3", "2 → 1 → 3"], 1, "Ordenar dados permite comparar e localizar valores."]], "5": [["Chegou uma mensagem: 'Clique e ganhe 1000 moedas!' Você...", ["Clica depressa", "Confere a origem com um adulto de confiança", "Envia aos amigos"], 1, "Mensagens com prêmios podem ser golpes."], ["Um jogo pede seu endereço de casa. Você...", ["Digita o endereço", "Envia a localização", "Não compartilha dados pessoais"], 2, "Informações pessoais precisam ser protegidas."], ["Qual rede é mais segura para uma conta importante?", ["Wi-Fi público desconhecido", "Rede confiável e protegida", "Qualquer rede com nome divertido"], 1, "Redes desconhecidas podem trazer riscos."], ["Um link estranho pede sua senha para liberar o caminho.", ["Não digita e verifica o endereço", "Digita para continuar", "Compartilha o link"], 0, "Links suspeitos podem tentar roubar informações."], ["O Glitch envia uma mensagem fingindo ser o Bit. O que fazer?", ["Acreditar sem verificar", "Conferir com o Bit por outro caminho", "Enviar todos os dados"], 1, "Confirmar a identidade ajuda a evitar golpes."]]};
+
+let missionOpen=false,missionPending=null,missionSolved=0,missionRequired=0,missionFailures=0;
+const missionBox=document.querySelector('#missionBox');
+function missionCount(){return level<=2?1:level<=4?2:3;}
+function missionTitle(){return `${worldInfo[world].icon} Missão ${world}-${level}`;}
+function missionHint(){
+ const n=missionBank[world][level-1];
+ return n[0];
+}
+function updateMissionHUD(){
+ document.querySelector('#missionProgress').textContent=`🧠 Missões ${missionSolved}/${missionRequired}`;
+}
+function openMission(s){
+ if(missionOpen)return;
+ missionOpen=true;missionPending=s;
+ const data=missionBank[world][level-1],idx=missionSolved%3;
+ const question=idx===0?data[0]:idx===1?
+  (world===3?'O que é importante ao programar?':world===5?'Qual atitude ajuda a manter você seguro?':world===4?'Como resolver o desafio dos dados?':world===2?'Qual hábito protege sua conta?':'Como resolver um problema complicado?'):
+  (world===3?'O programa não funcionou. E agora?':world===5?'Uma situação parece suspeita. E agora?':world===4?'Os cristais estão desorganizados. E agora?':world===2?'Um estranho pede dados pessoais. E agora?':'O caminho não deu certo. E agora?');
+ let options,correct,feedback;
+ if(idx===0){options=data[1];correct=data[2];feedback=data[3];}
+ else if(idx===1){
+  options=world===3?['Testar os comandos antes de continuar','Apertar tudo ao mesmo tempo','Ignorar o resultado']:
+  world===5?['Compartilhar dados','Verificar antes de clicar','Confiar em qualquer mensagem']:
+  world===4?['Procurar padrões e comparar','Escolher sem olhar','Misturar tudo']:
+  world===2?['Usar senhas únicas e longas','Contar a senha aos amigos','Usar 123456']:
+  ['Dividir em passos menores','Fazer tudo sem pensar','Ignorar as instruções'];
+  correct=world===5?1:0;feedback='Observar, pensar e testar é uma boa estratégia!';
+ }else{
+  options=world===3?['Desistir','Encontrar o erro e ajustar','Repetir sem mudar']:
+  world===5?['Pedir ajuda a um adulto de confiança','Enviar informações','Clicar imediatamente']:
+  world===4?['Misturar tudo','Ordenar por uma regra','Escolher de olhos fechados']:
+  world===2?['Enviar os dados','Publicar a senha','Recusar e procurar um adulto de confiança']:
+  ['Conferir os passos e corrigir','Desistir','Ignorar o problema'];
+  correct=world===3||world===4?1:world===2?2:0;feedback='Você usou a lógica para resolver o desafio!';
+ }
+ document.querySelector('#missionTitle').textContent=missionTitle();
+ document.querySelector('#missionQuestion').textContent=question;
+ document.querySelector('#missionFeedback').textContent='';
+ const answers=document.querySelector('#missionAnswers');answers.replaceChildren();
+ if(world===3){
+  const targets=[['➡️','⬆️','➡️'],['➡️','➡️','➡️'],['⏳','➡️','⬆️'],['⏳','➡️','➡️'],['➡️','⬆️','⏳']];
+  const target=targets[level-1];let entered=[];
+  document.querySelector('#missionQuestion').textContent='🤖 Programe o Bit! Monte esta sequência: '+target.join('  ');
+  const preview=document.createElement('p');preview.textContent='Seus comandos: (vazio)';answers.append(preview);
+  const commandNames={'➡️':'Avançar','⬆️':'Pular','⏳':'Esperar'};
+  for(const cmd of ['➡️','⬆️','⏳']){
+   const b=document.createElement('button');b.type='button';b.textContent=cmd+' '+commandNames[cmd];
+   b.addEventListener('click',()=>{
+    entered.push(cmd);preview.textContent='Seus comandos: '+entered.join(' ');
+    if(entered.length===target.length){
+     if(entered.every((x,i)=>x===target[i])){
+      s.on=true;missionSolved++;updateMissionHUD();tone(880,.22,'triangle');missionOpen=false;missionPending=null;missionBox.hidden=true;
+      message('🤖 Programa executado! Circuito ativado.');
+     }else{
+      entered=[];preview.textContent='Seus comandos: (vazio)';
+      document.querySelector('#missionFeedback').textContent='🔧 O Bit não chegou lá. Ajuste os comandos e tente de novo!';
+     }
+    }
+   });answers.append(b);
+  }
+  missionBox.hidden=false;return;
+ }
+ if(world===4){
+  const patterns=[['🔵','🔴','🔵'],['💎','⭐','💎'],['1','2','3'],['🔷','🔶','🔷'],['2','4','6']];
+  const target=patterns[level-1];let entered=[];
+  document.querySelector('#missionQuestion').textContent='💎 Organize os cristais nesta ordem: '+target.join('  ');
+  const preview=document.createElement('p');preview.textContent='Sua sequência: (vazia)';answers.append(preview);
+  for(const cmd of [...new Set([...target,'🔴','⭐','4'])]){
+   const b=document.createElement('button');b.type='button';b.textContent=cmd;
+   b.addEventListener('click',()=>{
+    entered.push(cmd);preview.textContent='Sua sequência: '+entered.join(' ');
+    if(entered.length===target.length){
+     if(entered.every((x,i)=>x===target[i])){
+      s.on=true;missionSolved++;updateMissionHUD();tone(880,.22,'triangle');missionOpen=false;missionPending=null;missionBox.hidden=true;
+      message('💎 Dados organizados! Cristal ativado.');
+     }else{entered=[];preview.textContent='Sua sequência: (vazia)';document.querySelector('#missionFeedback').textContent='🔍 Essa ordem não funcionou. Observe o padrão e tente novamente.';}
+    }
+   });answers.append(b);
+  }
+  missionBox.hidden=false;return;
+ }
+ options.forEach((answer,i)=>{
+  const b=document.createElement('button');b.type='button';b.textContent=answer;
+  b.addEventListener('click',()=>{
+   if(i!==correct){missionFailures++;document.querySelector('#missionFeedback').textContent='🔎 Quase! Observe as pistas e tente outra vez.';tone(230,.16);return;}
+   s.on=true;missionSolved++;updateMissionHUD();tone(880,.22,'triangle');
+   document.querySelector('#missionFeedback').textContent='✨ '+feedback;
+   missionOpen=false;missionPending=null;missionBox.hidden=true;
+   message('🧠 Desafio resolvido! Mecanismo ativado.');
+  });answers.append(b);
+ });
+ missionBox.hidden=false;
+}
+
 let level=1,player,coins,spikes,switches,platforms,drones=[],laserTraps=[],score=0,lives=3,camera=0,playing=false,invuln=0,last=0,muted=false,audio=null,tick=0,notice='',noticeFrames=0,previousJump=false,elapsed=0;
 
 function tone(f=440,d=.13,type='sine',vol=.035){if(muted)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f,audio.currentTime);g.gain.setValueAtTime(vol,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
@@ -100,7 +196,7 @@ function startMusic(){stopMusic();musicStep=0;if(muted||!playing)return;
 }
 function message(s){notice=s;noticeFrames=170;}
 function renderMap(){document.querySelectorAll('[data-level]').forEach(b=>{let n=Number(b.dataset.level),limit=progress[world];b.disabled=n>limit;b.textContent=(n>limit?'🔒 ':'🌟 ')+`${world}-${n} · ${currentNames()[n]}`+(n===5?' 👾':'');});}
-function showMap(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();choose.hidden=true;kingdom.hidden=true;gameSection.hidden=false;playing=false;overlay.hidden=false;overlay.querySelector('h2').textContent=worldTitle();overlay.querySelector('p').textContent='Cinco fases. Conclua uma para liberar a próxima!';document.querySelector('#map').hidden=false;startBtn.hidden=true;renderMap();}
+function showMap(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();choose.hidden=true;kingdom.hidden=true;gameSection.hidden=false;playing=false;overlay.hidden=false;overlay.querySelector('h2').textContent=worldTitle();overlay.querySelector('p').textContent='Colete os itens, resolva os desafios de lógica e chegue ao final!';document.querySelector('#map').hidden=false;startBtn.hidden=true;renderMap();}
 function reset(){document.querySelector('#nextLevel').hidden=true;stopMusic();stopPortal();choose.hidden=true;kingdom.hidden=true;gameSection.hidden=false;const cfg=currentConfigs()[level];const special=[...(cfg.moving||[]),...(cfg.vanish||[])];
 const staticPlatforms=base.concat(cfg.extras).filter(p=>{
  if(p.y>=460)return true; // ground remains untouched
@@ -112,7 +208,7 @@ const staticPlatforms=base.concat(cfg.extras).filter(p=>{
   return p.x<xMax&&p.x+p.w>xMin&&p.y<yMax+18&&p.y+p.h>yMin-18;
  });
 });
-platforms=staticPlatforms.map(p=>({...p}));if(cfg.moving)platforms.push(...cfg.moving.map(p=>({...p,moving:true,originX:p.x,originY:p.y})));if(cfg.vanish)platforms.push(...cfg.vanish.map(p=>({...p,vanish:true})));drones=(cfg.drones||[]).map(d=>({...d}));laserTraps=(cfg.lasers||[]).map(d=>({...d}));elapsed=0;if(cfg.bridge)platforms.push({x:2090,y:465,w:90,h:75,conditional:true});player={x:55,y:370,w:38,h:47,vx:0,vy:0,ground:false,spawnX:55,spawnY:370};coins=cfg.coins.map((x,i)=>({x,y:[322,272,307,247,317,252,312,317][i],got:false}));spikes=cfg.spikes.map(x=>({x,y:440,w:42}));switches=(cfg.switches||[]).map((s,i)=>({...s,on:false,index:i}));score=0;lives=3;camera=0;invuln=0;notice='';previousJump=false;playing=true;overlay.hidden=true;document.querySelector('#score').textContent=0;document.querySelector('#goal').textContent=coins.length;document.querySelector('#lives').textContent=lives;document.querySelector('#stageLabel').textContent=`Fase ${world}-${level} · ${currentNames()[level]}`;message(currentDescriptions()[level]);tone(523,.15);startMusic();}
+platforms=staticPlatforms.map(p=>({...p}));if(cfg.moving)platforms.push(...cfg.moving.map(p=>({...p,moving:true,originX:p.x,originY:p.y})));if(cfg.vanish)platforms.push(...cfg.vanish.map(p=>({...p,vanish:true})));drones=(cfg.drones||[]).map(d=>({...d}));laserTraps=(cfg.lasers||[]).map(d=>({...d}));elapsed=0;if(cfg.bridge)platforms.push({x:2090,y:465,w:90,h:75,conditional:true});player={x:55,y:370,w:38,h:47,vx:0,vy:0,ground:false,spawnX:55,spawnY:370};coins=cfg.coins.map((x,i)=>({x,y:[322,272,307,247,317,252,312,317][i],got:false}));spikes=cfg.spikes.map(x=>({x,y:440,w:42}));switches=(cfg.switches&&cfg.switches.length?cfg.switches:[{x:350,y:315},{x:1260,y:300},{x:1950,y:310}].slice(0,missionCount())).map((s,i)=>({...s,on:false,index:i}));score=0;lives=3;camera=0;invuln=0;notice='';previousJump=false;missionOpen=false;missionPending=null;missionSolved=0;missionRequired=switches.length;missionBox.hidden=true;updateMissionHUD();playing=true;overlay.hidden=true;document.querySelector('#score').textContent=0;document.querySelector('#goal').textContent=coins.length;document.querySelector('#lives').textContent=lives;document.querySelector('#stageLabel').textContent=`Fase ${world}-${level} · ${currentNames()[level]}`;message('🧠 '+missionHint());tone(523,.15);startMusic();}
 function finish(win){
  playing=false;stopMusic();overlay.hidden=false;
  overlay.querySelector('h2').textContent=win?(level===5?'🏆 '+worldInfo[world].name+' concluído!':'🎉 Fase concluída!'):'💛 Vamos tentar de novo?';
@@ -131,9 +227,9 @@ function finish(win){
  }else tone(180,.4,'sawtooth');renderMap();
 }
 function hurt(){if(invuln>0||!playing)return;lives--;document.querySelector('#lives').textContent=lives;tone(175,.28,'sawtooth');if(lives<=0){finish(false);return;}invuln=95;player.x=player.spawnX;player.y=player.spawnY;player.vx=player.vy=0;}
-function update(dt){if(!playing)return;const sc=Math.min(dt/16.67,2);elapsed+=dt;const cfg=currentConfigs()[level];for(const p of platforms){if(p.moving){const t=elapsed/1000*p.speed;p.x=p.originX+(p.axis==='x'?Math.sin(t)*p.amp:0);p.y=p.originY+(p.axis==='y'?Math.sin(t)*p.amp:0)}}invuln=Math.max(0,invuln-sc);noticeFrames=Math.max(0,noticeFrames-sc);player.vx=(Number(keys.right)-Number(keys.left))*5.1;for(const belt of (cfg.conveyors||[]))if(player.ground&&player.x>belt.x&&player.x<belt.x+belt.w)player.vx+=belt.push;player.x=Math.max(0,Math.min(2762,player.x+player.vx*sc));if(keys.jump&&!previousJump&&player.ground){player.vy=-13.5;player.ground=false;tone(470,.11,'square',.017)}previousJump=keys.jump;const bottom=player.y+player.h;player.vy+=.64*sc;player.y+=player.vy*sc;player.ground=false;for(const p of platforms){if(p.conditional&&!switches.every(s=>s.on))continue;if(p.vanish&&Math.sin(elapsed/(p.period||220)*Math.PI)<-.1)continue;if(player.vy>=0&&bottom<=p.y+9&&player.y+player.h>=p.y&&player.x+player.w>p.x&&player.x<p.x+p.w){player.y=p.y-player.h;player.vy=0;player.ground=true;}}
+function update(dt){if(!playing||missionOpen)return;const sc=Math.min(dt/16.67,2);elapsed+=dt;const cfg=currentConfigs()[level];for(const p of platforms){if(p.moving){const t=elapsed/1000*p.speed;p.x=p.originX+(p.axis==='x'?Math.sin(t)*p.amp:0);p.y=p.originY+(p.axis==='y'?Math.sin(t)*p.amp:0)}}invuln=Math.max(0,invuln-sc);noticeFrames=Math.max(0,noticeFrames-sc);player.vx=(Number(keys.right)-Number(keys.left))*5.1;for(const belt of (cfg.conveyors||[]))if(player.ground&&player.x>belt.x&&player.x<belt.x+belt.w)player.vx+=belt.push;player.x=Math.max(0,Math.min(2762,player.x+player.vx*sc));if(keys.jump&&!previousJump&&player.ground){player.vy=-13.5;player.ground=false;tone(470,.11,'square',.017)}previousJump=keys.jump;const bottom=player.y+player.h;player.vy+=.64*sc;player.y+=player.vy*sc;player.ground=false;for(const p of platforms){if(p.conditional&&!switches.every(s=>s.on))continue;if(p.vanish&&Math.sin(elapsed/(p.period||220)*Math.PI)<-.1)continue;if(player.vy>=0&&bottom<=p.y+9&&player.y+player.h>=p.y&&player.x+player.w>p.x&&player.x<p.x+p.w){player.y=p.y-player.h;player.vy=0;player.ground=true;}}
 if(player.y>H+90)hurt();for(const d of drones){const dx=d.x+Math.sin(elapsed/1000*d.speed)*d.range;if(Math.abs(player.x+19-dx)<28&&Math.abs(player.y+23-d.y)<32)hurt();}for(const laser of laserTraps){if(Math.sin(elapsed/laser.period)>0.3&&Math.abs(player.x+19-laser.x)<14&&player.y+player.h>laser.y)hurt();}for(const s of spikes)if(player.x+player.w>s.x+7&&player.x<s.x+s.w-7&&player.y+player.h>s.y+8&&player.y<s.y+25)hurt();for(const c of coins){if(!c.got&&Math.abs(player.x+19-c.x)<31&&Math.abs(player.y+23-c.y)<37){c.got=true;score++;document.querySelector('#score').textContent=score;tone(650+score*50,.15);}}
-for(const s of switches){if(s.on)continue;if(Math.abs(player.x+19-s.x)<35&&Math.abs(player.y+23-s.y)<50){if(currentConfigs()[level].ordered&&switches.slice(0,s.index).some(q=>!q.on)){message('🔢 Siga a sequência: 1 → 2 → 3!');continue;}s.on=true;tone(880,.25,'triangle');message(world===2?(currentConfigs()[level].boss?'🛡️ Guardião enfraquecido!':currentConfigs()[level].ordered?'🔐 Pista protegida!':'🔑 Proteção ativada!'):(currentConfigs()[level].boss?'⚡ Terminal desativado!':currentConfigs()[level].ordered?'✨ Pista encontrada na ordem certa!':'🔧 Alavanca acionada!'));}}
+for(const s of switches){if(missionOpen)break;if(s.on)continue;if(Math.abs(player.x+19-s.x)<35&&Math.abs(player.y+23-s.y)<50){if(currentConfigs()[level].ordered&&switches.slice(0,s.index).some(q=>!q.on)){message('🔢 Siga a sequência: 1 → 2 → 3!');continue;}openMission(s)}}
 if(player.x>1600&&player.spawnX<1600){player.spawnX=1640;player.spawnY=390;message('🚩 Checkpoint ativado!');}
 if(player.x>2650){if(score===coins.length&&switches.every(s=>s.on))finish(true);else if(noticeFrames<40)message(`Faltam ${coins.length-score} ${world===2?'chaves':world===3?'circuitos':world===4?'cristais':world===5?'escudos':'engrenagens'} e ${switches.filter(s=>!s.on).length} mecanismos!`);}
 camera=Math.max(0,Math.min(1840,player.x-W*.32));}

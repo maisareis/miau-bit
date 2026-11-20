@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-25-fases-auditadas-20261120';
+const CACHE_NAME = 'miau-bit-educativo-25-fases-20261120';
 const APP_FILES = [
   "autoria.css",
   "autoria.html",

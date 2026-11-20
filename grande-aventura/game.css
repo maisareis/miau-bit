@@ -76,3 +76,16 @@ button:focus-visible,a:focus-visible{outline:4px solid #f3b53e;outline-offset:3p
  #overlay #map button{min-height:39px}
  .next-level{width:min(100%,320px);padding:12px 18px;font-size:18px}
 }
+
+/* Desafios educativos: modal de decisões integrado ao percurso */
+.mission-box[hidden]{display:none!important}
+.mission-box{position:fixed;inset:0;z-index:1000;background:#161943b8;display:grid;place-items:center;padding:15px;overflow:auto}
+.mission-inner{width:min(94vw,570px);max-height:92dvh;overflow-y:auto;background:linear-gradient(150deg,#fffdf6,#e9f8ff);border:5px solid #8b74dc;border-radius:26px;padding:clamp(16px,4vw,28px);box-shadow:0 20px 80px #11164a88;text-align:center;color:#253357}
+.mission-inner h2{font-size:clamp(20px,4vw,30px);margin:7px 0}
+.mission-inner p{font-size:clamp(16px,3.5vw,21px);line-height:1.45}
+.mission-icon{font-size:30px}
+#missionAnswers{display:grid;gap:10px;margin:18px 0}
+#missionAnswers button{background:#fff;border:2px solid #9c8acb;border-radius:14px;color:#24324d;font-weight:700;font-size:clamp(14px,3vw,18px);padding:14px 12px;min-height:55px;cursor:pointer;white-space:normal}
+#missionAnswers button:hover,#missionAnswers button:focus-visible{background:#dbf9ee;border-color:#319e7b}
+#missionFeedback{min-height:25px;color:#7852a4;font-weight:700}
+.mission-inner small{display:block;color:#586982}
