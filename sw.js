@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pwa-grande-aventura-20261120';
+const CACHE_NAME = 'miau-bit-pwa-aventura-25d-20261120';
 const APP_FILES = [
   "autoria.css",
   "autoria.html",
