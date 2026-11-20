@@ -1,0 +1,30 @@
+Miau & Bit — O Quintal das Ideias
+Projeto idealizado e organizado por Maisa Araujo.
+Copyright © 2026 Maisa Araujo, quanto aos materiais autorais próprios e aos
+direitos de que seja titular. Todos os direitos reservados, nos limites da
+legislação aplicável.
+
+É permitido acessar e utilizar o portal publicado para brincar e aprender,
+inclusive em atividades educativas acompanhadas por famílias e educadores.
+Também é permitido compartilhar links para o portal e para os canais oficiais.
+
+O acesso gratuito não concede uma licença geral para copiar e republicar o
+portal, distribuir versões modificadas ou explorar comercialmente os materiais
+autorais próprios do projeto. Esses usos dependem de autorização prévia e
+expressa da titular, ressalvadas as permissões e limitações previstas em lei.
+É vedado apresentar como própria a criação autoral de outra pessoa.
+
+Esta reserva de direitos não abrange ideias, métodos de ensino, conceitos de
+programação ou outros elementos que não sejam protegidos por direitos autorais.
+Não se afirma exclusividade sobre elementos não protegíveis ou sobre materiais
+pertencentes a terceiros.
+
+As fontes, bibliotecas e demais materiais de terceiros conservam suas próprias
+licenças e atribuições. As licenças das fontes distribuídas neste pacote estão
+na pasta licenses/. Este aviso não substitui nem restringe essas licenças.
+
+Permanecem preservados os usos permitidos por lei e pelas condições das
+plataformas utilizadas para disponibilizar o projeto, incluindo a visualização
+e a criação de forks dentro do GitHub, conforme os termos dessa plataforma.
+
+Condições apresentadas ao público: autoria.html.

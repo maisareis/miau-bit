@@ -1,7 +1,14 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pwa-139e4e8206d1';
+const CACHE_NAME = 'miau-bit-pwa-2b3ee3a12f41';
 const APP_FILES = [
+  "autoria.css",
+  "autoria.html",
+  "LICENSE.txt",
+  "licenses/dmsans-OFL.txt",
+  "licenses/nunito-OFL.txt",
+  "licenses/dejavu-copyright.txt",
+  "visitas.js",
   "./",
   "app.js",
   "journey.js",
