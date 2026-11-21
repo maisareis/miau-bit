@@ -1,7 +1,30 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-terceira-pessoa-3d-v1';
+const CACHE_NAME = 'miau-bit-cinco-fases-musica-gato-v1';
 const APP_FILES = [
+  "grande-aventura/regioes-3d/fase-1/trilha.js",
+  "grande-aventura/regioes-3d/fase-2/trilha.js",
+  "grande-aventura/regioes-3d/fase-3/trilha.js",
+  "grande-aventura/regioes-3d/fase-4/trilha.js",
+  "grande-aventura/regioes-3d/fase-5/trilha.js",
+
+  "grande-aventura/regioes-3d/fase-1/index.html",
+  "grande-aventura/regioes-3d/fase-1/jogo.js",
+  "grande-aventura/regioes-3d/fase-2/index.html",
+  "grande-aventura/regioes-3d/fase-2/jogo.js",
+  "grande-aventura/regioes-3d/fase-3/index.html",
+  "grande-aventura/regioes-3d/fase-3/jogo.js",
+  "grande-aventura/regioes-3d/fase-4/index.html",
+  "grande-aventura/regioes-3d/fase-4/jogo.js",
+  "grande-aventura/regioes-3d/fase-5/index.html",
+  "grande-aventura/regioes-3d/fase-5/jogo.js",
+
+  "grande-aventura/floresta-3d/index.html",
+  "grande-aventura/floresta-3d/jogo.js",
+  "grande-aventura/comemoracao.js",
+  "grande-aventura/dimensao-3d.html",
+  "grande-aventura/dimensao-3d.js",
+  "grande-aventura/musica-coracao.js",
   "grande-aventura/conexao-secreta.html",
   "grande-aventura/conexao-secreta.css",
   "grande-aventura/conexao-secreta.js",
