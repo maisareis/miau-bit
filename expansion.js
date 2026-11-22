@@ -1,6 +1,11 @@
 'use strict';
 
 const expansionAdventures = [
+  {id:'fabrica',tag:'NOVA AVENTURA · FABRICA',title:'A Fábrica Maluca do Bit',description:'Monte as esteiras e programe a fábrica de brinquedos.',time:'5 min',medal:'Engenheiro de invenções',symbol:'⚙',filter:'logica',category:'AVENTURA',bonus:true,unlockStars:18},
+  {id:'jardim',tag:'NOVA AVENTURA · JARDIM',title:'O Jardim Encantado da Luma',description:'Cuide das flores e descubra as combinações do jardim.',time:'5 min',medal:'Guardião do jardim',symbol:'🌸',filter:'criar',category:'AVENTURA',bonus:true,unlockStars:21},
+  {id:'biblioteca',tag:'NOVA AVENTURA · BIBLIOTECA',title:'A Biblioteca dos Segredos',description:'Encontre os livros e decifre os caminhos da biblioteca.',time:'5 min',medal:'Detetive dos livros',symbol:'📚',filter:'descobrir',category:'AVENTURA',bonus:true,unlockStars:24},
+  {id:'oceano',tag:'NOVA AVENTURA · OCEANO',title:'O Tesouro do Oceano Digital',description:'Explore os recifes e cuide dos segredos da turma.',time:'5 min',medal:'Explorador do oceano',symbol:'🐠',filter:'proteger',category:'AVENTURA',bonus:true,unlockStars:27},
+  {id:'pinball',tag:'NOVA AVENTURA · PINBALL',title:'O Pinball das Estrelas',description:'Acione as palhetas e conquiste as estrelas brilhantes.',time:'5 min',medal:'Mestre do pinball',symbol:'⭐',filter:'logica',category:'AVENTURA',bonus:true,unlockStars:30},
   {id:'permissoes',tag:'SEGURANÇA DIGITAL · APLICATIVOS',title:'O aplicativo que pedia demais',description:'O aplicativo quer acessar o quê? Ajude Luma a combinar os acessos com cada atividade.',time:'5 min',medal:'Detetive dos aplicativos',symbol:'⚙',filter:'proteger',category:'SEGURANÇA DIGITAL',bonus:true,unlockStars:12},
   {id:'redes',tag:'SEGURANÇA DIGITAL · CONEXÕES',title:'Qual é a rede do quintal?',description:'Nomes parecidos confundiram a antena de Bit. Uma pista de um adulto pode ajudar!',time:'5 min',medal:'Explorador das conexões',symbol:'⌁',filter:'proteger',category:'SEGURANÇA DIGITAL',bonus:true,unlockStars:12},
   {id:'padroes',tag:'LÓGICA · PADRÕES',title:'A ponte dos padrões',description:'Estrela, lua… qual peça vem depois? Complete a ponte e leve os amigos ao outro lado.',time:'5 min',medal:'Construtor de pontes',symbol:'✦',filter:'logica',category:'LÓGICA',bonus:true,unlockStars:12}
@@ -11,6 +16,7 @@ function expansionCardArt(id) {
     redes:'<path d="M40 58q85-75 170 0M66 86q59-53 118 0M94 114q31-28 62 0" fill="none" stroke="#397d70" stroke-width="14" stroke-linecap="round"/><circle cx="125" cy="137" r="12" fill="#e5b84f"/><circle cx="196" cy="116" r="27" fill="#fff5da" stroke="#8e79ac" stroke-width="4"/><path d="M184 115l8 9 17-20" fill="none" stroke="#8e79ac" stroke-width="6" stroke-linecap="round"/>',
     padroes:'<path d="M18 128q108 28 215 0" stroke="#85b8bd" stroke-width="35" fill="none"/><path d="M20 79q105 37 210 0" fill="none" stroke="#a67746" stroke-width="5"/><g fill="#eed197" stroke="#b78f56" stroke-width="2"><rect x="24" y="69" width="42" height="28" rx="5"/><rect x="76" y="82" width="42" height="28" rx="5"/><rect x="128" y="82" width="42" height="28" rx="5"/><rect x="180" y="69" width="42" height="28" rx="5"/></g><path d="M46 75l3 6 7 1-5 5 1 6-6-3-6 3 1-6-5-5 7-1zM150 88l3 6 7 1-5 5 1 6-6-3-6 3 1-6-5-5 7-1z" fill="#397d70"/><path d="M101 87a10 10 0 1 0 9 16 10 10 0 0 1-9-16M205 74a10 10 0 1 0 9 16 10 10 0 0 1-9-16" fill="#6d609b"/>'
   };
+  if (!drawings[id]) { const symbols={fabrica:'⚙️',jardim:'🌸',biblioteca:'📚',oceano:'🐠',pinball:'⭐'}; return '<div class="new-card-art" aria-hidden="true">'+(symbols[id]||'✨')+'</div>'; }
   return '<svg class="art-svg" viewBox="0 0 250 160" aria-hidden="true">' + drawings[id] + '</svg>';
 }
 const PERMISSION_TYPES = {

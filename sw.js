@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-fases-desbloqueiam-v1';
+const CACHE_NAME = 'miau-bit-novas-aventuras-v1';
 const APP_FILES = [
   "grande-aventura/regioes-3d/fase-1/trilha.js",
   "grande-aventura/regioes-3d/fase-2/trilha.js",
@@ -42,6 +42,8 @@ const APP_FILES = [
   "app.js",
   "journey.js",
   "expansion.js",
+  "novas-aventuras.js",
+  "novas-aventuras.css",
   "expansion.css",
   "journey.css",
   "episodes.css",
@@ -76,7 +78,6 @@ const APP_FILES = [
   "grande-aventura/portal-card.css",
   "grande-aventura/luma.svg",
   "grande-aventura/miau.svg",
-  "grande-aventura/LEIA-ME.txt",
   "grande-aventura/game.css",
   "grande-aventura/reino-miau-bit.png",
   "grande-aventura/index.html",
