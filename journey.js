@@ -34,15 +34,19 @@ function requestedPhase(id) {
 }
 function phaseURL(id, phase) { return '#aventura/' + id + (phase > 1 ? '/' + phase : ''); }
 function coreStars() { return CORE_IDS.filter(id => discovered.has(id)).length; }
-function bonusUnlocked() { return coreStars() === CORE_IDS.length; }
+function bonusUnlocked() { return unlockStars() >= 9; }
 function collectedStars() { return adventures.filter(a => discovered.has(a.id)).length; }
+// Uma fase concluída também conta para abrir aventuras. Não soma duas vezes
+// a estrela da aventura à estrela da sua primeira fase.
+function unlockStars() { return Math.max(collectedStars(), phaseStars()); }
+function displayUnlockStars() { return Math.min(15, unlockStars()); }
 function phaseStars() { return adventures.reduce((sum,a) => sum + completedPhases(a.id), 0); }
 function totalPhaseStars() { return adventures.reduce((sum,a) => sum + phaseCount(a.id), 0); }
-function expansionUnlocked() { return bonusUnlocked() && ['senhas','fotos','receita'].every(id => discovered.has(id)); }
+function expansionUnlocked() { return unlockStars() >= 12; }
 function adventureUnlocked(a) { return !a.bonus || (a.unlockStars === 12 ? expansionUnlocked() : bonusUnlocked()); }
-function nextStarMilestone() { return !bonusUnlocked() ? 9 : !expansionUnlocked() ? 12 : 15; }
+function nextStarMilestone() { return unlockStars() < 9 ? 9 : unlockStars() < 12 ? 12 : 15; }
 function nextStarAdventure() { return adventures.find(a => adventureUnlocked(a) && !discovered.has(a.id)); }
-function celebrationStage() { return journeyFullyComplete() ? 4 : collectedStars() === 15 ? 3 : expansionUnlocked() ? 2 : bonusUnlocked() ? 1 : 0; }
+function celebrationStage() { return journeyFullyComplete() ? 4 : unlockStars() >= 15 ? 3 : expansionUnlocked() ? 2 : bonusUnlocked() ? 1 : 0; }
 function journeyFullyComplete() { return adventures.every(a => completedPhases(a.id) === phaseCount(a.id)); }
 function rememberPhase(id) {
   const before = completedPhases(id);
@@ -101,10 +105,10 @@ function bonusCardArt(id) {
   return '<svg class="art-svg" viewBox="0 0 250 160" aria-hidden="true">' + drawings[id] + '</svg>';
 }
 function journeyBanner() {
-  const n = collectedStars(), target = nextStarMilestone(), next = nextStarAdventure();
+  const n = displayUnlockStars(), target = nextStarMilestone(), next = nextStarAdventure();
   const full = journeyFullyComplete(), allStars = n === 15;
   const heading = full ? 'O quintal inteiro brilhou!' : allStars ? 'Quinze estrelas. Uma turma inteira!' : n >= 12 ? 'Uma nova rota está aberta!' : n >= 9 ? 'As surpresas da Luma estão abertas!' : 'Cada estrela abre uma possibilidade.';
-  const detail = full ? 'Você descobriu todas as fases! A turma adora brincar de novo com você.' : allStars ? 'Sua coleção de estrelas está completa. Ainda dá para explorar novas fases!' : n + ' de 15 estrelas. Faltam ' + (target-n) + ' para ' + (target === 15 ? 'a medalha das quinze estrelas.' : 'abrir três novas brincadeiras!');
+  const detail = full ? 'Você descobriu todas as fases! A turma adora brincar de novo com você.' : allStars ? 'Sua coleção de estrelas está completa. Ainda dá para explorar novas fases!' : n + ' de 15 estrelas para desbloquear. Faltam ' + (target-n) + ' para ' + (target === 15 ? 'a medalha das quinze estrelas.' : 'abrir três novas brincadeiras!');
   return '<section class="journey-banner"><div class="journey-banner-icon" aria-hidden="true">✦</div><div><span class="eyebrow">SEU MAPA CONTINUA CRESCENDO</span><h2>' + heading + '</h2><p>' + detail + '</p></div><a class="button primary" href="' + (next ? phaseURL(next.id,1) : '#conquistas') + '">' + (next ? 'Minha próxima estrela ↗' : 'Ver minhas conquistas ✦') + '</a></section>';
 }
 function bonusPreview() {
@@ -133,14 +137,14 @@ function renderAdventureCatalogue() {
   });
 }
 function bonusHub() {
-  const n = collectedStars(), target = nextStarMilestone(), next = nextStarAdventure();
-  main.innerHTML = '<section class="page-heading bonus-heading"><span class="eyebrow">UM QUINTAL DE SURPRESAS</span><h1>' + (bonusUnlocked() ? 'Cada descoberta abre um caminho.' : 'Tem mais quintal depois das estrelas.') + '</h1><p>' + n + ' de 15 estrelas. ' + (n === 15 ? 'Você encontrou todas! Suas fases favoritas continuam aqui.' : 'Faltam ' + (target-n) + ' para ' + (target === 15 ? 'uma nova medalha.' : 'abrir três jogos!')) + '</p>' +
+  const n = displayUnlockStars(), target = nextStarMilestone(), next = nextStarAdventure();
+  main.innerHTML = '<section class="page-heading bonus-heading"><span class="eyebrow">UM QUINTAL DE SURPRESAS</span><h1>' + (bonusUnlocked() ? 'Cada descoberta abre um caminho.' : 'Tem mais quintal depois das estrelas.') + '</h1><p>' + n + ' de 15 estrelas para desbloquear. ' + (n === 15 ? 'Você encontrou todas! Suas fases favoritas continuam aqui.' : 'Faltam ' + (target-n) + ' para ' + (target === 15 ? 'uma nova medalha.' : 'abrir três jogos!')) + '</p>' +
     (next ? '<a class="button primary" href="' + phaseURL(next.id,1) + '">Encontrar a próxima estrela ✦</a>' : '<a class="button primary" href="#conquistas">Ver minhas descobertas ✦</a>') +
     (bonusUnlocked() ? '<button class="text-button" id="see-party">Rever minha conquista ✦</button>' : '') + '</section>' + milestoneTrail() + bonusPreview();
   const party = $('#see-party'); if (party) party.onclick = showJourneyParty;
 }
 function milestoneTrail() {
-  const n = collectedStars();
+  const n = displayUnlockStars();
   return '<section class="milestone-trail" aria-label="As surpresas da coleção">' + [{n:9,title:'As surpresas da Luma',text:'Três jogos se abrem',done:bonusUnlocked()},{n:12,title:'Uma nova rota',text:'Mais três jogos se abrem',done:expansionUnlocked()},{n:15,title:'Quinze estrelas',text:'Uma medalha especial',done:n===15}].map(m => '<div class="milestone-stop ' + (m.done ? 'done' : '') + '"><span aria-hidden="true">' + (m.done ? '✦' : '✧') + '</span><b>' + m.n + ' estrelas</b><strong>' + m.title + '</strong><small>' + (m.done ? 'Conquista desbloqueada' : m.text) + '</small></div>').join('') + '</section>';
 }
 function phaseGate(a) {
@@ -148,10 +152,10 @@ function phaseGate(a) {
   main.innerHTML = '<section class="page-heading"><span class="eyebrow">UM PASSO DE CADA VEZ</span><h1>Uma descoberta abre a próxima.</h1><p>Complete a fase anterior de “' + a.title + '” para continuar por aqui.</p>' + phaseNavigation(a) + '<a class="button primary" href="' + phaseURL(a.id,available) + '">Vamos para a fase ' + available + ' →</a></section>';
 }
 function renderDiscoveries() {
-  const n = collectedStars(), phases = adventures.reduce((sum,a) => sum + completedPhases(a.id),0);
+  const n = displayUnlockStars(), phases = adventures.reduce((sum,a) => sum + completedPhases(a.id),0);
   const total = adventures.reduce((sum,a) => sum + phaseCount(a.id),0), complete = journeyFullyComplete();
   const core = adventures.filter(a => !a.bonus), target = nextStarMilestone();
-  main.innerHTML = '<section class="page-heading"><span class="eyebrow">SEU BOLSO DE PEQUENAS GRANDES IDEIAS</span><h1>Olha o que você descobriu!</h1><p>Cada fase concluída rende uma estrela de descoberta! As 15 estrelas dos jogos continuam valendo para abrir novas aventuras. Suas conquistas anteriores ficam guardadas.</p><div class="progress-bar" role="progressbar" aria-label="Estrelas da coleção" aria-valuemin="0" aria-valuemax="15" aria-valuenow="' + n + '"><span style="width:' + n/15*100 + '%"></span></div><p><b>' + n + ' de 15 estrelas</b> na coleção ✦ <span class="phase-total">✦ ' + phases + ' de ' + total + ' estrelas de fases conquistadas</span></p><p class="next-surprise">' + (n === 15 ? 'Todas as estrelas encontradas! Continue explorando as fases.' : 'Faltam ' + (target-n) + ' estrelas para ' + (target === 15 ? 'uma nova medalha.' : 'abrir mais três jogos!')) + '</p></section>' + milestoneTrail() +
+  main.innerHTML = '<section class="page-heading"><span class="eyebrow">SEU BOLSO DE PEQUENAS GRANDES IDEIAS</span><h1>Olha o que você descobriu!</h1><p>Cada fase concluída ajuda a desbloquear novas aventuras! As estrelas já conquistadas continuam valendo, sem contar duas vezes a mesma conquista. Seu progresso fica guardado.</p><div class="progress-bar" role="progressbar" aria-label="Estrelas da coleção" aria-valuemin="0" aria-valuemax="15" aria-valuenow="' + n + '"><span style="width:' + n/15*100 + '%"></span></div><p><b>' + n + ' de 15 estrelas</b> para desbloquear aventuras ✦ <span class="phase-total">✦ ' + phases + ' de ' + total + ' estrelas de fases conquistadas</span></p><p class="next-surprise">' + (n === 15 ? 'Todas as estrelas encontradas! Continue explorando as fases.' : 'Faltam ' + (target-n) + ' estrelas para ' + (target === 15 ? 'uma nova medalha.' : 'abrir mais três jogos!')) + '</p></section>' + milestoneTrail() +
     (bonusUnlocked() ? '<section class="journey-complete"><div class="journey-medal" aria-hidden="true">✦</div><div><span class="eyebrow">' + (complete ? 'TODAS AS FASES DESCOBERTAS' : n===15 ? 'QUINZE ESTRELAS NO SEU BOLSO' : 'SUA CONQUISTA ESPECIAL') + '</span><h2>' + (complete ? 'Guardião das Ideias!' : n===15 ? 'Turma das Quinze Estrelas!' : 'Explorador do Quintal!') + '</h2><p>' + (complete ? 'Você descobriu as ' + total + ' fases do quintal. Miau, Bit e Luma comemoram cada ideia e cada cuidado!' : n===15 ? 'A coleção de estrelas está completa. Você pode continuar descobrindo as fases e revisitar suas brincadeiras favoritas.' : 'As nove estrelas da primeira jornada continuam suas! Agora o quintal tem novos cantinhos para explorar.') + '</p>' + (legacyGuardian && !complete ? '<p class="legacy-medal">✦ Guardião das Ideias: sua medalha da coleção anterior também continua com você.</p>' : '') + '<div class="success-next"><a class="button primary" href="' + (complete ? '#aventuras' : '#novidades') + '">' + (complete ? 'Escolher minha favorita ↗' : 'Explorar os cantinhos ↗') + '</a><button class="button secondary" id="replay-party">Rever a festa ✦</button></div></div></section>' : '') +
     '<section class="achievements"><div class="medal-grid">' + core.map(a => '<article class="medal ' + (discovered.has(a.id) ? 'earned' : '') + '"><div class="medal-icon" aria-hidden="true">' + (discovered.has(a.id) ? '✦' : a.symbol) + '</div><h3>' + a.medal + '</h3><p>' + (discovered.has(a.id) ? 'A estrela desta aventura já é sua!' : 'Encontre a estrela em “' + a.title + '”.') + '</p>' + phaseDots(a) + '<a class="text-link" href="' + phaseURL(a.id,completedPhases(a.id) === phaseCount(a.id) ? 1 : Math.min(phaseCount(a.id),completedPhases(a.id)+1)) + '">' + (completedPhases(a.id) === phaseCount(a.id) ? 'Brincar de novo' : completedPhases(a.id) ? 'Continuar na próxima fase' : 'Encontrar a estrela') + ' ↗</a></article>').join('') + '</div></section>' + bonusPreview() + '<section class="reset-section"><p>Suas descobertas ficam só neste navegador ou aplicativo.</p><button class="text-button" id="reset-stars">Recomeçar toda a coleção</button></section>';
   $('#reset-stars').onclick = resetJourney;

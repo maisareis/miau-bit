@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pergunta-no-inicio-da-fase-v2-star10';
+const CACHE_NAME = 'miau-bit-fases-desbloqueiam-v1';
 const APP_FILES = [
   "grande-aventura/regioes-3d/fase-1/trilha.js",
   "grande-aventura/regioes-3d/fase-2/trilha.js",
