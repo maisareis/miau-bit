@@ -19,9 +19,9 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 function toast(message) { $('#toast').textContent = message; $('#toast').classList.add('show'); setTimeout(() => $('#toast').classList.remove('show'), 3200); }
 function updateProgress() {
   const n = collectedStars();
-  $('#progress-count').textContent = Math.min(30,unlockStars()) + '/30';
-  $('.pocket').setAttribute('aria-label','Minhas descobertas: ' + n + ' de 30 estrelas');
-  $('.pocket').classList.toggle('journey-done', unlockStars() >= 30);
+  $('#progress-count').textContent = Math.min(15,unlockStars()) + '/15';
+  $('.pocket').setAttribute('aria-label','Minhas descobertas: ' + n + ' de 15 estrelas');
+  $('.pocket').classList.toggle('journey-done', unlockStars() >= 15);
 }
 function award(id) { const fresh = !discovered.has(id), newPhase = rememberPhase(id); discovered.add(id); try { localStorage.setItem('miau-bit-stars-v1', JSON.stringify([...discovered])); } catch (_) {} updateProgress(); const a = adventures.find(item => item.id === id), nav = $('.phase-navigation'); if (a && nav) nav.outerHTML = phaseNavigation(a); if (fresh) toast('Uma estrela para a sua coleção! ✦'); else if (newPhase) toast('Mais uma fase descoberta! Sua ideia brilhou. ✦'); maybeCelebrateJourney(); }
 function robotSVG(cls = '') { return `<svg class="${cls}" viewBox="0 0 160 180" aria-hidden="true"><path d="M81 30L91 13" stroke="#315a50" stroke-width="7" stroke-linecap="round"/><circle cx="94" cy="11" r="10" fill="#ef8550"/><path d="M25 114L13 135M135 114L147 135" stroke="#3b8c7a" stroke-width="14" stroke-linecap="round"/><rect x="35" y="104" width="91" height="52" rx="23" fill="#358d7d"/><path d="M52 155v13M108 155v13" stroke="#334c48" stroke-width="12"/><ellipse cx="46" cy="170" rx="21" ry="9" fill="#ed854b"/><ellipse cx="112" cy="170" rx="21" ry="9" fill="#ed854b"/><rect x="19" y="31" width="124" height="90" rx="37" fill="#348e80"/><rect x="30" y="44" width="103" height="65" rx="26" fill="#fcf0d2"/><ellipse cx="59" cy="72" rx="6" ry="10" fill="#264b4a"/><ellipse cx="106" cy="72" rx="6" ry="10" fill="#264b4a"/><path d="M72 91q10 11 20 0" fill="none" stroke="#264b4a" stroke-width="4" stroke-linecap="round"/><circle cx="82" cy="135" r="13" fill="#f9d47a"/><path d="M81 128v14M75 135h14" stroke="#db8c3b" stroke-width="4" stroke-linecap="round"/></svg>`; }
@@ -177,7 +177,7 @@ function route() {
   else if (hash === 'novidades') bonusHub();
   else if (a && !adventureUnlocked(a)) bonusHub();
   else if (a && requestedPhase(a.id) > completedPhases(a.id) + 1) phaseGate(a);
-  else if (a) ({scratch:scratchGame,python:pythonGame,sql:sqlGame,safety:safetyGame,...awarenessGames,...bonusGames,...newGames})[a.id](a);
+  else if (a) ({scratch:scratchGame,python:pythonGame,sql:sqlGame,safety:safetyGame,...awarenessGames,...bonusGames})[a.id](a);
   else { home(); decorateJourneyHome(); }
   const titles = {episodios:'Histórias para assistir',inicio:'O quintal das ideias',turma:'Conheça a turma',aventuras:'Escolha sua aventura',conquistas:'Minhas descobertas',novidades:'As surpresas da Luma'};
   document.title = (a ? a.title + (phaseCount(a.id) > 1 ? ' · Fase ' + requestedPhase(a.id) : '') : titles[hash] || titles.inicio) + ' · Miau & Bit';

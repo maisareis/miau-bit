@@ -1,11 +1,6 @@
 'use strict';
 
 const expansionAdventures = [
-  {id:'fabrica',tag:'NOVA AVENTURA · FABRICA',title:'A Fábrica Maluca do Bit',description:'Monte as esteiras e programe a fábrica de brinquedos.',time:'5 min',medal:'Engenheiro de invenções',symbol:'⚙',filter:'logica',category:'AVENTURA',bonus:true,unlockStars:18},
-  {id:'jardim',tag:'NOVA AVENTURA · JARDIM',title:'O Jardim Encantado da Luma',description:'Cuide das flores e descubra as combinações do jardim.',time:'5 min',medal:'Guardião do jardim',symbol:'🌸',filter:'criar',category:'AVENTURA',bonus:true,unlockStars:21},
-  {id:'biblioteca',tag:'NOVA AVENTURA · BIBLIOTECA',title:'A Biblioteca dos Segredos',description:'Encontre os livros e decifre os caminhos da biblioteca.',time:'5 min',medal:'Detetive dos livros',symbol:'📚',filter:'descobrir',category:'AVENTURA',bonus:true,unlockStars:24},
-  {id:'oceano',tag:'NOVA AVENTURA · OCEANO',title:'O Tesouro do Oceano Digital',description:'Explore os recifes e cuide dos segredos da turma.',time:'5 min',medal:'Explorador do oceano',symbol:'🐠',filter:'proteger',category:'AVENTURA',bonus:true,unlockStars:27},
-  {id:'pinball',tag:'NOVA AVENTURA · PINBALL',title:'O Pinball das Estrelas',description:'Acione as palhetas e conquiste as estrelas brilhantes.',time:'5 min',medal:'Mestre do pinball',symbol:'⭐',filter:'logica',category:'AVENTURA',bonus:true,unlockStars:30},
   {id:'permissoes',tag:'SEGURANÇA DIGITAL · APLICATIVOS',title:'O aplicativo que pedia demais',description:'O aplicativo quer acessar o quê? Ajude Luma a combinar os acessos com cada atividade.',time:'5 min',medal:'Detetive dos aplicativos',symbol:'⚙',filter:'proteger',category:'SEGURANÇA DIGITAL',bonus:true,unlockStars:12},
   {id:'redes',tag:'SEGURANÇA DIGITAL · CONEXÕES',title:'Qual é a rede do quintal?',description:'Nomes parecidos confundiram a antena de Bit. Uma pista de um adulto pode ajudar!',time:'5 min',medal:'Explorador das conexões',symbol:'⌁',filter:'proteger',category:'SEGURANÇA DIGITAL',bonus:true,unlockStars:12},
   {id:'padroes',tag:'LÓGICA · PADRÕES',title:'A ponte dos padrões',description:'Estrela, lua… qual peça vem depois? Complete a ponte e leve os amigos ao outro lado.',time:'5 min',medal:'Construtor de pontes',symbol:'✦',filter:'logica',category:'LÓGICA',bonus:true,unlockStars:12}

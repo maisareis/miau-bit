@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-novas-aventuras-v2-movimento-sons';
+const CACHE_NAME = 'miau-bit-jogos-experimentais-ocultos-v3';
 const APP_FILES = [
   "grande-aventura/regioes-3d/fase-1/trilha.js",
   "grande-aventura/regioes-3d/fase-2/trilha.js",
@@ -42,8 +42,6 @@ const APP_FILES = [
   "app.js",
   "journey.js",
   "expansion.js",
-  "novas-aventuras.js",
-  "novas-aventuras.css",
   "expansion.css",
   "journey.css",
   "episodes.css",

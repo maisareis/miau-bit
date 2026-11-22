@@ -39,12 +39,12 @@ function collectedStars() { return adventures.filter(a => discovered.has(a.id)).
 // Uma fase concluída também conta para abrir aventuras. Não soma duas vezes
 // a estrela da aventura à estrela da sua primeira fase.
 function unlockStars() { return Math.max(collectedStars(), phaseStars()); }
-function displayUnlockStars() { return Math.min(30, unlockStars()); }
-function phaseStars() { return adventures.reduce((sum,a) => sum + completedPhases(a.id), 0); }
+function displayUnlockStars() { return Math.min(15, unlockStars()); }
+function phaseStars() { return adventures.reduce((sum,a) => sum + completedPhases(a.id), 0) + completedPhases('fabrica') + completedPhases('jardim') + completedPhases('biblioteca') + completedPhases('oceano') + completedPhases('pinball'); }
 function totalPhaseStars() { return adventures.reduce((sum,a) => sum + phaseCount(a.id), 0); }
 function expansionUnlocked() { return unlockStars() >= 12; }
 function adventureUnlocked(a) { return !a.bonus || unlockStars() >= (a.unlockStars || 9); }
-function nextStarMilestone() { return [9,12,15,18,21,24,27,30].find(n=>unlockStars()<n) || 30; }
+function nextStarMilestone() { return [9,12,15].find(n=>unlockStars()<n) || 15; }
 function nextStarAdventure() { return adventures.find(a => adventureUnlocked(a) && !discovered.has(a.id)); }
 function celebrationStage() { return journeyFullyComplete() ? 4 : unlockStars() >= 15 ? 3 : expansionUnlocked() ? 2 : bonusUnlocked() ? 1 : 0; }
 function journeyFullyComplete() { return adventures.every(a => completedPhases(a.id) === phaseCount(a.id)); }
@@ -107,12 +107,12 @@ function bonusCardArt(id) {
 function journeyBanner() {
   const n = displayUnlockStars(), target = nextStarMilestone(), next = nextStarAdventure();
   const full = journeyFullyComplete(), allStars = n >= 15;
-  const heading = full ? 'O quintal inteiro brilhou!' : n >= 30 ? 'Todas as aventuras estão abertas!' : allStars ? 'Quinze estrelas. Uma turma inteira!' : n >= 12 ? 'Uma nova rota está aberta!' : n >= 9 ? 'As surpresas da Luma estão abertas!' : 'Cada estrela abre uma possibilidade.';
-  const detail = full ? 'Você descobriu todas as fases! A turma adora brincar de novo com você.' : n >= 30 ? 'Você desbloqueou todas as aventuras! Continue descobrindo as fases.' : allStars ? 'Sua medalha das quinze estrelas está garantida! Continue para abrir novas aventuras.' : n + ' de 30 estrelas para desbloquear. Faltam ' + (target-n) + ' para ' + (target === 15 ? 'a medalha das quinze estrelas.' : 'abrir a próxima aventura!');
+  const heading = full ? 'O quintal inteiro brilhou!' : allStars ? 'Quinze estrelas. Uma turma inteira!' : n >= 12 ? 'Uma nova rota está aberta!' : n >= 9 ? 'As surpresas da Luma estão abertas!' : 'Cada estrela abre uma possibilidade.';
+  const detail = full ? 'Você descobriu todas as fases! A turma adora brincar de novo com você.' : allStars ? 'Sua medalha das quinze estrelas está garantida! Continue explorando o quintal.' : n + ' de 15 estrelas para desbloquear. Faltam ' + (target-n) + ' para ' + (target === 15 ? 'a medalha das quinze estrelas.' : 'abrir a próxima aventura!');
   return '<section class="journey-banner"><div class="journey-banner-icon" aria-hidden="true">✦</div><div><span class="eyebrow">SEU MAPA CONTINUA CRESCENDO</span><h2>' + heading + '</h2><p>' + detail + '</p></div><a class="button primary" href="' + (next ? phaseURL(next.id,1) : '#conquistas') + '">' + (next ? 'Minha próxima estrela ↗' : 'Ver minhas conquistas ✦') + '</a></section>';
 }
 function bonusPreview() {
-  return [9,12,18,21,24,27,30].map(threshold => {
+  return [9,12].map(threshold => {
     const available = unlockStars() >= threshold;
     const title = threshold === 9 ? 'As surpresas da Luma' : threshold === 12 ? 'Uma nova rota no quintal' : (bonusAdventures.find(a => a.unlockStars === threshold)?.title || 'Nova aventura');
     return '<section class="adventure-section bonus-preview"><div class="section-heading"><div><span class="eyebrow">' + threshold + ' ESTRELAS ABREM ESTE CANTINHO</span><h2>' + title + '</h2><p>' + (available ? 'Cantinho aberto! Escolha sua próxima descoberta.' : 'Continue descobrindo fases para abrir esta aventura!') + '</p></div><a class="text-link" href="#novidades">Ver meu caminho ↗</a></div><div class="adventure-grid bonus-grid">' + bonusAdventures.filter(a => (a.unlockStars || 9) === threshold).map(journeyCard).join('') + '</div></section>';
@@ -138,7 +138,7 @@ function renderAdventureCatalogue() {
 }
 function bonusHub() {
   const n = displayUnlockStars(), target = nextStarMilestone(), next = nextStarAdventure();
-  main.innerHTML = '<section class="page-heading bonus-heading"><span class="eyebrow">UM QUINTAL DE SURPRESAS</span><h1>' + (bonusUnlocked() ? 'Cada descoberta abre um caminho.' : 'Tem mais quintal depois das estrelas.') + '</h1><p>' + n + ' de 30 estrelas para desbloquear. ' + (n >= 30 ? 'Você abriu todas as aventuras! Suas fases favoritas continuam aqui.' : 'Faltam ' + (target-n) + ' para ' + (target === 15 ? 'uma nova medalha.' : 'abrir a próxima aventura!')) + '</p>' +
+  main.innerHTML = '<section class="page-heading bonus-heading"><span class="eyebrow">UM QUINTAL DE SURPRESAS</span><h1>' + (bonusUnlocked() ? 'Cada descoberta abre um caminho.' : 'Tem mais quintal depois das estrelas.') + '</h1><p>' + n + ' de 15 estrelas para desbloquear. ' + (n >= 30 ? 'Você abriu todas as aventuras! Suas fases favoritas continuam aqui.' : 'Faltam ' + (target-n) + ' para ' + (target === 15 ? 'uma nova medalha.' : 'abrir a próxima aventura!')) + '</p>' +
     (next ? '<a class="button primary" href="' + phaseURL(next.id,1) + '">Encontrar a próxima estrela ✦</a>' : '<a class="button primary" href="#conquistas">Ver minhas descobertas ✦</a>') +
     (bonusUnlocked() ? '<button class="text-button" id="see-party">Rever minha conquista ✦</button>' : '') + '</section>' + milestoneTrail() + bonusPreview();
   const party = $('#see-party'); if (party) party.onclick = showJourneyParty;
