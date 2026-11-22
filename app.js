@@ -51,7 +51,7 @@ const guardianEpisode = {
   title: 'A foto que viajou pelo mundo',
   series: 'GUARDIÕES DO MUNDO DIGITAL · PRIVACIDADE',
   duration: '51 s',
-  url: 'https://youtu.be/68yYGtvCLiU',
+  url: 'https://youtu.be/OSTldiPm5cU',
   image: 'assets/episodio-foto.jpg',
   alt: 'Miau e Bit observam no computador a foto de um foguete, com uma mochila ao fundo.',
   description: 'Miau quer mostrar a foto do seu foguete, mas Bit percebe um detalhe no fundo da imagem! Com ajuda de um adulto, os amigos descobrem o que merece cuidado antes de compartilhar.',
