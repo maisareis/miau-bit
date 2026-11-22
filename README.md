@@ -1,41 +1,49 @@
 # Miau & Bit — O Quintal das Ideias
 
-Site infantil de histórias, lógica e segurança digital. Esta versão tem 15 jogos e 32 fases: as nove estrelas da primeira jornada abrem três jogos, e doze estrelas liberam outras três missões. A estrela que caiu tem seis fases; luzes, busca de peças, correio, permissões, redes e padrões têm três fases cada.
+Portal infantil de histórias, lógica e segurança digital, idealizado por **Maisa Araujo**, para crianças a partir de 6 anos.
 
-## Publicação manual no GitHub Pages
+A proposta é aprender brincando, com personagens, descobertas e desafios integrados às aventuras.
 
-1. Extraia o ZIP e envie seu conteúdo para a raiz do repositório `miau-bit`, substituindo os arquivos anteriores. Inclua as pastas `assets` e `licenses`, os arquivos `journey.js`, `journey.css`, `expansion.js` e `expansion.css` e todos os demais arquivos do pacote.
-2. Mantenha `CNAME` com `miauebit.com.br`. Não é preciso alterar o domínio nem a configuração de publicação.
-3. Aguarde a publicação do GitHub Pages. Com internet, o site e o aplicativo recebem as novidades automaticamente ao abrir. Se a criança já começou a interagir, a página atual é mantida e a nova versão aparece na próxima abertura.
-4. Na primeira troca da versão antiga, que usava atualização manual, abra o site com internet para baixar o pacote; depois feche e reabra as abas ou o aplicativo. Não é preciso limpar os dados. O botão **Atualizar aplicativo**, em **Para quem cuida**, também continua disponível quando há uma atualização pendente.
+## O que tem no portal
 
-As estrelas anteriores são preservadas no mesmo navegador e domínio. Quem já tem nove estrelas continua com elas. Quem completou os doze jogos anteriores já pode abrir as três missões novas. Quem concluiu as três fases anteriores de A estrela que caiu continua na fase quatro. A medalha Guardião das Ideias da coleção anterior também é preservada. O progresso não é transferido entre aparelhos, navegadores ou domínios.
+- **O Quintal das Ideias:** uma coleção de 15 jogos e 32 fases, com estrelas, novas aventuras e conquistas.
+- **A Grande Aventura:** um jogo de plataforma com Miau e Luma, dez mundos, 50 fases e uma dimensão secreta.
+- **Histórias animadas:** episódios do Miau & Bit disponíveis no YouTube.
+- **Instalação como aplicativo:** disponível nos navegadores compatíveis, com acesso offline aos jogos após o download dos arquivos.
+
+As atividades exploram instruções, sequências, padrões, resolução de problemas e cuidados no mundo digital. Python, SQL, redes e permissões são apresentados por meio de simulações visuais.
+
+## Publicação no GitHub Pages
+
+1. Envie os arquivos do projeto para a raiz do repositório `miau-bit`, mantendo a estrutura das pastas, incluindo `assets`, `licenses` e `grande-aventura`.
+2. Mantenha o arquivo `CNAME` com o domínio `miauebit.com.br`.
+3. Ao atualizar o conteúdo, altere `CACHE_NAME` em `sw.js` para um nome novo, começando com `miau-bit-pwa-`.
+4. Aguarde a publicação do GitHub Pages e abra o portal com internet para receber a atualização.
+
+Se o aplicativo ainda mostrar a versão anterior, feche e abra novamente. O botão **Atualizar aplicativo**, em **Para quem cuida**, também pode ser usado quando houver uma atualização pendente.
+
+## Progresso e uso offline
+
+As estrelas e o progresso ficam salvos no próprio navegador e são preservados nas atualizações. Não há sincronização entre aparelhos, navegadores ou domínios.
+
+Os jogos funcionam offline depois que seus arquivos são baixados. Os episódios do YouTube precisam de conexão com a internet. A leitura em voz alta depende das vozes disponíveis no aparelho.
 
 ## Desenvolvimento
 
-HTML, CSS e JavaScript sem etapa de compilação. Sirva esta pasta com um servidor HTTP local. As estrelas e o progresso ficam apenas no navegador. Os vídeos abrem no YouTube mediante clique. O contador de visitas faz uma requisição ao serviço externo descrito abaixo.
+Projeto desenvolvido com HTML, CSS e JavaScript, sem etapa de compilação. Para executar localmente, sirva a pasta com um servidor HTTP.
 
-As chaves de armazenamento são `miau-bit-stars-v1`, `miau-bit-phases-v1` e `miau-bit-journey-party-v2` (com leitura da versão anterior para preservar conquistas). Atualizações do conteúdo exigem uma nova versão de cache em `sw.js`.
+O arquivo `sw.js` gerencia o cache dos arquivos para uso offline. Uma nova versão só é ativada após concluir o download do pacote.
 
-A nova versão do serviço de cache só é ativada depois que todos os arquivos foram baixados com sucesso. O primeiro preparo offline não recarrega a página. A troca automática não altera o armazenamento das estrelas ou das fases.
+## Contador de visitas
 
-Cada jogo rende uma estrela na primeira fase concluída. Avançar e repetir fases não duplica estrelas. As fases têm seu próprio contador. Aos 9 e 12 jogos descobertos, abrem-se novos cantinhos; aos 15, há uma medalha; completar as 32 fases tem sua própria comemoração.
+Uma pequena patinha no rodapé mostra uma estimativa de acessos por meio de um serviço externo. Ela fica oculta quando o aparelho está offline ou o serviço está indisponível, sem afetar os jogos.
 
-As missões de aplicativos e redes são simulações. Elas não solicitam permissões, dados reais ou conexões. A ponte aceita toque e teclado e não depende apenas da cor para identificar as peças. O convite de instalação aparece na apresentação da página inicial e fica oculto dentro do aplicativo instalado.
+Os detalhes estão em [Autoria e condições de uso](autoria.html).
 
 ## Autoria e condições de uso
 
-Projeto idealizado e organizado por **Maisa Araujo**. O rodapé e as informações de autoria identificam a idealizadora. As condições públicas estão em `autoria.html`; a reserva de direitos está em `LICENSE.txt`, preservando os usos legais e as licenças de terceiros. A pasta `licenses/` mantém as licenças das fontes. O aviso não garante exclusividade sobre materiais não protegíveis ou pertencentes a terceiros.
+Projeto idealizado e organizado por **Maisa Araujo**.
 
-## A pequena patinha de visitas
+As condições de uso estão em [autoria.html](autoria.html), e o aviso de direitos está em [LICENSE.txt](LICENSE.txt).
 
-A patinha no canto direito do rodapé exibe um total compartilhado entre os acessos online ao domínio oficial e ao endereço original do GitHub Pages. Ela usa a API pública e gratuita Count API (`https://countapi.mileshilliard.com/`), sem conta, senha ou chave secreta. O primeiro acesso publicado cria a contagem. Os números anteriores à instalação não são recuperados.
-
-- Uma marca de horário em `miau-bit-visit-at-v1`, no armazenamento do navegador, evita incrementar novamente dentro de 30 minutos. Depois desse intervalo, uma nova abertura pode contar outra visita. Acessos pelo domínio personalizado e pelo GitHub Pages usam o mesmo total, mas o armazenamento de cada domínio é separado.
-- É uma estimativa de visitas, não de pessoas únicas ou de visitantes online. O próprio acesso da idealizadora também pode contar. Recarregar a página dentro do intervalo apenas consulta o total; trocar de aventura não incrementa.
-- O ícone tem um número pequeno, uma descrição acessível e detalhes ao tocar ou clicar. Ele fica oculto se o serviço falhar ou se o aparelho estiver offline. Os jogos continuam funcionando. Se a conexão voltar na mesma página, uma nova tentativa é feita.
-- Não são enviados nome, idade, senha, respostas ou progresso. A requisição é feita sem credenciais ou referência à página. O serviço externo recebe os dados técnicos inerentes à conexão, como IP e agente do navegador.
-- O número e a chave são públicos. É possível alterar ou inflar contadores públicos por fora do portal; esse recurso serve para ter uma noção de uso, não como relatório auditável. A disponibilidade e a retenção dependem do serviço gratuito.
-- O contador só faz requisições nos endereços oficiais em HTTPS; abrir o ZIP ou uma prévia local não aumenta o total. Não há número fictício de demonstração no pacote.
-
-Ao publicar esta atualização, envie também `autoria.css`, `autoria.html`, `LICENSE.txt` e `visitas.js`, além de substituir `index.html` e `sw.js`. Para evitar deixar algum arquivo para trás, envie o conteúdo completo deste ZIP.
+As licenças das fontes e de outros materiais de terceiros estão na pasta `licenses/`.
