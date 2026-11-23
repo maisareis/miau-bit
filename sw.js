@@ -1,7 +1,11 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-tres-jogos-videos-v4-miniatura-youtube';
+const CACHE_NAME = 'miau-bit-corrida-turbo-5-10-v1';
 const APP_FILES = [
+  "grande-aventura/corrida-acesso.js",
+  "corrida-das-dimensoes/index.html",
+  "corrida-das-dimensoes/jogo3d.js",
+  "corrida-das-dimensoes/manifest.webmanifest",
   "novas-aventuras.css",
   "novas-aventuras/index.html",
   "assets/episodio-brincadeira.svg",
