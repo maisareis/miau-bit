@@ -51,7 +51,7 @@ const guardianEpisode = {
   title: 'A foto que viajou pelo mundo',
   series: 'GUARDIÕES DO MUNDO DIGITAL · PRIVACIDADE',
   duration: '51 s',
-  url: 'https://youtu.be/68yYGtvCLiU',
+  url: 'https://www.youtube.com/watch?v=OSTldiPm5cU',
   image: 'assets/episodio-foto.jpg',
   alt: 'Miau e Bit observam no computador a foto de um foguete, com uma mochila ao fundo.',
   description: 'Miau quer mostrar a foto do seu foguete, mas Bit percebe um detalhe no fundo da imagem! Com ajuda de um adulto, os amigos descobrem o que merece cuidado antes de compartilhar.',
@@ -69,7 +69,19 @@ const lumaEpisode = {
   gameURL: '#aventura/scratch',
   gameLabel: 'Brincar com os comandos'
 };
-const episodes = [lumaEpisode, guardianEpisode, firstEpisode];
+const brincadeiraEpisode = {
+  title: 'A brincadeira que não teve graça',
+  series: 'GUARDIÕES DO MUNDO DIGITAL · RESPEITO NA INTERNET',
+  duration: 'Vídeo',
+  url: 'https://www.youtube.com/watch?v=kIbC512rTNg',
+  image: 'https://i.ytimg.com/vi/kIbC512rTNg/hqdefault.jpg',
+  fallbackImage: 'assets/episodio-brincadeira.svg',
+  alt: 'Miniatura do vídeo A brincadeira que não teve graça no YouTube.',
+  description: 'Uma história para conversar sobre respeito, empatia e o que fazer quando uma brincadeira machuca alguém.',
+  gameURL: '#aventuras',
+  gameLabel: 'Explorar as aventuras'
+};
+const episodes = [lumaEpisode, guardianEpisode, brincadeiraEpisode, firstEpisode];
 function lumaSVG() {
   return `<svg viewBox="0 0 180 210" aria-hidden="true"><path d="M137 156q40-3 20-39" fill="none" stroke="#a7a8b2" stroke-width="17" stroke-linecap="round"/><path d="M147 126l8 8m0 10 7 5" stroke="#858695" stroke-width="5" stroke-linecap="round"/><rect x="43" y="121" width="94" height="65" rx="20" fill="#e6b64e"/><path d="M52 148l-19 19m94-19 19 19" stroke="#a7a8b2" stroke-width="15" stroke-linecap="round"/><circle cx="30" cy="169" r="9" fill="#f9f5eb"/><circle cx="149" cy="169" r="9" fill="#f9f5eb"/><path d="M58 183v16m63-16v16" stroke="#a7a8b2" stroke-width="18" stroke-linecap="round"/><path d="M47 200h24m39 0h25" stroke="#9180b4" stroke-width="13" stroke-linecap="round"/><path d="M54 133q35-19 72 0l8 37H46z" fill="#fff3dc"/><path d="M61 130v22h56v-22m-62 19h69v36H55z" fill="#a694c3"/><path d="M60 137v15m59-15v15" stroke="#8572a4" stroke-width="6"/><circle cx="61" cy="152" r="4" fill="#f5cf65"/><circle cx="118" cy="152" r="4" fill="#f5cf65"/><path d="M30 68 28 15l43 27m39-2 42-25-5 56" fill="#a7a8b2"/><path d="M40 49 38 30l18 16m70 0 16-16-2 22" fill="#eab9ba"/><ellipse cx="89" cy="84" rx="68" ry="59" fill="#b9bac3"/><path d="M72 30 83 17l5 16 13-13 1 17" fill="#b9bac3"/><path d="m76 43 7 12m15-12-6 12M26 85l12 4m102 0 12-4" stroke="#8d8e9d" stroke-width="5" stroke-linecap="round"/><ellipse cx="89" cy="111" rx="36" ry="25" fill="#f9f5eb"/><ellipse cx="59" cy="82" rx="9" ry="12" fill="#477b5c"/><ellipse cx="118" cy="82" rx="9" ry="12" fill="#477b5c"/><ellipse cx="59" cy="83" rx="4" ry="8" fill="#253e36"/><ellipse cx="118" cy="83" rx="4" ry="8" fill="#253e36"/><circle cx="56" cy="78" r="3" fill="#fff"/><circle cx="115" cy="78" r="3" fill="#fff"/><path d="M81 100h16l-8 8" fill="#cf8e98"/><path d="M76 113q13 16 26 0" fill="none" stroke="#6d535c" stroke-width="3" stroke-linecap="round"/><path d="M47 104l-19-4m18 12-19 3m105-11 18-4m-18 12 19 3" stroke="#8d8e9d" stroke-width="2" stroke-linecap="round"/></svg>`;
 }
@@ -104,7 +116,7 @@ function episodeTeaser() {
 function episodeCard(episode) {
   return `<article class="episode-card">
     <a class="episode-cover-link" href="${episode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir a ${episode.title} no YouTube, em outra aba">
-      <img src="${episode.image}" alt="${episode.alt}" width="960" height="540" loading="lazy">
+      <img src="${episode.image}" alt="${episode.alt}" width="960" height="540" loading="lazy"${episode.fallbackImage ? ` onerror="this.onerror=null;this.src='${episode.fallbackImage}'"` : ''}>
       <span class="episode-play-badge" aria-hidden="true">▶</span>
     </a>
     <div class="episode-card-copy">
@@ -163,6 +175,14 @@ function safetyGame(a) {
   function finish(){award('safety');$('#story-text').textContent='Miau e Bit aprenderam que cuidar dos amigos também é uma grande aventura. Você ajudou a turma a encontrar escolhas seguras!';$('#game-stage').innerHTML='<div class="safety-celebrate"><span class="big-star" aria-hidden="true">✦</span><h2>Guardião do quintal!</h2><p>Uma estrela para quem cuida de si e dos amigos.</p></div>';$('#game-panel').innerHTML='<h2>Seu superpoder é pedir ajuda.</h2><p>Uma senha fica em segredo. Seus dados merecem cuidado. E um adulto de confiança pode ajudar quando algo parece estranho.</p><div class="feedback success" role="status">Você encontrou a estrela do cuidado! ✦</div>'+nextLinks()+'<button class="text-button" id="play-safety-again">↶ Brincar de novo</button>';$('#play-safety-again').onclick=()=>{index=0;show();};}
   show();
 }
+function novasAventurasSection() {
+  const jogos = [
+    {titulo:'O Farol das Nuvens',desc:'Salte entre plataformas, encontre estrelas e acenda o farol mágico.',link:'novas-aventuras/farol-das-nuvens/index.html',icon:'☁',cor:'#d8f5ff'},
+    {titulo:'O Circuito do Bit',desc:'Empurre as baterias até os terminais e faça o circuito funcionar.',link:'novas-aventuras/circuito-do-bit/index.html',icon:'⚙',cor:'#ddf6e7'},
+    {titulo:'A Travessia da Luma',desc:'Atravesse ilhas flutuantes e chegue ao jardim com a gatinha cinza.',link:'novas-aventuras/travessia-da-luma/index.html',icon:'✿',cor:'#eee2ff'}
+  ];
+  return `<section class="novas-aventuras-section" aria-labelledby="novas-aventuras-title"><div class="section-heading"><div><span class="eyebrow">TRÊS NOVAS BRINCADEIRAS</span><h2 id="novas-aventuras-title">Mais aventuras para descobrir!</h2><p>Uma fase por jogo, sem cadeados. Escolha e divirta-se!</p></div></div><div class="novas-aventuras-grid">${jogos.map(j=>`<article class="nova-aventura-card"><div class="nova-aventura-arte" style="background:${j.cor}" aria-hidden="true">${j.icon}</div><div class="nova-aventura-corpo"><h3>${j.titulo}</h3><p>${j.desc}</p><a class="button primary" href="${j.link}">Jogar agora <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div></section>`;
+}
 function route() {
   visit++; if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   const hash = location.hash.replace(/^#/,'') || 'inicio';
@@ -179,6 +199,9 @@ function route() {
   else if (a && requestedPhase(a.id) > completedPhases(a.id) + 1) phaseGate(a);
   else if (a) ({scratch:scratchGame,python:pythonGame,sql:sqlGame,safety:safetyGame,...awarenessGames,...bonusGames})[a.id](a);
   else { home(); decorateJourneyHome(); }
+  if (hash === 'inicio' || hash === 'aventuras') {
+    main.insertAdjacentHTML('beforeend', novasAventurasSection());
+  }
   const titles = {episodios:'Histórias para assistir',inicio:'O quintal das ideias',turma:'Conheça a turma',aventuras:'Escolha sua aventura',conquistas:'Minhas descobertas',novidades:'As surpresas da Luma'};
   document.title = (a ? a.title + (phaseCount(a.id) > 1 ? ' · Fase ' + requestedPhase(a.id) : '') : titles[hash] || titles.inicio) + ' · Miau & Bit';
   window.scrollTo({top:0,behavior:'instant'}); main.focus({preventScroll:true}); updateProgress(); bindEpisodeLinks(); maybeCelebrateJourney(); window.dispatchEvent(new Event('miau:pagechange'));

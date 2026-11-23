@@ -1,7 +1,15 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-jogos-experimentais-ocultos-v3';
+const CACHE_NAME = 'miau-bit-tres-jogos-videos-v4-miniatura-youtube';
 const APP_FILES = [
+  "novas-aventuras.css",
+  "novas-aventuras/index.html",
+  "assets/episodio-brincadeira.svg",
+  "novas-aventuras/circuito-do-bit/index.html",
+  "novas-aventuras/farol-das-nuvens/index.html",
+  "novas-aventuras/luma-rosto.svg",
+  "novas-aventuras/travessia-da-luma/index.html",
+
   "grande-aventura/regioes-3d/fase-1/trilha.js",
   "grande-aventura/regioes-3d/fase-2/trilha.js",
   "grande-aventura/regioes-3d/fase-3/trilha.js",
