@@ -1,7 +1,14 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-corrida-turbo-5-10-v1';
+const CACHE_NAME = 'miau-bit-pwa-episodios-miniaturas-20261127-v4';
 const APP_FILES = [
+  "assets/episodio-nico.jpg",
+  "assets/episodio-tico.jpg",
+  "assets/episodio-portinha.jpg",
+  "assets/episodio-senha.jpg",
+  "assets/episodio-brincadeira.jpg",
+  "assets/episodio-presente.jpg",
+
   "grande-aventura/corrida-acesso.js",
   "corrida-das-dimensoes/index.html",
   "corrida-das-dimensoes/jogo3d.js",

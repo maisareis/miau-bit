@@ -50,7 +50,7 @@ const firstEpisode = {
 const guardianEpisode = {
   title: 'A foto que viajou pelo mundo',
   series: 'GUARDIÕES DO MUNDO DIGITAL · PRIVACIDADE',
-  duration: '51 s',
+  duration: '48 s',
   url: 'https://www.youtube.com/watch?v=OSTldiPm5cU',
   image: 'assets/episodio-foto.jpg',
   alt: 'Miau e Bit observam no computador a foto de um foguete, com uma mochila ao fundo.',
@@ -72,44 +72,96 @@ const lumaEpisode = {
 const brincadeiraEpisode = {
   title: 'A brincadeira que não teve graça',
   series: 'GUARDIÕES DO MUNDO DIGITAL · RESPEITO NA INTERNET',
-  duration: 'Vídeo',
+  duration: '55 s',
   url: 'https://www.youtube.com/watch?v=kIbC512rTNg',
-  image: 'https://i.ytimg.com/vi/kIbC512rTNg/hqdefault.jpg',
+  image: 'assets/episodio-brincadeira.jpg',
   fallbackImage: 'assets/episodio-brincadeira.svg',
   alt: 'Miniatura do vídeo A brincadeira que não teve graça no YouTube.',
   description: 'Uma história para conversar sobre respeito, empatia e o que fazer quando uma brincadeira machuca alguém.',
   gameURL: '#aventuras',
   gameLabel: 'Explorar as aventuras'
 };
-const episodes = [lumaEpisode, guardianEpisode, brincadeiraEpisode, firstEpisode];
+const nicoEpisode = {
+  title: 'Nico e o Jogador Misterioso',
+  series: 'GUARDIÕES DO MUNDO DIGITAL · JOGOS ONLINE',
+  duration: '3 min e 25 s',
+  url: 'https://youtu.be/q0HkjPpdj0U',
+  image: 'assets/episodio-nico.jpg',
+  alt: 'Nico, Miau, Bit e Luma investigam uma mensagem no tablet.',
+  description: 'Um jogador desconhecido sabe o nome de Nico, sua cor favorita e até seus pontos no jogo! A turma investiga as pistas e descobre a importância de pedir ajuda a um adulto de confiança.',
+  gameURL: '#aventuras',
+  gameLabel: 'Explorar as aventuras'
+};
+const ticoEpisode = {
+  title: 'Tico, o Robô que Guardava Tudo',
+  series: 'PEQUENOS PROGRAMADORES · INSTRUÇÕES CLARAS',
+  duration: '1 min e 28 s',
+  url: 'https://youtu.be/0vo0BqKoHls',
+  image: 'assets/episodio-tico.jpg',
+  alt: 'Miau apresenta Tico, o robozinho que começa a guardar os brinquedos da oficina.',
+  description: 'Miau apresenta sua nova invenção! Tico começa a guardar tudo que está no chão e acaba levando até o tênis da Luma. Uma confusão divertida sobre dar instruções claras.',
+  gameURL: '#aventura/receita',
+  gameLabel: 'Brincar com as instruções'
+};
+const portinhaEpisode = {
+  title: 'A Portinha que Apareceu do Nada',
+  series: 'PEQUENOS PROGRAMADORES · PADRÕES E DESCOBERTAS',
+  duration: '1 min e 43 s',
+  url: 'https://youtu.be/oEoTZtdmUjg',
+  image: 'assets/episodio-portinha.jpg',
+  alt: 'Miau, Bit e Luma encontram uma portinha misteriosa na oficina.',
+  description: 'Uma portinha apareceu na oficina! Entre pistas, desenhos e padrões, Miau, Bit e Luma testam ideias para descobrir o que existe do outro lado.',
+  gameURL: '#aventura/padroes',
+  gameLabel: 'Descobrir os padrões'
+};
+const senhaEpisode = {
+  title: 'A senha do quintal',
+  series: 'GUARDIÕES DO MUNDO DIGITAL · SENHAS',
+  duration: '35 s',
+  url: 'https://youtu.be/D89i45o4kk4',
+  image: 'assets/episodio-senha.jpg',
+  alt: 'Miau, Bit e Luma conversam sobre os segredos do quintal.',
+  description: 'Uma pista inesperada faz Bit achar que tem superpoderes! Com Luma e a ajuda de um adulto, a turma descobre por que uma senha merece cuidado.',
+  gameURL: '#aventura/senhas',
+  gameLabel: 'Cuidar das senhas do quintal'
+};
+const presenteEpisode = {
+  title: 'O presente misterioso',
+  series: 'GUARDIÕES DO MUNDO DIGITAL · MENSAGENS E CUIDADO',
+  duration: '1 min e 6 s',
+  url: 'https://youtu.be/eHS82L7CWmw',
+  image: 'assets/episodio-presente.jpg',
+  alt: 'Miau e Bit encontram uma mensagem sobre um presente no computador.',
+  description: 'Um presente misterioso apareceu no computador, mas a mensagem pede um segredo. Miau e Bit descobrem como cuidar das informações e pedir ajuda antes de continuar.',
+  gameURL: '#aventura/safety',
+  gameLabel: 'Brincar de cuidar do quintal'
+};
+const episodes = [nicoEpisode, ticoEpisode, portinhaEpisode, senhaEpisode, brincadeiraEpisode, guardianEpisode, lumaEpisode, presenteEpisode, firstEpisode];
 function lumaSVG() {
   return `<svg viewBox="0 0 180 210" aria-hidden="true"><path d="M137 156q40-3 20-39" fill="none" stroke="#a7a8b2" stroke-width="17" stroke-linecap="round"/><path d="M147 126l8 8m0 10 7 5" stroke="#858695" stroke-width="5" stroke-linecap="round"/><rect x="43" y="121" width="94" height="65" rx="20" fill="#e6b64e"/><path d="M52 148l-19 19m94-19 19 19" stroke="#a7a8b2" stroke-width="15" stroke-linecap="round"/><circle cx="30" cy="169" r="9" fill="#f9f5eb"/><circle cx="149" cy="169" r="9" fill="#f9f5eb"/><path d="M58 183v16m63-16v16" stroke="#a7a8b2" stroke-width="18" stroke-linecap="round"/><path d="M47 200h24m39 0h25" stroke="#9180b4" stroke-width="13" stroke-linecap="round"/><path d="M54 133q35-19 72 0l8 37H46z" fill="#fff3dc"/><path d="M61 130v22h56v-22m-62 19h69v36H55z" fill="#a694c3"/><path d="M60 137v15m59-15v15" stroke="#8572a4" stroke-width="6"/><circle cx="61" cy="152" r="4" fill="#f5cf65"/><circle cx="118" cy="152" r="4" fill="#f5cf65"/><path d="M30 68 28 15l43 27m39-2 42-25-5 56" fill="#a7a8b2"/><path d="M40 49 38 30l18 16m70 0 16-16-2 22" fill="#eab9ba"/><ellipse cx="89" cy="84" rx="68" ry="59" fill="#b9bac3"/><path d="M72 30 83 17l5 16 13-13 1 17" fill="#b9bac3"/><path d="m76 43 7 12m15-12-6 12M26 85l12 4m102 0 12-4" stroke="#8d8e9d" stroke-width="5" stroke-linecap="round"/><ellipse cx="89" cy="111" rx="36" ry="25" fill="#f9f5eb"/><ellipse cx="59" cy="82" rx="9" ry="12" fill="#477b5c"/><ellipse cx="118" cy="82" rx="9" ry="12" fill="#477b5c"/><ellipse cx="59" cy="83" rx="4" ry="8" fill="#253e36"/><ellipse cx="118" cy="83" rx="4" ry="8" fill="#253e36"/><circle cx="56" cy="78" r="3" fill="#fff"/><circle cx="115" cy="78" r="3" fill="#fff"/><path d="M81 100h16l-8 8" fill="#cf8e98"/><path d="M76 113q13 16 26 0" fill="none" stroke="#6d535c" stroke-width="3" stroke-linecap="round"/><path d="M47 104l-19-4m18 12-19 3m105-11 18-4m-18 12 19 3" stroke="#8d8e9d" stroke-width="2" stroke-linecap="round"/></svg>`;
 }
-function lumaArrival() {
-  return `<section class="luma-arrival" aria-labelledby="luma-arrival-title">
-    <a class="episode-cover-link" href="${lumaEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir a Luma chegou! no YouTube, em outra aba">
-      <img src="${lumaEpisode.image}" alt="${lumaEpisode.alt}" width="960" height="540" loading="lazy">
+function featuredNicoEpisode() {
+  return `<section class="luma-arrival featured-episode featured-nico" aria-labelledby="featured-nico-title">
+    <a class="episode-cover-link" href="${nicoEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir a Nico e o Jogador Misterioso no YouTube, em outra aba">
+      <img src="${nicoEpisode.image}" alt="${nicoEpisode.alt}" width="960" height="540" loading="lazy">
       <span class="episode-play-badge" aria-hidden="true">▶</span>
     </a>
-    <div><span class="eyebrow">TEM AMIGA NOVA NO QUINTAL</span><h2 id="luma-arrival-title">Luma chegou!</h2><p>Com mochila nas costas e muita curiosidade, nossa gatinha exploradora chegou para viver novas descobertas com Miau e Bit.</p>
-      <div class="episode-actions"><a class="button primary" href="${lumaEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir à chegada da Luma no YouTube, em outra aba">Assistir à chegada da Luma <span aria-hidden="true">↗</span></a><a class="text-link" href="#turma">Conhecer a turma ↗</a></div>
+    <div><span class="eyebrow">NOVIDADE NO QUINTAL · JOGOS ONLINE</span><h2 id="featured-nico-title">${nicoEpisode.title}</h2><p>Um jogador desconhecido sabe até a cor favorita do Nico! Miau, Bit e Luma ajudam o novo amigo a seguir as pistas e a pedir ajuda quando a conversa fica estranha.</p>
+      <div class="episode-actions"><a class="button primary" href="${nicoEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video>Assistir à história do Nico <span aria-hidden="true">↗</span></a><a class="text-link" href="#turma">Conhecer os amigos ↗</a></div>
     </div>
   </section>`;
 }
-function episodeTeaser() {
-  return `<section class="episode-home" aria-labelledby="episode-home-title">
-    <a class="episode-cover-link" href="#episodios" aria-label="Conhecer A foto que viajou pelo mundo, dos Guardiões do Mundo Digital">
-      <img src="${guardianEpisode.image}" alt="${guardianEpisode.alt}" width="960" height="540" loading="lazy">
+function featuredTicoEpisode() {
+  return `<section class="episode-home featured-episode featured-tico" aria-labelledby="featured-tico-title">
+    <a class="episode-cover-link" href="${ticoEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir a Tico, o Robô que Guardava Tudo no YouTube, em outra aba">
+      <img src="${ticoEpisode.image}" alt="${ticoEpisode.alt}" width="960" height="540" loading="lazy">
       <span class="episode-play-badge" aria-hidden="true">▶</span>
     </a>
     <div class="episode-home-copy">
-      <span class="eyebrow">GUARDIÕES DO MUNDO DIGITAL</span>
-      <h2 id="episode-home-title">Uma foto pode contar mais do que parece.</h2>
-      <p>Miau quer mostrar a foto do seu foguete. Bit encontra uma pista no fundo da imagem! Vamos descobrir juntos o que merece cuidado antes de compartilhar?</p>
-      <div class="episode-actions">
-        <a class="button primary" href="#episodios">Conhecer a história <span aria-hidden="true">↗</span></a>
-        <a class="text-link" href="${guardianEpisode.gameURL}">Brincar de cuidar dos segredos ↗</a>
-      </div>
+      <span class="eyebrow">UMA INVENÇÃO DO MIAU · INSTRUÇÕES CLARAS</span>
+      <h2 id="featured-tico-title">${ticoEpisode.title}</h2>
+      <p>Tico chegou para ajudar a organizar a oficina. Mas guardar tudo inclui até o tênis da Luma? Uma confusão divertida sobre explicar direitinho o que queremos.</p>
+      <div class="episode-actions"><a class="button primary" href="${ticoEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video>Assistir à história do Tico <span aria-hidden="true">↗</span></a><a class="text-link" href="#turma">Conhecer os amigos ↗</a></div>
     </div>
   </section>`;
 }
@@ -146,10 +198,19 @@ function bindEpisodeLinks() {
 }
 
 function home() {
-  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="little-star" aria-hidden="true">✦</span> UM MUNDO DE IDEIAS ESPERA POR VOCÊ</div><h1>Brincar, inventar<br>e <em>descobrir.</em></h1><p>No quintal de Miau e Bit, uma pequena ideia pode virar uma grande aventura. Vamos nessa?</p><div class="hero-actions"><a class="button primary" href="#aventura/scratch">Começar a aventura <span aria-hidden="true">↗</span></a><a class="text-link" href="#turma">Conhecer a turma</a></div><div class="hero-foot"><span>✦ Para pequenos curiosos de 6 anos ou mais</span><span>No seu ritmo</span></div></div><div class="hero-picture"><img class="hero-art" src="assets/quintal.webp" alt="Miau, um gatinho laranja inventor, segura uma estrela brilhante ao lado de Bit, seu amigo robozinho verde, no quintal de uma oficina." width="768" height="512" fetchpriority="high"><span class="picture-star" aria-hidden="true">✦</span><span class="handwritten">Uma ideia. Dois amigos. Mil possibilidades!</span><span class="picture-orbit" aria-hidden="true">imaginar<br>é só o<br>começo ↗</span></div></section><section class="welcome-strip"><span class="line"></span><span class="flower" aria-hidden="true">✳</span> Aqui a gente aprende fazendo… e se diverte descobrindo! <span class="flower" aria-hidden="true">✳</span><span class="line"></span></section>${lumaArrival()}${episodeTeaser()}<section class="adventure-section"><div class="section-heading"><div><div class="eyebrow">ESCOLHA UMA HISTÓRIA. LEVE SUA CURIOSIDADE.</div><h2>Qual vai ser a aventura de hoje?</h2><p>Cada descoberta começa com um “e se…?”</p></div><a class="text-link" href="#aventuras">Explorar o quintal ↗</a></div><div class="adventure-grid">${adventures.slice(0,4).map(card).join('')}</div></section><section class="adventure-section aw-new-section"><div class="section-heading"><div><div class="eyebrow">MAIS JEITOS DE CUIDAR DO NOSSO MUNDO DIGITAL</div><h2>Pequenas atitudes, grandes cuidados.</h2><p>Cinco histórias para cuidar da turma e descobrir novas pistas.</p></div></div><div class="adventure-grid">${awarenessAdventures.map(card).join('')}</div></section><aside class="story-teaser"><span class="teaser-doodle" aria-hidden="true">✧</span><div><h2>O melhor ingrediente? A sua imaginação.</h2><p>Miau tem muitas ideias. Bit adora experimentar. Luma traz novas perguntas. E você é a peça que faltava nessa turma!</p></div><a class="button yellow" href="#turma">Conhecer nossa turma <span aria-hidden="true">↗</span></a></aside>`;
+  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="little-star" aria-hidden="true">✦</span> UM MUNDO DE IDEIAS ESPERA POR VOCÊ</div><h1>Brincar, inventar<br>e <em>descobrir.</em></h1><p>No quintal de Miau e Bit, uma pequena ideia pode virar uma grande aventura. Vamos nessa?</p><div class="hero-actions"><a class="button primary" href="#aventura/scratch">Começar a aventura <span aria-hidden="true">↗</span></a><a class="text-link" href="#turma">Conhecer a turma</a></div><div class="hero-foot"><span>✦ Para pequenos curiosos de 6 anos ou mais</span><span>No seu ritmo</span></div></div><div class="hero-picture"><img class="hero-art" src="assets/quintal.webp" alt="Miau, um gatinho laranja inventor, segura uma estrela brilhante ao lado de Bit, seu amigo robozinho verde, no quintal de uma oficina." width="768" height="512" fetchpriority="high"><span class="picture-star" aria-hidden="true">✦</span><span class="handwritten">Uma ideia. Dois amigos. Mil possibilidades!</span><span class="picture-orbit" aria-hidden="true">imaginar<br>é só o<br>começo ↗</span></div></section><section class="welcome-strip"><span class="line"></span><span class="flower" aria-hidden="true">✳</span> Aqui a gente aprende fazendo… e se diverte descobrindo! <span class="flower" aria-hidden="true">✳</span><span class="line"></span></section>${featuredNicoEpisode()}${featuredTicoEpisode()}<section class="adventure-section"><div class="section-heading"><div><div class="eyebrow">ESCOLHA UMA HISTÓRIA. LEVE SUA CURIOSIDADE.</div><h2>Qual vai ser a aventura de hoje?</h2><p>Cada descoberta começa com um “e se…?”</p></div><a class="text-link" href="#aventuras">Explorar o quintal ↗</a></div><div class="adventure-grid">${adventures.slice(0,4).map(card).join('')}</div></section><section class="adventure-section aw-new-section"><div class="section-heading"><div><div class="eyebrow">MAIS JEITOS DE CUIDAR DO NOSSO MUNDO DIGITAL</div><h2>Pequenas atitudes, grandes cuidados.</h2><p>Cinco histórias para cuidar da turma e descobrir novas pistas.</p></div></div><div class="adventure-grid">${awarenessAdventures.map(card).join('')}</div></section><aside class="story-teaser"><span class="teaser-doodle" aria-hidden="true">✧</span><div><h2>O melhor ingrediente? A sua imaginação.</h2><p>Miau tem muitas ideias. Bit adora experimentar. Luma traz novas perguntas. E você é a peça que faltava nessa turma!</p></div><a class="button yellow" href="#turma">Conhecer nossa turma <span aria-hidden="true">↗</span></a></aside>`;
+}
+function ticoSVG() {
+  return `<svg class="friend-art" viewBox="0 0 180 210" role="img" aria-label="Tico, robozinho branco e amarelo com dois olhos azuis e duas esteiras"><ellipse cx="90" cy="199" rx="65" ry="8" fill="#dbeade"/><path d="M90 36l5-16" stroke="#6c8179" stroke-width="5" stroke-linecap="round"/><circle cx="98" cy="15" r="9" fill="#6bcdd0"/><circle cx="98" cy="15" r="4" fill="#fff5da"/><path d="M49 119l-20 19m100-18 20-18" stroke="#6c8179" stroke-width="11" stroke-linecap="round"/><circle cx="27" cy="140" r="11" fill="#e9ba55"/><circle cx="151" cy="98" r="11" fill="#e9ba55"/><rect x="43" y="99" width="94" height="64" rx="22" fill="#fff5da" stroke="#6c8179" stroke-width="3"/><rect x="66" y="111" width="48" height="37" rx="11" fill="#6bc1b9"/><circle cx="90" cy="136" r="8" fill="#f1ca69"/><circle cx="76" cy="122" r="4" fill="#f1ca69"/><circle cx="88" cy="119" r="4" fill="#f1ca69"/><circle cx="101" cy="122" r="4" fill="#f1ca69"/><rect x="34" y="153" width="35" height="43" rx="15" fill="#344b46"/><rect x="111" y="153" width="35" height="43" rx="15" fill="#344b46"/><path d="M39 161h9m-10 26h10m79-26h12m-12 26h12" stroke="#6c8179" stroke-width="3" stroke-linecap="round"/><circle cx="54" cy="175" r="11" fill="#e9ba55"/><circle cx="126" cy="175" r="11" fill="#e9ba55"/><circle cx="54" cy="175" r="4" fill="#fff5da"/><circle cx="126" cy="175" r="4" fill="#fff5da"/><path d="M72 163h36" stroke="#e9ba55" stroke-width="11"/><circle cx="30" cy="70" r="12" fill="#e9ba55"/><circle cx="150" cy="70" r="12" fill="#e9ba55"/><rect x="36" y="35" width="108" height="73" rx="26" fill="#fff5da" stroke="#6c8179" stroke-width="3"/><path d="M66 36h48" stroke="#e9ba55" stroke-width="7" stroke-linecap="round"/><rect x="47" y="47" width="86" height="49" rx="17" fill="#243e36"/><ellipse cx="68" cy="67" rx="8" ry="10" fill="#73d8d8"/><ellipse cx="112" cy="67" rx="8" ry="10" fill="#73d8d8"/><path d="M79 83q11 10 22 0" fill="none" stroke="#73d8d8" stroke-width="3" stroke-linecap="round"/></svg>`;
+}
+function nicoSVG() {
+  return `<svg class="friend-art" viewBox="0 0 180 210" role="img" aria-label="Nico, cachorrinho caramelo de camiseta azul com um raio amarelo e controle verde"><path d="M132 157q42 3 24-28" fill="none" stroke="#dba15d" stroke-width="14" stroke-linecap="round"/><ellipse cx="90" cy="204" rx="60" ry="5" fill="#dbeade"/><path d="M65 184v15m49-15v15" stroke="#dba15d" stroke-width="14" stroke-linecap="round"/><path d="M52 201h28m22 0h28" stroke="#d98a49" stroke-width="13" stroke-linecap="round"/><rect x="52" y="157" width="34" height="34" rx="8" fill="#536e7e"/><rect x="96" y="157" width="34" height="34" rx="8" fill="#536e7e"/><path d="M47 128l-15 27m101-27 14 27" stroke="#dba15d" stroke-width="16" stroke-linecap="round"/><path d="M56 114q34-16 68 0l13 53H45z" fill="#4a90ad"/><path d="M94 119l-14 20h12l-8 18 22-25H94l8-13z" fill="#f6d073"/><ellipse cx="42" cy="70" rx="22" ry="41" fill="#b98149" transform="rotate(9 42 70)"/><ellipse cx="138" cy="70" rx="22" ry="41" fill="#b98149" transform="rotate(-9 138 70)"/><ellipse cx="90" cy="71" rx="53" ry="52" fill="#dfab6b"/><path d="M65 28q1-18 21-17l-7 10q17-13 29-4l-13 8" fill="#e8bb7d"/><path d="M53 68q10-8 19-3m35 0q10-6 20 3" fill="none" stroke="#ad7846" stroke-width="3" stroke-linecap="round"/><ellipse cx="68" cy="77" rx="6" ry="9" fill="#634e39"/><ellipse cx="113" cy="77" rx="6" ry="9" fill="#634e39"/><circle cx="66" cy="74" r="2" fill="#fff5da"/><circle cx="111" cy="74" r="2" fill="#fff5da"/><ellipse cx="90" cy="100" rx="29" ry="22" fill="#fff0d4"/><ellipse cx="90" cy="91" rx="10" ry="7" fill="#344b46"/><path d="M78 104q12 12 25 0" fill="none" stroke="#87623f" stroke-width="3" stroke-linecap="round"/><path d="M51 145h78q11 0 14 16 1 13-11 9l-13-6H62l-14 6q-12 4-10-9 2-16 13-16z" fill="#50836f" stroke="#344b46" stroke-width="3"/><path d="M59 151v12m-6-6h12" stroke="#fff5da" stroke-width="3" stroke-linecap="round"/><circle cx="119" cy="153" r="3" fill="#f6d073"/><circle cx="129" cy="160" r="3" fill="#f6d073"/><circle cx="38" cy="153" r="9" fill="#dfab6b"/><circle cx="143" cy="153" r="9" fill="#dfab6b"/></svg>`;
+}
+function friendsOfTheYard() {
+  return `<section class="friends-section" aria-labelledby="friends-title"><div class="section-heading"><div><span class="eyebrow">NOVOS AMIGOS, NOVAS DESCOBERTAS</span><h2 id="friends-title">Amigos do quintal</h2><p>Tico e Nico chegaram para brincar e descobrir com a turma.</p></div></div><div class="friends-grid"><article class="friend-card friend-tico">${ticoSVG()}<div class="friend-copy"><span class="eyebrow">A INVENÇÃO DO MIAU</span><h3>Tico</h3><p>Um robozinho cheio de vontade de ajudar! Adora organizar as coisas e aprende com Miau a seguir instruções bem claras.</p><a class="button secondary small" href="${ticoEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video>Ver a história do Tico <span aria-hidden="true">↗</span></a></div></article><article class="friend-card friend-nico">${nicoSVG()}<div class="friend-copy"><span class="eyebrow">O AMIGO QUE ADORA JOGAR</span><h3>Nico</h3><p>Um cachorrinho curioso que chegou com seu controle na pata. Descobriu que jogar com os amigos deixa a aventura ainda melhor!</p><a class="button secondary small" href="${nicoEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video>Ver a história do Nico <span aria-hidden="true">↗</span></a></div></article></div></section>`;
 }
 function characters() {
-  main.innerHTML = `<section class="page-heading"><div class="eyebrow">AMIGOS, IDEIAS E UM QUINTAL INTEIRINHO.</div><h1>Prazer, sua nova turma!</h1><p>Miau inventa, Bit experimenta e Luma quer explorar. Falta só você para a próxima história começar.</p></section><section class="character-section"><article class="character-card">${catSVG()}<div><span class="eyebrow">O GATINHO INVENTOR</span><h2>Miau</h2><p>Tem ideias até de ponta-cabeça! Guarda parafusos no bolso e adora perguntar: “E se a gente tentasse de outro jeito?”</p><blockquote>“Errar também faz parte de inventar!”</blockquote></div></article><article class="character-card robot">${robotSVG()}<div><span class="eyebrow">O ROBOZINHO CURIOSO</span><h2>Bit</h2><p>É pequeno, gentil e cheio de perguntas. Gosta de seguir pistas, organizar peças e cuidar dos amigos no mundo digital.</p><blockquote>“Bip-bip! Vamos descobrir juntos?”</blockquote></div></article><article class="character-card luma">${lumaSVG()}<div><span class="eyebrow">A GATINHA EXPLORADORA</span><h2>Luma</h2><p>Chegou de mochila nas costas e cheia de perguntas! Adora explorar, seguir pistas e convidar os amigos para descobrir o que vem depois.</p><blockquote>“Vamos descobrir o que tem por lá?”</blockquote><a class="text-link" href="${lumaEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir à primeira aventura da Luma no YouTube, em outra aba">Ver sua primeira aventura ↗</a></div></article></section><section class="team-banner"><img src="assets/quintal.webp" alt="Miau e Bit brincando de inventar no quintal." width="768" height="512"><div><span class="eyebrow">O NOSSO COMBINADO</span><h2>Aqui, toda ideia tem espaço.</h2><p>Você pode tentar, mudar de ideia e começar de novo. Sem corrida e sem nota: a diversão é descobrir junto.</p><a class="button primary" href="#aventuras">Vamos brincar? <span aria-hidden="true">↗</span></a></div></section>`;
+  main.innerHTML = `<section class="page-heading"><div class="eyebrow">AMIGOS, IDEIAS E UM QUINTAL INTEIRINHO.</div><h1>Prazer, sua nova turma!</h1><p>Miau inventa, Bit experimenta e Luma quer explorar. Falta só você para a próxima história começar.</p></section><section class="character-section"><article class="character-card">${catSVG()}<div><span class="eyebrow">O GATINHO INVENTOR</span><h2>Miau</h2><p>Tem ideias até de ponta-cabeça! Guarda parafusos no bolso e adora perguntar: “E se a gente tentasse de outro jeito?”</p><blockquote>“Errar também faz parte de inventar!”</blockquote></div></article><article class="character-card robot">${robotSVG()}<div><span class="eyebrow">O ROBOZINHO CURIOSO</span><h2>Bit</h2><p>É pequeno, gentil e cheio de perguntas. Gosta de seguir pistas, organizar peças e cuidar dos amigos no mundo digital.</p><blockquote>“Bip-bip! Vamos descobrir juntos?”</blockquote></div></article><article class="character-card luma">${lumaSVG()}<div><span class="eyebrow">A GATINHA EXPLORADORA</span><h2>Luma</h2><p>Chegou de mochila nas costas e cheia de perguntas! Adora explorar, seguir pistas e convidar os amigos para descobrir o que vem depois.</p><blockquote>“Vamos descobrir o que tem por lá?”</blockquote><a class="text-link" href="${lumaEpisode.url}" target="_blank" rel="noopener noreferrer" data-watch-video aria-label="Assistir à primeira aventura da Luma no YouTube, em outra aba">Ver sua primeira aventura ↗</a></div></article></section>${friendsOfTheYard()}<section class="team-banner"><img src="assets/quintal.webp" alt="Miau e Bit brincando de inventar no quintal." width="768" height="512"><div><span class="eyebrow">O NOSSO COMBINADO</span><h2>Aqui, toda ideia tem espaço.</h2><p>Você pode tentar, mudar de ideia e começar de novo. Sem corrida e sem nota: a diversão é descobrir junto.</p><a class="button primary" href="#aventuras">Vamos brincar? <span aria-hidden="true">↗</span></a></div></section>`;
 }
 function adventureList() { renderAdventureCatalogue(); }
 function accomplishments() { renderDiscoveries(); }
@@ -175,13 +236,20 @@ function safetyGame(a) {
   function finish(){award('safety');$('#story-text').textContent='Miau e Bit aprenderam que cuidar dos amigos também é uma grande aventura. Você ajudou a turma a encontrar escolhas seguras!';$('#game-stage').innerHTML='<div class="safety-celebrate"><span class="big-star" aria-hidden="true">✦</span><h2>Guardião do quintal!</h2><p>Uma estrela para quem cuida de si e dos amigos.</p></div>';$('#game-panel').innerHTML='<h2>Seu superpoder é pedir ajuda.</h2><p>Uma senha fica em segredo. Seus dados merecem cuidado. E um adulto de confiança pode ajudar quando algo parece estranho.</p><div class="feedback success" role="status">Você encontrou a estrela do cuidado! ✦</div>'+nextLinks()+'<button class="text-button" id="play-safety-again">↶ Brincar de novo</button>';$('#play-safety-again').onclick=()=>{index=0;show();};}
   show();
 }
+function novaAventuraArt(id) {
+  const farol = '<path d="M25 110h51q12-2 8-14-4-9-15-7-2-16-18-16-17 0-20 17-13-1-14 10-1 10 8 10z" fill="#fff5da"/><path d="M89 145h89q16 0 16-12t-17-12q-3-20-23-18-17 1-20 17-17-9-27 7-26-4-25 9 0 9 7 9z" fill="#a8c5af"/><path d="M110 134l8-65h29l9 65z" fill="#fff5da" stroke="#397d70" stroke-width="4" stroke-linejoin="round"/><path d="M115 90h35l3 16h-40z" fill="#397d70"/><rect x="115" y="45" width="36" height="26" rx="5" fill="#e7bb5f" stroke="#397d70" stroke-width="4"/><path d="M109 44l24-22 24 22z" fill="#397d70"/><path d="M127 51h12v12h-12z" fill="#fff5da"/><path d="M162 49l42-13m-42 28 42 13" fill="none" stroke="#e6b84f" stroke-width="5" stroke-linecap="round"/><path d="M77 38v15M70 45h14M209 112v13M203 118h13" stroke="#e99b61" stroke-width="4"/>';
+  const circuito = '<path d="M48 106h39v-19h28m51 0h35v26h20" fill="none" stroke="#8cad70" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="22" y="81" width="34" height="47" rx="8" fill="#fff5da" stroke="#397d70" stroke-width="4"/><path d="M33 76h12M39 93v16m-8-8h16" stroke="#397d70" stroke-width="4" stroke-linecap="round"/><circle cx="221" cy="113" r="11" fill="#e7bb5f" stroke="#397d70" stroke-width="4"/><path d="M125 38V25" stroke="#397d70" stroke-width="5"/><circle cx="125" cy="21" r="6" fill="#e99b61"/><rect x="86" y="40" width="80" height="61" rx="19" fill="#397d70"/><rect x="96" y="50" width="60" height="39" rx="12" fill="#fff5da"/><circle cx="111" cy="66" r="5" fill="#397d70"/><circle cx="141" cy="66" r="5" fill="#397d70"/><path d="M119 78q7 7 14 0" fill="none" stroke="#397d70" stroke-width="3" stroke-linecap="round"/><rect x="101" y="99" width="50" height="37" rx="11" fill="#397d70"/><path d="M115 115h22" stroke="#e7bb5f" stroke-width="6" stroke-linecap="round"/><path d="M110 137v8m32-8v8" stroke="#397d70" stroke-width="7" stroke-linecap="round"/><path d="M65 35v14M58 42h14M191 31v12M185 37h12" stroke="#e99b61" stroke-width="4"/>';
+  const luma = '<path d="M30 137q85 26 190-7" fill="none" stroke="#a6c5bc" stroke-width="13" stroke-linecap="round" stroke-dasharray="2 17"/><rect x="29" y="126" width="59" height="18" rx="7" fill="#397d70"/><rect x="153" y="127" width="64" height="18" rx="7" fill="#9ab6a0"/><path d="M198 125v-22m0 10q-15-11-20-1 12 12 20 1" fill="none" stroke="#397d70" stroke-width="4" stroke-linecap="round"/><circle cx="198" cy="92" r="16" fill="#a694c3"/><circle cx="198" cy="92" r="6" fill="#fff5da"/><path d="M41 51v15M34 58h14M221 42v12M215 48h12" stroke="#e99b61" stroke-width="4"/>' + lumaSVG().replace('<svg ', '<svg x="81" y="0" width="102" height="133" ');
+  const drawings = {farol: farol, circuito: circuito, travessia: luma};
+  return '<svg class="art-svg" viewBox="0 0 250 160" aria-hidden="true">' + drawings[id] + '</svg>';
+}
 function novasAventurasSection() {
   const jogos = [
-    {titulo:'O Farol das Nuvens',desc:'Salte entre plataformas, encontre estrelas e acenda o farol mágico.',link:'novas-aventuras/farol-das-nuvens/index.html',icon:'☁',cor:'#d8f5ff'},
-    {titulo:'O Circuito do Bit',desc:'Empurre as baterias até os terminais e faça o circuito funcionar.',link:'novas-aventuras/circuito-do-bit/index.html',icon:'⚙',cor:'#ddf6e7'},
-    {titulo:'A Travessia da Luma',desc:'Atravesse ilhas flutuantes e chegue ao jardim com a gatinha cinza.',link:'novas-aventuras/travessia-da-luma/index.html',icon:'✿',cor:'#eee2ff'}
+    {id:'farol',titulo:'O Farol das Nuvens',desc:'Salte entre plataformas, encontre estrelas e acenda o farol mágico.',link:'novas-aventuras/farol-das-nuvens/index.html',categoria:'AVENTURA'},
+    {id:'circuito',titulo:'O Circuito do Bit',desc:'Empurre as baterias até os terminais e faça o circuito funcionar.',link:'novas-aventuras/circuito-do-bit/index.html',categoria:'LÓGICA'},
+    {id:'travessia',titulo:'A Travessia da Luma',desc:'Atravesse ilhas flutuantes e chegue ao jardim com a gatinha cinza.',link:'novas-aventuras/travessia-da-luma/index.html',categoria:'EXPLORAÇÃO'}
   ];
-  return `<section class="novas-aventuras-section" aria-labelledby="novas-aventuras-title"><div class="section-heading"><div><span class="eyebrow">TRÊS NOVAS BRINCADEIRAS</span><h2 id="novas-aventuras-title">Mais aventuras para descobrir!</h2><p>Escolha sua aventura e divirta-se!</p></div></div><div class="novas-aventuras-grid">${jogos.map(j=>`<article class="nova-aventura-card"><div class="nova-aventura-arte" style="background:${j.cor}" aria-hidden="true">${j.icon}</div><div class="nova-aventura-corpo"><h3>${j.titulo}</h3><p>${j.desc}</p><a class="button primary" href="${j.link}">Jogar agora <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div></section>`;
+  return `<section class="novas-aventuras-section" aria-labelledby="novas-aventuras-title"><div class="section-heading"><div><span class="eyebrow">TRÊS NOVAS BRINCADEIRAS</span><h2 id="novas-aventuras-title">Mais aventuras para descobrir!</h2><p>Escolha sua aventura e divirta-se!</p></div></div><div class="adventure-grid novas-aventuras-grid">${jogos.map(j=>`<a class="adventure-card nova-aventura-card" href="${j.link}" aria-label="Jogar ${j.titulo}"><div class="adventure-illustration nova-aventura-arte ${j.id}">${novaAventuraArt(j.id)}</div><div class="card-content"><div class="card-label"><span>${j.categoria}</span></div><h3>${j.titulo}</h3><p>${j.desc}</p><div class="card-cta">Jogar agora <span aria-hidden="true">↗</span></div></div></a>`).join('')}</div></section>`;
 }
 function route() {
   visit++; if ('speechSynthesis' in window) window.speechSynthesis.cancel();

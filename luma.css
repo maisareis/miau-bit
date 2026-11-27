@@ -31,3 +31,18 @@
   .luma-arrival h2 { font-size: 32px; }
   .luma-arrival p { font-size: 15px; }
 }
+
+/* Os amigos têm seu cantinho, depois de Miau, Bit e Luma. */
+.friends-section{padding-top:12px;padding-bottom:44px}
+.friends-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.friend-card{display:grid;grid-template-columns:150px minmax(0,1fr);align-items:center;gap:24px;padding:28px;border:1px solid var(--line);border-radius:25px}
+.friend-tico{background:#f8edcf}
+.friend-nico{background:#e4eee5}
+.friend-art{display:block;width:100%;height:190px;max-width:180px;justify-self:center}
+.friend-copy{min-width:0}
+.friend-copy .eyebrow{font-size:9px;letter-spacing:.09em}
+.friend-copy h3{font-size:32px;margin:10px 0 12px}
+.friend-copy p{font-size:14px;line-height:1.7;color:var(--muted)}
+.friend-copy .button{margin-top:20px;gap:10px}
+@media(max-width:1000px){.friends-grid{grid-template-columns:1fr}.friend-card{grid-template-columns:150px minmax(0,1fr)}}
+@media(max-width:480px){.friend-card{grid-template-columns:1fr;gap:18px;padding:23px}.friend-art{width:140px;height:166px}.friend-copy .button{max-width:100%}}

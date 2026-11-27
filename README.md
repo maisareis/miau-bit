@@ -42,8 +42,16 @@ Os detalhes estão em [Autoria e condições de uso](autoria.html).
 
 ## Autoria e condições de uso
 
-Projeto idealizado e organizado por **Maisa Araujo**.
+Projeto Criado e desenvolvido por **Maisa Araujo**.
 
 As condições de uso estão em [autoria.html](autoria.html), e o aviso de direitos está em [LICENSE.txt](LICENSE.txt).
 
 As licenças das fontes e de outros materiais de terceiros estão na pasta `licenses/`.
+
+## Atualização de episódios e miniaturas — 27/11/2026
+
+A seção Episódios reúne os nove vídeos publicados, com miniaturas locais e links conferidos no canal Miau & Bit. Os cartões do Farol das Nuvens, Circuito do Bit e Travessia da Luma seguem as ilustrações e o acabamento dos demais jogos.
+
+Publique na mesma pasta e domínio, substituindo os arquivos e mantendo a estrutura das pastas. Esta atualização mantém os identificadores dos jogos e as chaves de armazenamento existentes: estrelas, fases e progresso continuam salvos no mesmo navegador e aparelho. Abra com internet para receber a nova versão.
+
+A página inicial destaca Nico e o Jogador Misterioso e Tico, o Robô que Guardava Tudo. Na página A turma, os dois aparecem em Amigos do quintal, depois de Miau, Bit e Luma, com apresentações e links para seus episódios.
