@@ -1,6 +1,6 @@
 'use strict';
 const CACHE_PREFIX = 'miau-bit-pwa-';
-const CACHE_NAME = 'miau-bit-pwa-episodios-miniaturas-20261127-v4';
+const CACHE_NAME = 'miau-bit-pwa-retorno-portal-20261127-v5';
 const APP_FILES = [
   "assets/episodio-nico.jpg",
   "assets/episodio-tico.jpg",
